@@ -1,8 +1,10 @@
 #![allow(unused_imports)]
 use proconio::{input, marker::Usize1};
-use itertools::Itertools;
 
 fn main() {
-    input!{
+    input! {
+        h1: isize,
+        h2: isize
     };
+    println!("{}", h1 - h2);
 }
