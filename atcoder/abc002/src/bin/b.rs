@@ -7,9 +7,13 @@ use proconio::{
 
 fn main() {
     input! {
-        mut w: String
+        mut w: Chars
     };
-    let vowels = ['a', 'i', 'u', 'e', 'o'];
-    w.retain(|c| !vowels.iter().any(|&v| c==v));
-    println!("{}", w);
+    let mut s = String::new();
+    for c in w {
+        if !"aiueo".contains(c) {
+            s.push(c)
+        }
+    }
+    println!("{}", s);
 }
