@@ -10,7 +10,7 @@ fn main() {
     arr[2] = 1;
     if n >= 3 {
         for i in 3..=n {
-            arr[i] = (arr[i-1] + arr[i-2] + arr[i-3]) % 10007;
+            arr[i] = (arr[i - 1] + arr[i - 2] + arr[i - 3]) % 10007;
         }
     }
     println!("{}", arr[n]);
