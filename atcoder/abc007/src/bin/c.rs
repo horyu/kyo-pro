@@ -1,7 +1,6 @@
 #![allow(unused_imports)]
 // use itertools::Itertools;
 use proconio::{input, marker::*};
-use std::collections::VecDeque;
 
 fn main() {
     input! {
@@ -25,26 +24,22 @@ fn main() {
         .collect::<Vec<_>>();
     ccc[s.0][s.1] = 0;
     ccc[g.0][g.1] = std::isize::MAX;
-    let mut queue = VecDeque::new();
+    let mut queue = std::collections::VecDeque::new();
+    let dxdys = [(0, -1), (0, 1), (1, 0), (-1, 0)];
     queue.push_front(s);
-    while !queue.is_empty() {
-        let center = queue.pop_front().unwrap();
-        let next_num = ccc[center.0][center.1] + 1;
-        let xy_udrl = vec![
-            (center.0, center.1 - 1),
-            (center.0, center.1 + 1),
-            (center.0 + 1, center.1),
-            (center.0 - 1, center.1),
-        ];
-        for xy in xy_udrl {
-            let num = ccc[xy.0][xy.1];
-            if num == std::isize::MAX {
+    while let Some((x, y)) = queue.pop_front() {
+        let next_num = ccc[x][y] + 1;
+        for &(dx, dy) in dxdys.iter() {
+            let xdx = (x as isize + dx) as usize;
+            let ydy = (y as isize + dy) as usize;
+            let dist_num = ccc[xdx][ydy];
+            if dist_num == std::isize::MAX {
                 println!("{}", next_num);
                 return;
             }
-            if num == -1 {
-                ccc[xy.0][xy.1] = next_num;
-                queue.push_back(xy);
+            if dist_num == -1 {
+                ccc[xdx][ydy] = next_num;
+                queue.push_back((xdx, ydy));
             }
         }
     }
