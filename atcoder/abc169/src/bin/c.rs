@@ -5,11 +5,8 @@ use proconio::{input, marker::*};
 fn main() {
     input! {
         a: u128,
-        b: String
+        mut b: String
     };
-    if let [s, t] = *b.split('.').collect::<Vec<_>>() {
-        let s: u128 = s.parse().unwrap();
-        let t: u128 = t.parse().unwrap();
-        println!("{}", a * (100 * s + t) / 100);
-    }
+    b.retain(|c| c != '.');
+    println!("{}", a * b.parse::<u128>().unwrap() / 100);
 }
