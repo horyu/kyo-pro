@@ -8,33 +8,38 @@ fn main() {
         mut aa: [usize; n]
     };
     aa.sort();
-    let mut count = 0;
+    let max = aa[n - 1];
+    let mut dp = vec![true; max + 1];
+    let mut dup = 0;
     let mut i = 0;
-    loop {
-        if i >= aa.len() {
-            break;
+    while i < aa.len() {
+        let a = aa[i];
+        if !dp[a] {
+            i += 1;
+            continue;
         }
-        let ai = aa[i];
-        let mut j = i + 1;
-        loop {
-            if j >= aa.len() {
-                break;
-            }
-            let aj = aa[j];
-            if aj == ai {
-                count += 1;
-                while (j < aa.len()) && (aa[j] == ai) {
-                    aa.remove(j);
+        if i > 0 {
+            let left = i - 1;
+            if aa[left] == aa[i] {
+                while aa[left] == aa[i] {
+                    i += 1;
+                    if i >= aa.len() {
+                        break;
+                    }
                 }
+                dup += i - left;
                 continue;
             }
-            if aj % ai == 0 {
-                aa.remove(j);
-                continue;
-            }
-            j += 1;
+        }
+        let mut na = 2 * a;
+        while na <= max {
+            dp[na] = false;
+            na += a;
         }
         i += 1;
     }
-    println!("{}", aa.len() - count);
+    println!(
+        "{}",
+        aa.iter().filter(|&&a| dp[a]).collect::<Vec<_>>().len() - dup
+    )
 }
