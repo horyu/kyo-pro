@@ -3,6 +3,12 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        a: usize,
+        b: usize,
+        c: usize,
+        d: usize,
+        e: usize
+    };
+    println!("{}", std::cmp::max(e + d + a, e + c + b));
 }
