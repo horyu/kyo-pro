@@ -15,5 +15,5 @@ fn main() {
             max = sp;
         }
     }
-    println!("{}",if max.1 * 2 > sum { &max.0 } else { "atcoder" });
+    println!("{}", if max.1 * 2 > sum { &max.0 } else { "atcoder" });
 }

@@ -3,6 +3,11 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        s: String
+    };
+    let count = (&s)
+        .split('+')
+        .fold(0, |acc, x| acc + !x.contains('0') as i32);
+    println!("{}", count);
 }
