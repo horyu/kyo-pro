@@ -3,6 +3,20 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        n: usize,
+        mut aa: [usize; n]
+    };
+    let mut height_to_num = std::collections::HashMap::new();
+    for (i, a) in (&aa).iter().enumerate() {
+        height_to_num.insert(*a, i + 1);
+    }
+    aa.sort();
+    aa.reverse();
+    let s = aa
+        .iter()
+        .map(|a| height_to_num.get(&a).unwrap().to_string())
+        .collect::<Vec<_>>()
+        .join("\n");
+    println!("{}", s);
 }
