@@ -3,6 +3,19 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        n: usize,
+        mut ss: [usize; n]
+    };
+    let sum: usize = ss.iter().sum();
+    if sum % 10 != 0 {
+        println!("{}", sum);
+    } else {
+        ss.sort();
+        if let Some(s) = ss.iter().find(|&s| s % 10 != 0) {
+            println!("{}", sum - s);
+        } else {
+            println!("0");
+        }
+    }
 }
