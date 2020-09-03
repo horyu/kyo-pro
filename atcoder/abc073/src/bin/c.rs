@@ -3,6 +3,17 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        n: usize,
+        aa: [usize; n]
+    };
+    let mut hs = std::collections::HashSet::new();
+    for a in aa {
+        if hs.contains(&a) {
+            hs.remove(&a);
+        } else {
+            hs.insert(a);
+        }
+    }
+    println!("{}", hs.len());
 }
