@@ -3,6 +3,6 @@
 use proconio::{input, marker::*};
 
 fn main() {
-      input! {};
-      // println!("{}",);
+    input! {};
+    // println!("{}",);
 }
