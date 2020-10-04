@@ -3,6 +3,16 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        n: usize,
+        m: usize
+    };
+    // a <= b
+    let (a, b) = [(m, n), (n, m)][(n < m) as usize];
+    let rs = match (a, b) {
+        (1, 1) => 1,
+        (1, d) => d - 2,
+        (c, d) => (c - 2) * (d - 2),
+    };
+    println!("{}", rs);
 }
