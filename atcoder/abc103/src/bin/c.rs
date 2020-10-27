@@ -3,6 +3,9 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        n: usize,
+        aa: [usize; n]
+    };
+    println!("{}", aa.iter().fold(0, |acc, a| acc + a - 1));
 }
