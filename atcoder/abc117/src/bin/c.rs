@@ -4,7 +4,7 @@ use proconio::{input, marker::*};
 
 fn main() {
     input! {
-        n: usize,
+        mut n: usize,
         m: usize,
         mut xx: [isize; m]
     };
@@ -17,10 +17,10 @@ fn main() {
         println!("{}", xx[n - 1] - xx[0]);
         return;
     }
-    // windows(2)で前から調べる
-    // 距離が2以上ある地点を調べ、距離が一番離れてる塊ごとにコマを置く
-    // コマをおいたら距離1の地点を消してまた↑を実行
-    // 距離2の塊がなくなったら余ったコマの数だけカウントから引く
-
-    // println!("{}",);
+    let mut distances: Vec<isize> = xx.windows(2).map(|tmp| tmp[1] - tmp[0]).collect();
+    distances.sort();
+    for _ in 0..(n - 1) {
+        distances.remove(distances.len() - 1);
+    }
+    println!("{}", distances.iter().sum::<isize>());
 }
