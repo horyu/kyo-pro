@@ -4,23 +4,23 @@ use proconio::{input, marker::*};
 
 fn main() {
     input! {
-        mut n: usize,
+        n: usize,
         m: usize,
         mut xx: [isize; m]
     };
-    if n >= m || m == 1 {
+    if n >= m {
         println!("0");
         return;
     }
     xx.sort();
     if n == 1 {
-        println!("{}", xx[n - 1] - xx[0]);
+        println!("{}", xx[m - 1] - xx[0]);
         return;
     }
     let mut distances: Vec<isize> = xx.windows(2).map(|tmp| tmp[1] - tmp[0]).collect();
     distances.sort();
     for _ in 0..(n - 1) {
-        distances.remove(distances.len() - 1);
+        distances.pop();
     }
     println!("{}", distances.iter().sum::<isize>());
 }
