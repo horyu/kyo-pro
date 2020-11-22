@@ -7,20 +7,17 @@ fn main() {
         n: usize,
         mut aa: [usize; n]
     };
-    aa.sort();
-    aa.dedup();
-    loop {
-        let min = aa[0];
-        let min_kouho = aa
-            .iter()
-            .map(|&a| a % min + if a % min == 0 { a } else { 0 })
-            .min()
-            .unwrap();
-        if min_kouho < min {
-            aa.insert(0, min_kouho);
-            continue;
-        }
-        println!("{}", min);
-        return;
-    };
+    let gcd = aa.iter().fold(aa[0], |acc, &a| gcd(acc, a));
+    println!("{}", gcd);
+}
+
+// https://qiita.com/mhgp/items/711a7bb8e00bff607660
+fn gcd(a: usize, b: usize) -> usize {
+    let (mut a, mut b) = if a < b { (b, a) } else { (a, b) };
+    while b > 0 {
+        let r = a % b;
+        a = b;
+        b = r;
+    }
+    a
 }
