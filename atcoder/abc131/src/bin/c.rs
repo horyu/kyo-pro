@@ -9,7 +9,8 @@ fn main() {
         c: usize,
         d: usize,
     };
-    let rs = (b - a + 1) - (b / c - (a - 1) / c) - (b / d - (a - 1) / d) + (b / lcm(c, d) - (a - 1) / lcm(c, d));
+    let rs = (b - a + 1) - (b / c - (a - 1) / c) - (b / d - (a - 1) / d)
+        + (b / lcm(c, d) - (a - 1) / lcm(c, d));
     println!("{}", rs);
 }
 
