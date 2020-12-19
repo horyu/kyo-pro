@@ -3,6 +3,10 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        mut dd: [usize; n]
+    };
+    dd.sort();
+    println!("{}", dd[n / 2] - dd[n / 2 - 1]);
 }
