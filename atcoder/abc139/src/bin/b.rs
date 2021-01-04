@@ -7,5 +7,8 @@ fn main() {
         a: usize,
         b: usize
     };
-    println!("{}", (b - 1) / (a - 1) + (((b - 1) % (a - 1)) != 0) as usize);
+    println!(
+        "{}",
+        (b - 1) / (a - 1) + (((b - 1) % (a - 1)) != 0) as usize
+    );
 }
