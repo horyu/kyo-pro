@@ -3,6 +3,8 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize
+    };
+    println!("{}", (1..n).sum::<usize>());
 }
