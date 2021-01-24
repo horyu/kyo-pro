@@ -9,16 +9,16 @@ fn main() {
         mut ss: [String; n]
     };
     ss.reverse();
-    let mut memo: HashMap<(bool, &[String]), usize> = HashMap::new();
+    let mut memo: HashMap<(bool, usize), usize> = HashMap::new();
     println!("{}", calc(true, &ss[..], &mut memo));
 }
 
-fn calc<'a>(tf: bool, ops: &'a[String], memo: &mut HashMap<(bool, &'a[String]), usize>) -> usize {
-    if let Some(&rs) = memo.get(&(tf, ops)) {
+fn calc(tf: bool, ops: &[String], memo: &mut HashMap<(bool, usize), usize>) -> usize {
+    let len = ops.len();
+    if let Some(&rs) = memo.get(&(tf, len)) {
         return rs;
     }
 
-    let len = ops.len();
     let op = ops[0].as_str();
     let rs = if len == 1 {
         match (tf, op) {
@@ -37,6 +37,6 @@ fn calc<'a>(tf: bool, ops: &'a[String], memo: &mut HashMap<(bool, &'a[String]), 
             _ => unreachable!(),
         }
     };
-    memo.insert((tf, ops), rs);
+    memo.insert((tf, len), rs);
     rs
 }
