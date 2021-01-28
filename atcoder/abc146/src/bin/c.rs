@@ -17,12 +17,13 @@ fn main() {
         println!("0");
         return;
     }
-    let mut right = 1i128;
-    while a * right + b * digit(right) <= x {
-        right *= 10;
+    if a * MAX + b * digit(MAX) <= x {
+        println!("{}", MAX);
+        return;
     }
-    let mut left = right / 10;
     // https://twitter.com/meguru_comp/status/697008509376835584
+    let mut left = 1; // ok
+    let mut right = MAX; // ng
     while (right - left).abs() > 1 {
         let mid = (left + right) / 2;
         if a * mid + b * digit(mid) <= x {
@@ -31,7 +32,7 @@ fn main() {
             right = mid;
         }
     }
-    println!("{}", left.min(MAX));
+    println!("{}", left);
 }
 
 fn digit(num: i128) -> i128 {
