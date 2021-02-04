@@ -9,5 +9,9 @@ fn main() {
         b: usize,
         k: usize
     };
-    println!("{} {}", a.saturating_sub(k), b.saturating_sub(k.saturating_sub(a)));
+    println!(
+        "{} {}",
+        a.saturating_sub(k),
+        b.saturating_sub(k.saturating_sub(a))
+    );
 }
