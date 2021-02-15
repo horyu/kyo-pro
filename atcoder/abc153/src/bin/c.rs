@@ -4,6 +4,16 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        k: usize,
+        mut hh: [usize; n],
+    };
+    if n <= k {
+        println!("0");
+        return;
+    }
+    hh.sort_unstable();
+    let rs = hh[..(n - k)].iter().sum::<usize>();
+    println!("{}", rs);
 }
