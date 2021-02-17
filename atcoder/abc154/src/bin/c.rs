@@ -4,6 +4,17 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        aa: [Usize1; n],
+    };
+    let mut v = vec![false; 1_000_000_000];
+    for a in aa {
+        if v[a] {
+            println!("NO");
+            return;
+        }
+        v[a] = true;
+    }
+    println!("YES");
 }
