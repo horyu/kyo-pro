@@ -4,6 +4,13 @@
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        xx: [usize; n],
+    };
+    let rs = (1..=100)
+        .map(|p| xx.iter().fold(0, |acc, x| acc + x * x + p * p - 2 * p * x))
+        .min()
+        .unwrap();
+    println!("{}", rs);
 }
