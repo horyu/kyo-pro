@@ -5,6 +5,8 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        l: f64
+    };
+    println!("{}", (l / 3.0).powi(3));
 }
