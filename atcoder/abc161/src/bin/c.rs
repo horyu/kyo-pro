@@ -5,6 +5,10 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        mut n: isize,
+        k: isize,
+    };
+    n %= k;
+    println!("{}", n.min((n - k).abs()));
 }
