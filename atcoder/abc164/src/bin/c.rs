@@ -5,6 +5,10 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        ss: [String; n]
+    };
+    let hs: HashSet<_> = ss.iter().collect();
+    println!("{}", hs.len());
 }
