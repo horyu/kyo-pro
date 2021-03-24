@@ -5,6 +5,11 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        a: usize,
+        b: usize,
+        n: usize,
+    };
+    let f = |x: usize| a * x / b - a * (x / b);
+    println!("{}", f(n.min(b - 1)));
 }
