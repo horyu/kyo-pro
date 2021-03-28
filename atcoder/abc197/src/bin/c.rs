@@ -12,13 +12,12 @@ fn main() {
     let mut min = aa.iter().fold(0, |acc, &a| acc ^ a);
     for i in 2..n {
         // i 個のグループに分ける
-        for mut indexes in (1..n).combinations(i - 1) {
-            indexes.insert(0, 0);
-            indexes.push(n);
-            let xor = indexes
-                .iter()
+        for indexes in (1..n).combinations(i - 1) {
+            let xor = std::iter::once(0usize)
+                .chain(indexes.into_iter())
+                .chain(std::iter::once(n))
                 .tuple_windows()
-                .map(|(&mae, &ato)| aa[mae..ato].iter().fold(0, |acc, &a| acc | a))
+                .map(|(mae, ato)| aa[mae..ato].iter().fold(0, |acc, &a| acc | a))
                 .fold(0, |acc, a| acc ^ a);
             min = min.min(xor);
         }
