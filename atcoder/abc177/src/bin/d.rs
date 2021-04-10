@@ -19,22 +19,35 @@ fn main() {
     let mut hss: Vec<HashSet<usize>> = vec![];
     let mut i_to_hss_index: Vec<Option<usize>> = vec![None; n];
     for (a, b) in aabb {
-        // 1-4; 2-3; 3-4; のように後から合流する場合に結合できるようにする
-        if let Some(hs_index) = i_to_hss_index[a].or(i_to_hss_index[b]) {
-            let hs = hss.get_mut(hs_index).unwrap();
-            hs.insert(a);
-            hs.insert(b);
-            i_to_hss_index[a] = Some(hs_index);
-            i_to_hss_index[b] = Some(hs_index);
-        } else {
-            let hs_index = hss.len();
-            let mut hs = HashSet::new();
-            hs.insert(a);
-            hs.insert(b);
-            hss.push(hs);
-            i_to_hss_index[a] = Some(hs_index);
-            i_to_hss_index[b] = Some(hs_index);
-        }
+        let hs_index = match (i_to_hss_index[a], i_to_hss_index[b]) {
+            (Some(a), Some(b)) if a != b => {
+                // 1-4; 2-3; 3-4; のように後から合流する場合に結合できるようにする
+                let mut tmp = HashSet::new();
+                let (big_index, small) = if hss[a].len() > hss[b].len() {
+                    (a, &mut hss[b])
+                } else {
+                    (b, &mut hss[a])
+                };
+                std::mem::swap(small, &mut tmp);
+                for &j in tmp.iter() {
+                    i_to_hss_index[j] = Some(big_index);
+                }
+                hss[big_index].extend(tmp);
+                big_index
+            }
+            (Some(hs_index), _) | (_, Some(hs_index)) => hs_index,
+            (None, None) => {
+                let hs_index = hss.len();
+                let hs = HashSet::new();
+                hss.push(hs);
+                hs_index
+            }
+        };
+        let hs = &mut hss[hs_index];
+        hs.insert(a);
+        hs.insert(b);
+        i_to_hss_index[a] = Some(hs_index);
+        i_to_hss_index[b] = Some(hs_index);
     }
     let rs = hss.iter().map(|hs| hs.len()).max().unwrap();
     println!("{}", rs);
