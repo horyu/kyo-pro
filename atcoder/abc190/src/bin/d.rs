@@ -12,10 +12,11 @@ fn main() {
     // 0 = nn + (2a-1)n - 2N
     // a = (-nn + n + 2N) / 2n
     // a = (1 - n) / 2 + N / n
+    // a と n は整数なので、 1 - n % 2 が偶数（nが奇数）　かつ n は N の約数（正負）
     let mut rs = 0;
     for i in divisors(n) {
-        if i % 2 != 0 {
-            rs += 1;
+        if i % 2 == 1 {
+            rs += 2;
         }
     }
     println!("{}", rs);
