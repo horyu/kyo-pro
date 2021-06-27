@@ -24,11 +24,10 @@ fn range_contain(x: &(usize, usize, usize), y: &(usize, usize, usize)) -> bool {
         return true;
     }
     let (l, r) = if x.1 < y.1 { (x, y) } else { (y, x) };
-    if l.2 < r.1 {
-        return false;
+    use std::cmp::Ordering;
+    match l.2.cmp(&r.1) {
+        Ordering::Less => false,
+        Ordering::Equal => [1, 3].contains(&l.0) && [1, 2].contains(&r.0),
+        Ordering::Greater => true,
     }
-    if l.2 == r.1 {
-        return [1, 3].contains(&l.0) && [1, 2].contains(&r.0);
-    }
-    true
 }
