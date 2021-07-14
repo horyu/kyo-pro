@@ -6,6 +6,14 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        aa: [usize; n]
+    };
+    if n == 1 {
+        println!("{}", aa[0]);
+        return;
+    }
+    let rs = aa[1..].iter().fold(aa[0], |acc, a| acc.gcd(a));
+    println!("{}", rs);
 }
