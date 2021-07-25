@@ -39,17 +39,16 @@ fn main() {
     }
 
     let ranges = 10usize.pow(10u32);
-    if n == 1 {
-        println!("{}", if is_zero(t[0]) { ranges } else { ranges * 2 });
-    } else if n == 2 {
-        // 11 or 10 or 01
-        println!("{}", if t == ['0', '1'] { ranges - 1 } else { ranges });
+    if t == ['1'] {
+        println!("{}", ranges * 2);
+    } else if t == ['1', '1'] {
+        println!("{}", ranges);
     } else {
-        // 110 or 101 or 011
-        let rs = match (n % 3, &t[0..3]) {
-            (0, &['1', '1', '0']) => ranges - n / 3 + 1,
-            (2, &['0', '1', '1']) => ranges - n / 3 - 1,
-            _ => ranges - n / 3,
+        let k = t.iter().filter(|&&c| c == '0').count();
+        let rs = if is_zero(t[n - 1]) {
+            ranges - k + 1
+        } else {
+            ranges - k
         };
         println!("{}", rs);
     }
