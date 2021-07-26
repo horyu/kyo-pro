@@ -12,20 +12,16 @@ fn main() {
     };
     let yy = xx.into_iter().map(divisors).collect_vec();
     let primes = [2usize, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47];
-    let mut oks = vec![];
+    let mut min = std::usize::MAX;
     for size in 1..=primes.len() {
         for selected in primes.iter().combinations(size) {
             let hs: HashSet<_> = selected.iter().collect();
             if yy.iter().all(|y| y.iter().any(|i| hs.contains(&i))) {
-                let mut ok = 1usize;
-                for j in hs {
-                    ok *= **j;
-                }
-                oks.push(ok);
+                min = min.min(hs.into_iter().fold(1, |acc, &&j| acc * j));
             }
         }
     }
-    println!("{}", oks.iter().min().unwrap());
+    println!("{}", min);
 }
 
 // https://qiita.com/Cassin01/items/9bc63a4bde5526150681
