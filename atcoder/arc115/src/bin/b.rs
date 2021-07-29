@@ -15,19 +15,16 @@ fn main() {
         println!("Yes\n{}\n0", ccc[0][0]);
         return;
     }
-    let out = (0..n).chain(0..=0).tuple_combinations().any(|(i, j)| {
-        (1..n).any(|m| {
-            (ccc[i][0] - ccc[j][0] != ccc[i][m] - ccc[j][m])
-                && (ccc[0][i] - ccc[0][j] != ccc[m][i] - ccc[m][j])
-        })
-    });
-    if out {
-        println!("No");
+    let b1 = (0..n).map(|i| ccc[i][0]).min().unwrap();
+    let aa = (0..n).map(|i| ccc[i][0] - b1).collect_vec();
+    let bb = (0..n).map(|j| ccc[0][j] - aa[0]).collect_vec();
+    if (0..n).all(|i| (0..n).all(|j| aa[i] + bb[j] == ccc[i][j])) {
+        println!(
+            "Yes\n{}\n{}",
+            aa.into_iter().map(|a| a.to_string()).join(" "),
+            bb.into_iter().map(|b| b.to_string()).join(" ")
+        );
         return;
     }
-    // a1 = A とすると b_1 = c_11 - A
-    // a_i - A = c_i1 - c_11   => a_i = c_i1 - C_11 + A
-    // b_j - b_1 = c_1j - c_11 => b_j = c_1j - A
-    // 1 <= i,j <= n にたいして 0 <= a_i, b_j とできるようなAを見つけられたらOK
-    // println!("Yes\n{}\n{}");
+    println!("No");
 }
