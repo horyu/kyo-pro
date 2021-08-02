@@ -6,6 +6,11 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
+    input! {
+        n: usize,
+        aa: [usize; n]
+    };
+    const MOD: usize = 1_000_000_007;
+
     // println!("{}", );
 }
