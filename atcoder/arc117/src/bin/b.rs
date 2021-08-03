@@ -8,9 +8,14 @@ use std::collections::{HashMap, HashSet};
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n]
+        mut aa: [usize; n]
     };
+    aa.push(0);
     const MOD: usize = 1_000_000_007;
-
-    // println!("{}", );
+    aa.sort_unstable();
+    let rs = aa
+        .into_iter()
+        .tuple_windows()
+        .fold(1, |acc, (a1, a2)| acc * (a2 - a1 + 1) % MOD);
+    println!("{}", rs);
 }
