@@ -15,23 +15,30 @@ fn main() {
         println!("{}", aa[0] ^ bb[0]);
         return;
     }
+    let mut hm = HashMap::new();
+    for &b in &bb {
+        *hm.entry(b).or_insert(0) += 1;
+    }
     let mut oks = HashSet::new();
-    for (i, b) in bb.iter().enumerate() {
-        let mut used = vec![false; n];
-        let v = aa[0] ^ b;
-        used[i] = true;
-        let is_ok = (1..n).all(|j| {
-            (0..n).any(|k| {
-                if !used[k] && (aa[j] ^ bb[k] == v) {
-                    used[k] = true;
-                    true
-                } else {
-                    false
+    for &b in bb.iter() {
+        let xor = aa[0] ^ b;
+        if oks.contains(&xor) {
+            continue;
+        }
+        let mut b_cnts = hm.clone();
+        *b_cnts.entry(b).or_default() -= 1;
+        let is_ok = aa[1..].iter().all(|a| {
+            let v = xor ^ a;
+            if let Some(b_cnt) = b_cnts.get_mut(&v) {
+                if *b_cnt > 0 {
+                    *b_cnt -= 1;
+                    return true;
                 }
-            })
+            }
+            false
         });
         if is_ok {
-            oks.insert(v);
+            oks.insert(xor);
         }
     }
     let len = oks.len();
