@@ -6,6 +6,12 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        k: usize,
+        aa: [usize; n]
+    };
+    for i in k..n {
+        println!("{}", ["No", "Yes"][(aa[i - k] < aa[i]) as usize]);
+    }
 }
