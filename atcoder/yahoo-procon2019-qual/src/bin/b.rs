@@ -6,6 +6,14 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        aabb: [(Usize1, Usize1); 3]
+    };
+    let mut arr = [0; 4];
+    for (a, b) in aabb {
+        arr[a] += 1;
+        arr[b] += 1;
+    }
+    let tf = arr.iter().all(|&x| x <= 2);
+    println!("{}", ["NO", "YES"][tf as usize]);
 }
