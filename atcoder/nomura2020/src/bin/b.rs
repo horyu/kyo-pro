@@ -6,6 +6,8 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        t: String
+    };
+    println!("{}", t.replace("?", "D"));
 }
