@@ -6,6 +6,17 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        a: isize,
+        v: isize,
+        b: isize,
+        w: isize,
+        t: isize,
+    };
+    let tf = if v <= w {
+        false
+    } else {
+        (b - a).abs() <= t * (w - v).abs()
+    };
+    println!("{}", ["NO", "YES"][tf as usize]);
 }
