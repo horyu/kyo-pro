@@ -1,0 +1,14 @@
+[package]
+name = "abc219"
+version = "0.1.0"
+edition = "2018"
+
+# dependencies added to new project
+[dependencies]
+proconio = { version = "0.3.7", features = ["derive"] }
+itertools = "0.9.0"
+num-integer = "0.1"
+
+[profile.release]
+lto = true
+panic = 'abort'
