@@ -1,4 +1,5 @@
 #![allow(unused_imports)]
+#![allow(clippy::collapsible_else_if)]
 // use itertools::Itertools;
 use proconio::{input, marker::*};
 
