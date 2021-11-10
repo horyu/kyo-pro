@@ -1,8 +1,16 @@
 #![allow(unused_imports)]
-// use itertools::Itertools;
+use itertools::Itertools;
 use proconio::{input, marker::*};
 
 fn main() {
-    input! {};
-    // println!("{}",);
+    input! {
+        n: usize,
+        k: usize,
+        aa: [u128; n]
+    };
+    let rs = aa.iter().sum::<u128>() * (k as u128)
+        - (0..(k - 1))
+            .map(|i| (k - 1 - i) as u128 * (aa[i] + aa[n - 1 - i]))
+            .sum::<u128>();
+    println!("{}", rs);
 }
