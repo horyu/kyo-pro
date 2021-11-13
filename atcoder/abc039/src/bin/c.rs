@@ -10,7 +10,7 @@ fn main() {
     let oto = ["Do", "", "Re", "", "Mi", "Fa", "", "So", "", "La", "", "Si"];
     let kenban3 = "WBWBWWBWBWBWWBWBWWBWBWBWWBWBWWBWBWBW";
     for left in 0.. {
-        if &kenban3[left..(left + s.len())] == &s {
+        if kenban3[left..(left + s.len())] == s {
             let index = left % oto.len();
             println!("{}", oto[index]);
             return;
