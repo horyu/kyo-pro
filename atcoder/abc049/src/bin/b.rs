@@ -8,27 +8,18 @@ fn main() {
 
     let bytes = buf.as_bytes();
     let mut iter = bytes.iter().enumerate();
-    let space_index;
 
-    loop {
-        match iter.next() {
-            Some((i, b' ')) => {
-                space_index = i;
-                break;
-            }
-            _ => (),
+    let space_index = loop {
+        if let Some((i, b' ')) = iter.next() {
+            break i;
         }
-    }
-    let lf_index;
-    loop {
-        match iter.next() {
-            Some((i, b'\n')) => {
-                lf_index = i;
-                break;
-            }
-            _ => (),
+    };
+    let lf_index = loop {
+        if let Some((i, b'\n')) = iter.next() {
+            break i;
         }
-    }
+    };
+
     let h: usize = (&buf)[0..(space_index)].parse().unwrap();
     let line_width: usize = (&buf)[(space_index + 1)..(lf_index)]
         .parse::<usize>()
