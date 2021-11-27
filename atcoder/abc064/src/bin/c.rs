@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut aa: [usize; n]
     };
-    aa.sort();
+    aa.sort_unstable();
     let mut min_colors = 0;
     let mut free_colors = 0;
     let mut pre = std::usize::MAX;
