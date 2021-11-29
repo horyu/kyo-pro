@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut tt: [usize; n]
     };
-    tt.sort();
+    tt.sort_unstable();
     tt.dedup();
     if tt.len() == 1 {
         println!("{}", tt[0]);
@@ -18,9 +18,13 @@ fn main() {
 }
 
 fn lcm(a: usize, b: usize) -> usize {
-    return a / gcd(a, b) * b;
+    a / gcd(a, b) * b
 }
 
 fn gcd(m: usize, n: usize) -> usize {
-    return if n == 0 { m } else { gcd(n, m % n) };
+    if n == 0 {
+        m
+    } else {
+        gcd(n, m % n)
+    }
 }
