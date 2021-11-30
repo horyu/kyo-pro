@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut aa: [usize; n]
     };
-    aa.sort();
+    aa.sort_unstable();
     aa.reverse();
 
     let mut pre_a = 0;
