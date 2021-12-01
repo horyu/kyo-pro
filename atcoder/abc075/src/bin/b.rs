@@ -1,3 +1,4 @@
+#![allow(clippy::manual_saturating_arithmetic, clippy::needless_range_loop)]
 #![allow(unused_imports)]
 // use itertools::Itertools;
 use proconio::{input, marker::*};

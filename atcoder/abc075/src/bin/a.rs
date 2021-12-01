@@ -6,6 +6,6 @@ fn main() {
     input! {
         mut abc: [i8; 3]
     };
-    abc.sort();
+    abc.sort_unstable();
     println!("{}", [abc[0], abc[2]][(abc[0] == abc[1]) as usize]);
 }
