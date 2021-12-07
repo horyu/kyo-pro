@@ -9,28 +9,19 @@ fn main() {
         mut s: Chars
     };
     for _ in 0..b {
-        match s.pop().unwrap() {
-            '-' => {
-                println!("No");
-                return;
-            }
-            _ => (),
-        }
-    }
-    match s.pop().unwrap() {
-        '-' => (),
-        _ => {
+        if s.pop().unwrap() == '-' {
             println!("No");
             return;
         }
     }
+    if s.pop().unwrap() != '-' {
+        println!("No");
+        return;
+    }
     for _ in 0..a {
-        match s.pop().unwrap() {
-            '-' => {
-                println!("No");
-                return;
-            }
-            _ => (),
+        if s.pop().unwrap() == '-' {
+            println!("No");
+            return;
         }
     }
     println!("Yes");
