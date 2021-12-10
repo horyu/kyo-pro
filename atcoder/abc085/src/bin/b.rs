@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut dd: [usize; n]
     };
-    dd.sort();
+    dd.sort_unstable();
     dd.dedup();
     println!("{}", dd.len());
 }
