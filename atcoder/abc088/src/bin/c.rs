@@ -14,6 +14,7 @@ fn main() {
     a[1] = c[1][0] - b[0];
     a[2] = c[2][0] - b[0];
 
+    #[allow(clippy::needless_range_loop)]
     for i in 0..3 {
         for j in 0..3 {
             if a[i] + b[j] != c[i][j] {

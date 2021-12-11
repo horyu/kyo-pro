@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut aa: [isize; n]
     };
-    aa.sort();
+    aa.sort_unstable();
     aa.reverse();
     let mut num = 0;
     for (i, a) in aa.iter().enumerate() {
