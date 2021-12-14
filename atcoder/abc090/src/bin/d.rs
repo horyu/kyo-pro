@@ -15,14 +15,12 @@ fn main() {
 
     let mut rs = 0usize;
     for b in (k + 1)..=n {
-        let m = (n + 1) / b;
-        rs += (b - k) * m;
+        // N = pb * r
+        let p = n / b;
+        let r = n - p * b;
 
-        let l = k + b * m;
-        let r = n;
-        if l <= r {
-            rs += r - l + 1;
-        }
+        rs += p * b.saturating_sub(k);
+        rs += (r + 1).saturating_sub(k);
     }
     println!("{}", rs);
 }
