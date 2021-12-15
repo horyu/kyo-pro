@@ -9,7 +9,7 @@ fn main() {
         x: usize,
         aa: [usize; m]
     };
-    let left = (0..x).filter(|i| aa.contains(i)).collect::<Vec<_>>().len();
-    let right = (x..n).filter(|i| aa.contains(i)).collect::<Vec<_>>().len();
+    let left = (0..x).filter(|i| aa.contains(i)).count();
+    let right = (x..n).filter(|i| aa.contains(i)).count();
     println!("{}", std::cmp::min(left, right));
 }
