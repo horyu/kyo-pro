@@ -7,5 +7,5 @@ fn main() {
         a: usize,
         b: usize
     };
-    println!("{}", (1..(b - a)).fold(0, |acc, x| acc + x) - a);
+    println!("{}", (1..(b - a)).sum::<usize>() - a);
 }
