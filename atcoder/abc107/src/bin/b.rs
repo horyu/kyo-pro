@@ -1,4 +1,6 @@
 #![allow(unused_imports)]
+#![allow(clippy::mut_range_bound)]
+#![allow(clippy::needless_range_loop)]
 // use itertools::Itertools;
 use proconio::{input, marker::*};
 
