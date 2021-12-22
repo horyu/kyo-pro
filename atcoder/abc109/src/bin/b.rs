@@ -12,7 +12,7 @@ fn main() {
         let a = &tmp[0];
         let b = &tmp[1];
         hs.insert(a);
-        if (a.chars().last().unwrap() != b.chars().nth(0).unwrap()) || hs.contains(&b) {
+        if (a.chars().last().unwrap() != b.chars().next().unwrap()) || hs.contains(&b) {
             println!("No");
             return;
         }
