@@ -7,6 +7,6 @@ fn main() {
         n: usize,
         mut dd: [usize; n]
     };
-    dd.sort();
+    dd.sort_unstable();
     println!("{}", dd[n / 2] - dd[n / 2 - 1]);
 }

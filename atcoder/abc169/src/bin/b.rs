@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut aa: [u128; n]
     };
-    aa.sort();
+    aa.sort_unstable();
     let mut sum = 1u128;
     for a in aa {
         let (tmp, tf) = sum.overflowing_mul(a);

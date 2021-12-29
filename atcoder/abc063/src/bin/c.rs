@@ -11,7 +11,7 @@ fn main() {
     if sum % 10 != 0 {
         println!("{}", sum);
     } else {
-        ss.sort();
+        ss.sort_unstable();
         if let Some(s) = ss.iter().find(|&s| s % 10 != 0) {
             println!("{}", sum - s);
         } else {

@@ -7,8 +7,8 @@ fn main() {
         mut s: Chars,
         mut t: Chars
     };
-    s.sort();
-    t.sort();
+    s.sort_unstable();
+    t.sort_unstable();
     t.reverse();
     let tf = (0..s.len()).any(|index| (index < t.len()) && (s[index] < t[index]))
         || ((s.len() < t.len()) && (0..s.len()).all(|index| s[index] == t[index]));

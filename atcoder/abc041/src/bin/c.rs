@@ -11,7 +11,7 @@ fn main() {
     for (i, a) in (&aa).iter().enumerate() {
         height_to_num.insert(*a, i + 1);
     }
-    aa.sort();
+    aa.sort_unstable();
     aa.reverse();
     let s = aa
         .iter()

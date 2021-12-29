@@ -14,7 +14,7 @@ fn main() {
     }
 
     let mut v = hm.values().into_iter().map(|&i| i).collect::<Vec<i32>>();
-    v.sort();
+    v.sort_unstable();
     if v.len() <= k {
         println!("0");
         return;

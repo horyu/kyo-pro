@@ -9,7 +9,7 @@ fn main() {
     input! {
         mut abc: [usize; 3]
     };
-    abc.sort();
+    abc.sort_unstable();
     println!(
         "{}",
         if abc[0] == abc[1] {

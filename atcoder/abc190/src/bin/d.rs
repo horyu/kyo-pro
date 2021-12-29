@@ -33,6 +33,6 @@ fn divisors(n: usize) -> Vec<usize> {
             }
         }
     }
-    divisors.sort();
+    divisors.sort_unstable();
     divisors
 }

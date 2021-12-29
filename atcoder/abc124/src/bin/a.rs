@@ -6,6 +6,6 @@ fn main() {
     input! {
         mut ab: [usize; 2],
     };
-    ab.sort();
+    ab.sort_unstable();
     println!("{}", ab[1] + if ab[0] == ab[1] { ab[0] } else { ab[1] - 1 });
 }

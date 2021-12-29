@@ -6,7 +6,7 @@ fn main() {
     input! {
         mut abc: [usize; 3]
     };
-    abc.sort();
+    abc.sort_unstable();
     let diff = (abc[2] - abc[1]) + (abc[2] - abc[0]);
     let rs = if diff % 2 == 0 {
         diff / 2

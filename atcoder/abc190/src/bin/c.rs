@@ -22,7 +22,7 @@ fn main() {
     }
     let mut max = 0;
     for mut v in ccdd.into_iter().multi_cartesian_product() {
-        v.sort();
+        v.sort_unstable();
         v.dedup();
         let mut tmp = 0;
         for (c, d) in v.into_iter().tuple_combinations() {

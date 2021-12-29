@@ -16,11 +16,11 @@ fn main() {
         println!("1");
         return;
     }
-    aa.sort();
+    aa.sort_unstable();
     aa.insert(0, 0);
     aa.push(n + 1);
     let mut spaces: Vec<_> = aa.windows(2).map(|tmp| tmp[1] - tmp[0] - 1).collect();
-    spaces.sort();
+    spaces.sort_unstable();
     while let Some(&first) = spaces.first() {
         if first == 0 {
             spaces.remove(0);

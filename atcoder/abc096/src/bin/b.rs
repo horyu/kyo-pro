@@ -7,7 +7,7 @@ fn main() {
         mut abc: [usize; 3],
         k: usize
     };
-    abc.sort();
+    abc.sort_unstable();
     for _ in 0..k {
         abc[2] *= 2;
     }

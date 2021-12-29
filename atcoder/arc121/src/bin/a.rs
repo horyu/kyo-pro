@@ -21,7 +21,7 @@ fn main() {
         indexes.push(y_indexes[i]);
         indexes.push(y_indexes[n - 1 - i]);
     }
-    indexes.sort();
+    indexes.sort_unstable();
     indexes.dedup();
     let mut vv = indexes
         .into_iter()
@@ -32,6 +32,6 @@ fn main() {
             (xi - xj).abs().max((yi - yj).abs())
         })
         .collect_vec();
-    vv.sort();
+    vv.sort_unstable();
     println!("{}", vv[vv.len() - 2]);
 }

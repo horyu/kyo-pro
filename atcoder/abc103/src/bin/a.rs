@@ -11,6 +11,6 @@ fn main() {
         .combinations(2)
         .map(|arr| (arr[0] - arr[1]).abs())
         .collect();
-    aa.sort();
+    aa.sort_unstable();
     println!("{}", aa[0] + aa[1]);
 }

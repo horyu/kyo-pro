@@ -6,6 +6,6 @@ fn main() {
     input! {
         mut abc: [usize; 3]
     };
-    abc.sort();
+    abc.sort_unstable();
     println!("{}", abc[0] + abc[1]);
 }

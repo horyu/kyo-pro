@@ -11,7 +11,7 @@ fn main() {
         println!("0");
         return;
     }
-    ll.sort();
+    ll.sort_unstable();
     let mut count = 0;
     for i in 0..(n - 2) {
         let a = ll[i];

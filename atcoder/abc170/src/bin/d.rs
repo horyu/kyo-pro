@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut aa: [usize; n]
     };
-    aa.sort();
+    aa.sort_unstable();
     let max = aa[n - 1];
     let mut dp = vec![true; max + 1];
     let mut dup = 0;

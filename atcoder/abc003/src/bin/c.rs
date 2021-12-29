@@ -8,7 +8,7 @@ fn main() {
         k: usize,
         mut rr: [usize; n]
     };
-    rr.sort();
+    rr.sort_unstable();
     let mut c = 0f64;
     let len = rr.len();
     for &r in &rr[(len - k)..len] {

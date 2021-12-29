@@ -7,7 +7,7 @@ fn main() {
         s: Chars
     };
     let mut ss = s.clone();
-    ss.sort();
+    ss.sort_unstable();
     ss.dedup();
     println!("{}", ["no", "yes"][(s.len() == ss.len()) as usize]);
 }

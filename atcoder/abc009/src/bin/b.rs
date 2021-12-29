@@ -7,7 +7,7 @@ fn main() {
         n: usize,
         mut aa: [usize; n]
     };
-    aa.sort();
+    aa.sort_unstable();
     aa.dedup();
     println!("{}", aa[aa.len() - 2]);
 }

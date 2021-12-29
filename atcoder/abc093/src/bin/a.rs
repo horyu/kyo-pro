@@ -6,6 +6,6 @@ fn main() {
     input! {
         mut s: Chars
     };
-    s.sort();
+    s.sort_unstable();
     println!("{}", ["No", "Yes"][(s == vec!['a', 'b', 'c']) as usize]);
 }

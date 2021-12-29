@@ -7,7 +7,7 @@ fn main() {
         abc: [usize; 3]
     };
     let mut sorted = abc.clone();
-    sorted.sort();
+    sorted.sort_unstable();
     sorted.reverse();
     for score in abc {
         println!("{}", sorted.iter().position(|&x| x == score).unwrap() + 1);

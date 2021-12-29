@@ -12,13 +12,13 @@ fn main() {
         println!("0");
         return;
     }
-    xx.sort();
+    xx.sort_unstable();
     if n == 1 {
         println!("{}", xx[m - 1] - xx[0]);
         return;
     }
     let mut distances: Vec<isize> = xx.windows(2).map(|tmp| tmp[1] - tmp[0]).collect();
-    distances.sort();
+    distances.sort_unstable();
     for _ in 0..(n - 1) {
         distances.pop();
     }

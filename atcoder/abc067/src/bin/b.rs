@@ -8,7 +8,7 @@ fn main() {
         k: usize,
         mut ll: [usize; n]
     };
-    ll.sort();
+    ll.sort_unstable();
     ll.reverse();
     println!("{}", ll[0..k].iter().sum::<usize>());
 }

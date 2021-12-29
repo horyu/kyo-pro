@@ -6,7 +6,7 @@ fn main() {
     input! {
         mut abc: [u8; 3]
     };
-    abc.sort();
+    abc.sort_unstable();
     abc.dedup();
     println!("{}", abc.len());
 }

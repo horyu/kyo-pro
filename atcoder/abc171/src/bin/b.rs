@@ -8,7 +8,7 @@ fn main() {
         k: usize,
         mut pp: [usize; n]
     };
-    pp.sort();
+    pp.sort_unstable();
     let sum = pp[0..k].iter().sum::<usize>();
     println!("{}", sum);
 }
