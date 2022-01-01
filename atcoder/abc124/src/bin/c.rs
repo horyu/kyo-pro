@@ -8,9 +8,9 @@ fn main() {
     };
     let mut black_start = 0;
     let mut white_start = 0;
-    for i in 0..s.len() {
-        let is_black = (s[i] == '0') as i32;
-        let is_white = (s[i] == '1') as i32;
+    for (i, sc) in s.into_iter().enumerate() {
+        let is_black = (sc == '0') as i32;
+        let is_white = (sc == '1') as i32;
         if i % 2 == 0 {
             black_start += is_white;
             white_start += is_black;
