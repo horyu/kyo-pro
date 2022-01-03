@@ -51,16 +51,13 @@ fn main2() {
             }
         }
     }
-    let mut x = 0;
-    let mut y = 0;
-    for (k, cnt) in hm {
-        if cnt == n {
-            x = x.max(k);
-        } else if cnt == n - 1 {
-            y = y.max(k);
-        }
-    }
-    println!("{}", x.max(y));
+    let rs = hm
+        .into_iter()
+        .filter(|(_k, cnt)| *cnt >= n - 1)
+        .max_by_key(|kcnt| kcnt.0)
+        .unwrap()
+        .0;
+    println!("{}", rs);
 }
 
 // 公約数 https://qiita.com/Cassin01/items/9bc63a4bde5526150681
