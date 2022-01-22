@@ -10,7 +10,7 @@ fn main() {
     };
     let mut num = 0;
     while n > 0 {
-        n = n / k;
+        n /= k;
         num += 1;
     }
     println!("{}", num);
