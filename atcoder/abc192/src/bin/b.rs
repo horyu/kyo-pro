@@ -14,10 +14,8 @@ fn main() {
             if c.is_ascii_lowercase() {
                 continue;
             }
-        } else {
-            if c.is_ascii_uppercase() {
-                continue;
-            }
+        } else if c.is_ascii_uppercase() {
+            continue;
         }
         println!("No");
         return;
