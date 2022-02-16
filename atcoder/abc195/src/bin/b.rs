@@ -4,6 +4,7 @@ use itertools::Itertools;
 use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
+#[allow(clippy::if_same_then_else)]
 fn main() {
     input! {
         a: usize,
@@ -24,7 +25,9 @@ fn main() {
     // 減らさない a + (w % a)/(w / a) <= b は
     // 1個減らす a <= w/(w/a - 1) <= b は
     if w % a == 0 {
+        // 何もしない
     } else if a as f64 + (w % a) as f64 / (w / a) as f64 <= b as f64 {
+        // 何もしない
     } else if (a * (w / a - 1) <= w) && (w <= b * (w / a - 1)) {
         max -= 1;
     } else {
