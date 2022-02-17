@@ -52,6 +52,7 @@ fn main() {
     }
 }
 
+#[allow(clippy::ptr_arg)]
 fn to_num(s: &Vec<char>, nums: &Vec<isize>, chars: &Vec<char>) -> isize {
     let mut rs = 0;
     for (i, sc) in s.iter().enumerate() {
