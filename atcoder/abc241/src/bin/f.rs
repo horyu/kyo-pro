@@ -20,10 +20,10 @@ fn main() {
         xyhm.entry(x).or_insert_with(BTreeSet::new).insert(y);
         yxhm.entry(y).or_insert_with(BTreeSet::new).insert(x);
     }
-    let mut checked = HashMap::new();
     let mut qq = VecDeque::new();
+    let mut checked = HashMap::new();
     qq.push_back((s, 0));
-    checked.insert(s, 0usize);
+    checked.insert(s, 0isize);
     while let Some(((qx, qy), c)) = qq.pop_front() {
         if let Some(ybtm) = xyhm.get(&qx) {
             if let Some(&l) = ybtm.range(0..qy).into_iter().rev().next() {
@@ -63,11 +63,8 @@ fn main() {
         }
     }
 
-    if let Some(c) = checked.get(&g) {
-        println!("{c}");
-    } else {
-        println!("-1");
-    }
+    let rs = checked.get(&g).unwrap_or(&(-1));
+    println!("{rs}");
     // dbg!(checked);
     // for (x, btm) in xyhm {
     //     println!("x {x}:{}", btm.iter().join(" "));
