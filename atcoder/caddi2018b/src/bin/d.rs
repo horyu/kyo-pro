@@ -6,6 +6,10 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        aa: [usize; n]
+    };
+    let tf = aa.into_iter().all(|a| a % 2 == 0);
+    println!("{}", ["first" ,"second"][tf as usize]);
 }
