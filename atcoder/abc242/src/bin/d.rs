@@ -6,15 +6,34 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    // input! {
-    //     s: Chars,
-    //     q: usize,
-    //     ttkk: [(Usize1, Usize1); q]
-    // };
-    // let n = s.len();
-    // for (t, k) in ttkk {
+    input! {
+        s: Chars,
+        q: usize,
+        ttkk: [(usize, Usize1); q]
+    };
+    for (t, k) in ttkk {
+        println!("{}", rec(&s, t, k, &mut Vec::new()));
+    }
+}
 
-    // }
-
-    // println!("{}", );
+fn rec(s: &[char], t: usize, k: usize, llrr: &mut Vec<usize>) -> char {
+    if t > 0 && k > 0 {
+        llrr.push(k % 2);
+        return rec(s, t - 1, k / 2, llrr);
+    }
+    let mut c = if t == 0 {
+        s[k]
+    } else {
+        ['A', 'B', 'C'][(s[0] as usize - ('A' as usize) + t) % 3]
+    };
+    while let Some(lr) = llrr.pop() {
+        let arr = match c {
+            'A' => ['B', 'C'],
+            'B' => ['C', 'A'],
+            'C' => ['A', 'B'],
+            _ => unreachable!(),
+        };
+        c = arr[lr];
+    }
+    c
 }
