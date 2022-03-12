@@ -14,13 +14,10 @@ fn main() {
     v %= x_sum;
     let rs = if v < xx[0] {
         'F'
+    } else if v < xx[0] + xx[1] {
+        'M'
     } else {
-        v -= xx[0];
-        if v < xx[1] {
-            'M'
-        } else {
-            'T'
-        }
+        'T'
     };
     println!("{rs}");
 }
