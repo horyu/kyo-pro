@@ -5,6 +5,12 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        dd: [isize; n]
+    };
+    let sum = dd.iter().sum::<isize>();
+    let max = *dd.iter().max().unwrap();
+    let init = sum - max;
+    println!("{}\n{}", sum, (max - init).max(0));
 }
