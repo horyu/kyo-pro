@@ -5,6 +5,15 @@ use proconio::{input, marker::*};
 use std::collections::{HashMap, HashSet};
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        bb: [char; 10],
+        n: usize,
+        mut aa: [String; n]
+    };
+    aa.sort_unstable_by_key(|a| {
+        a.chars().fold(0, |acc, c| {
+            acc * 10 + bb.iter().position(|&b| b == c).unwrap()
+        })
+    });
+    println!("{}", aa.into_iter().join("\n"));
 }
