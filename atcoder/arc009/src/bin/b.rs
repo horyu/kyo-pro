@@ -10,7 +10,7 @@ fn main() {
         n: usize,
         mut aa: [String; n]
     };
-    aa.sort_unstable_by_key(|a| {
+    aa.sort_by_cached_key(|a| {
         a.chars().fold(0, |acc, c| {
             acc * 10 + bb.iter().position(|&b| b == c).unwrap()
         })
