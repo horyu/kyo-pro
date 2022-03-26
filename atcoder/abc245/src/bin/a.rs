@@ -7,9 +7,9 @@ use std::collections::*;
 
 fn main() {
     input! {
-        ab: (usize, usize),
-        cd: (usize, usize),
+        ab: [usize; 2],
+        cd: [usize; 2],
     };
-    let tf = ab.0 < cd.0 || (ab.0 == cd.0 && ab.1 <= cd.1);
+    let tf = ab <= cd;
     println!("{}", ["Aoki", "Takahashi"][tf as usize]);
 }
