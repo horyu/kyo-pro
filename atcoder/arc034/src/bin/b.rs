@@ -19,8 +19,6 @@ fn main() {
     for r in rs {
         println!("{r}");
     }
-
-    // println!("{}", );
 }
 
 fn g(mut x: usize) -> usize {
