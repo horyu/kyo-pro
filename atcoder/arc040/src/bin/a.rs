@@ -10,14 +10,11 @@ fn main() {
         n: usize,
         ss: [Chars; n]
     };
-    let (r, b) = ss
-        .into_iter()
-        .flat_map(|s| s)
-        .fold((0, 0), |(r, b), s| match s {
-            'R' => (r + 1, b),
-            'B' => (r, b + 1),
-            _ => (r, b),
-        });
+    let (r, b) = ss.into_iter().flatten().fold((0, 0), |(r, b), s| match s {
+        'R' => (r + 1, b),
+        'B' => (r, b + 1),
+        _ => (r, b),
+    });
     use std::cmp::Ordering;
     println!(
         "{}",
