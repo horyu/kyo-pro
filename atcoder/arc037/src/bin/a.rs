@@ -10,6 +10,8 @@ fn main() {
         n: usize,
         mm: [usize; n]
     };
-    let rs = mm.into_iter().fold(0, |acc, m| acc + 80usize.saturating_sub(m));
+    let rs = mm
+        .into_iter()
+        .fold(0, |acc, m| acc + 80usize.saturating_sub(m));
     println!("{}", rs);
 }
