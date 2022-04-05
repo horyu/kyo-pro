@@ -11,10 +11,6 @@ fn main() {
         y: usize,
         k: usize,
     };
-    let rs = if k > y {
-        y + x - (k - y)
-    } else {
-        x + k
-    };
+    let rs = if k > y { y + x - (k - y) } else { x + k };
     println!("{}", rs);
 }
