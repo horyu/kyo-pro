@@ -15,9 +15,9 @@ fn main() {
     let mut min = std::usize::MAX;
     for size in 1..=primes.len() {
         for selected in primes.iter().combinations(size) {
-            let hs: HashSet<_> = selected.iter().collect();
+            let hs: HashSet<_> = selected.into_iter().collect();
             if yy.iter().all(|y| y.iter().any(|i| hs.contains(&i))) {
-                min = min.min(hs.into_iter().fold(1, |acc, &&j| acc * j));
+                min = min.min(hs.into_iter().product::<usize>());
             }
         }
     }
