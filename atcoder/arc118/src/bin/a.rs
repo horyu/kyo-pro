@@ -1,5 +1,6 @@
 #![allow(clippy::many_single_char_names)]
 #![allow(unused_imports)]
+#![feature(int_roundings)]
 use itertools::Itertools;
 use num_integer::*;
 use proconio::{input, marker::*};
@@ -10,6 +11,6 @@ fn main() {
         t: usize,
         n: usize
     };
-    let v = (n * 100).div_ceil(&t);
+    let v = (n * 100).div_ceil(t);
     println!("{}", (100 + t) * v / 100 - 1)
 }
