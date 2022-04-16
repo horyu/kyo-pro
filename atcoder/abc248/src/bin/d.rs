@@ -19,7 +19,7 @@ fn main() {
     for (l, r, x) in llrrxx {
         let ri = vvv[x].partition_point(|&v| v < r);
         let li = vvv[x].partition_point(|&v| v < l - 1);
-        let rs = ri.saturating_sub(li);
+        let rs = ri - li;
         println!("{rs}");
     }
 }
