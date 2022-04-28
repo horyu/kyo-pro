@@ -6,7 +6,6 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    input! {
-    };
+    input! {};
     // println!("{}", );
 }

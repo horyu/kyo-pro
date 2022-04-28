@@ -16,11 +16,7 @@ fn main() {
     for (l, r) in llrr {
         ll = ll.max(l);
         rr = rr.min(r);
-        let rs = if ll <= rr {
-            0
-        } else {
-            (ll - rr).div_ceil(2)
-        };
+        let rs = ll.saturating_sub(rr).div_ceil(2);
         println!("{rs}");
     }
 }
