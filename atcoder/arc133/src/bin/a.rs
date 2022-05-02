@@ -7,18 +7,14 @@ use std::collections::*;
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n]
+        mut aa: [usize; n]
     };
-    let mut x = 0;
-    for (&ax, &ay) in aa.iter().tuple_windows() {
-        if ax > ay {
-            x = ax;
-            break;
-        }
-    }
-    if x == 0 {
-        x = aa[n - 1];
-    }
-    let rs = aa.into_iter().filter(|&a| a != x).join(" ");
+    let x = aa
+        .iter()
+        .tuple_windows()
+        .find_map(|(ax, ay)| if ax > ay { Some(*ax) } else { None })
+        .unwrap_or(aa[n - 1]);
+    aa.retain(|&a| a != x);
+    let rs = aa.into_iter().join(" ");
     println!("{rs}");
 }
