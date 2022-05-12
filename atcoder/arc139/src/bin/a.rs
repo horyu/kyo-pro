@@ -11,16 +11,15 @@ fn main() {
         tt: [usize; n]
     };
     let mut pre_a = 0usize;
-    // eprintln!("[{}]{pre_a}\t{:#010b}", tt[0], pre_a);
     for t in tt {
         let tmp = pre_a >> t;
         for k in 0.. {
-            if (((tmp + 1) << k) | 1) << t > pre_a {
-                pre_a = (((tmp + 1) << k) | 1) << t;
+            let a = (((tmp + 1) << k) | 1) << t;
+            if a > pre_a {
+                pre_a = a;
                 break;
             }
         }
-        // eprintln!("[{t}]{pre_a}\t{:#010b}", pre_a);
     }
     println!("{pre_a}");
 }
