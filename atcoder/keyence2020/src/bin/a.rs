@@ -1,5 +1,6 @@
 #![allow(clippy::many_single_char_names)]
 #![allow(unused_imports)]
+#![feature(int_roundings)]
 use itertools::Itertools;
 use num_integer::*;
 use proconio::{input, marker::*};
@@ -12,5 +13,5 @@ fn main() {
         n: usize,
     };
     let k = h.max(w);
-    println!("{}", n.div_ceil(&k));
+    println!("{}", n.div_ceil(k));
 }
