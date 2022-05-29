@@ -6,6 +6,12 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        a: u128,
+        b: u128,
+        c: u128,
+    };
+    // log2(a) < b*log2(c)
+    let tf = a < c.pow(b as u32);
+    println!("{}", ["No", "Yes"][tf as usize]);
 }
