@@ -6,6 +6,10 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        abc: [usize; 3]
+    };
+    let gcd = abc[0].gcd(&abc[1]).gcd(&abc[2]);
+    let rs = abc.into_iter().map(|x| x / gcd - 1).sum::<usize>();
+    println!("{rs}");
 }
