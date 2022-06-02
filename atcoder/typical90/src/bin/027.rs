@@ -6,6 +6,14 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        ss: [String; n]
+    };
+    let mut hs = HashSet::new();
+    for (i, s) in ss.into_iter().enumerate() {
+        if hs.insert(s) {
+            println!("{}", i + 1);
+        }
+    }
 }
