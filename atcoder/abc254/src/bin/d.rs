@@ -14,21 +14,16 @@ fn main() {
     let mut vv = vec![0usize; n + 1];
     vv[1] = 1;
     for i in 2..=n {
-        let lpf = pf.least_factor(i);
-        if vv[i / lpf] % lpf == 0 {
-            vv[i] = vv[i / lpf] / lpf;
-        } else {
-            vv[i] = vv[i / lpf] * lpf;
-        }
+        let kk = pf
+            .get(i)
+            .into_iter()
+            .filter_map(|(k, v)| if v.is_odd() { Some(k) } else { None })
+            .product::<usize>();
+        vv[kk] += 1;
     }
-    let mut ww = vec![0usize; n + 1];
-    for &v in &vv[1..]  {
-        ww[v] += 1;
-    }
-    let rs = ww.into_iter().fold(0, |acc, w| acc + w.pow(2u32));
+    let rs = vv.into_iter().fold(0, |acc, w| acc + w.pow(2u32));
     println!("{rs}");
 }
-
 
 // https://algo-logic.info/prime-fact/
 struct PrimeFact {
@@ -57,9 +52,5 @@ impl PrimeFact {
             n /= self.spf[n];
         }
         hm
-    }
-
-    fn least_factor(&self, n: usize) -> usize {
-        self.spf[n]
     }
 }
