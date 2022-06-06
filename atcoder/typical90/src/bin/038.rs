@@ -6,6 +6,14 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        a: u128,
+        b: u128,
+    };
+    let rs = a.lcm(&b);
+    if rs <= 1e18 as u128 {
+        println!("{rs}");
+    } else {
+        println!("Large");
+    }
 }
