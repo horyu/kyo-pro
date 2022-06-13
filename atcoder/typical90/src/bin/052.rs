@@ -6,6 +6,14 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        n: usize,
+        aaa: [[usize; 6]; n]
+    };
+    let mut rs = 1;
+    for aa in aaa {
+        let sum = aa.into_iter().sum::<usize>();
+        rs = rs * sum % (1e9 as usize + 7);
+    }
+    println!("{rs}");
 }
