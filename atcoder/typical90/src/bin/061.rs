@@ -6,6 +6,22 @@ use proconio::{input, marker::*};
 use std::collections::*;
 
 fn main() {
-    input! {};
-    // println!("{}", );
+    input! {
+        q: usize,
+        ttxx: [(usize, usize); q]
+    };
+    let mut qq = VecDeque::new();
+    for (t, x) in ttxx {
+        match t {
+            1 => {
+                qq.push_front(x);
+            }
+            2 => {
+                qq.push_back(x);
+            }
+            _ => {
+                println!("{}", qq[x - 1]);
+            }
+        }
+    }
 }
