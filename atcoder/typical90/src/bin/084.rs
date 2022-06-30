@@ -21,7 +21,7 @@ fn main() {
     }
     let mut rs = 0usize;
     for i in 0..n {
-        let other = if s[i] == 'o' { &xx } else {&oo};
+        let other = if s[i] == 'o' { &xx } else { &oo };
         if let Some(j) = other.range(i..).next() {
             rs += n - j;
         }
