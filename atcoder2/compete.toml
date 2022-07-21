@@ -23,7 +23,7 @@ test-suite = "{{ manifest_dir }}/testcases/{{ bin_alias }}.yml"
 [template]
 src = '''
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
-#![allow(unused_imports)]
+#![allow(unused_imports, unused_variables)]
 #![feature(int_log, int_roundings, map_first_last)]
 use itertools::{iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
