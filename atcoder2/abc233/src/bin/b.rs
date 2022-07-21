@@ -17,7 +17,7 @@ fn main() {
     println!(
         "{}{}{}",
         &s[..(l - 1)].iter().join(""),
-        &s[(l - 1)..=(r - 1)].iter().rev().join(""),
+        &s[(l - 1)..r].iter().rev().join(""),
         &s[r..].iter().join(""),
     );
 }
