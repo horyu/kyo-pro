@@ -11,7 +11,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        x: usize,
     };
-    // println!("{rs}");
+    input! {
+        l: usize,
+        aa: [usize; l],
+    };
+    let mut hm = aa.into_iter().counts();
+    for _ in 1..n {
+        input! {
+            l: usize,
+            aa: [usize; l],
+        };
+        let mut new_hm = HashMap::new();
+        for (ak, ac) in aa.into_iter().counts() {
+            for (&k, &c) in &hm {
+                if let Some(kk) = k.checked_mul(ak) {
+                    if kk <= x {
+                        *new_hm.entry(kk).or_insert(0) += ac * c;
+                    }
+                }
+            }
+        }
+        hm = new_hm;
+    }
+    let rs = hm.get(&x).unwrap_or(&0);
+    println!("{rs}");
 }
