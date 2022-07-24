@@ -14,20 +14,43 @@ fn main() {
         cc: [usize; n],
         xx: [usize; n],
     };
-    let ctoi: HashMap<usize, usize> = cc
+    let mut rs = 0;
+    let xtoi: HashMap<usize, usize> = xx
         .iter()
         .unique()
+        .sorted()
         .enumerate()
-        .map(|(i, &c)| (c, i + 1))
+        .map(|(i, &x)| (x, i + 1))
         .collect();
-    let mut bb = vec![Bit::new(300000); ctoi.len() + 1];
-    let mut rs = 0;
-    for (i, c, x) in izip!(0..n, cc, xx) {
-        let c = *ctoi.get(&c).unwrap();
-        eprintln!("{rs}({i}, {c}) {} {}", bb[c].sum(x), bb[0].sum(x));
-        rs += bb[0].sum(x) - bb[c].sum(x);
-        bb[0].add(x);
-        bb[c].add(x);
+    // 色を考えない反転数
+    {
+        let mut b = Bit::new(xtoi.len());
+        for (i, &x) in xx.iter().enumerate() {
+            let x = *xtoi.get(&x).unwrap();
+            rs += i - b.sum(x);
+            b.add(x);
+        }
+    }
+    // 色ごとの反転数を引く
+    for ii in (0..n)
+        .into_iter()
+        .into_group_map_by(|&i| cc[i])
+        .into_values()
+    {
+        let vv = ii.into_iter().map(|i| xx[i]).collect_vec();
+        let vtoj: HashMap<usize, usize> = vv
+            .iter()
+            .unique()
+            .sorted()
+            .enumerate()
+            .map(|(j, &v)| (v, j + 1))
+            .collect();
+        let mut b = Bit::new(vtoj.len());
+        for (j, v) in vv.into_iter().enumerate() {
+            let v = *vtoj.get(&v).unwrap();
+            rs -= j - b.sum(v);
+            b.add(v);
+        }
     }
     println!("{rs}");
 }
