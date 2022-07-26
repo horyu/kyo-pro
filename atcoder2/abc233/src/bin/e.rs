@@ -10,8 +10,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        xx: Bytes,
     };
-    // println!("{rs}");
+    let xx = xx
+        .into_iter()
+        .rev()
+        .map(|x| (x - b'0') as usize)
+        .collect_vec();
+    let mut vv = vec![];
+    let mut sum = xx.iter().sum::<usize>();
+    let mut amari = 0;
+    for x in xx {
+        let y = sum + amari;
+        vv.push(y % 10);
+        amari = y / 10;
+        sum -= x;
+    }
+    while 0 < amari {
+        vv.push(amari % 10);
+        amari /= 10;
+    }
+    if let Some(&0) = vv.last() {
+        vv.pop();
+    }
+    println!("{}", vv.into_iter().rev().join(""));
 }
