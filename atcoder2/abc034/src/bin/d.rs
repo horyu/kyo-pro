@@ -11,7 +11,25 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
+        wwpp: [(f64, f64); n],
     };
-    // println!("{rs}");
+    let mut ok = 0.0;
+    let mut ng = 100.1;
+    for _ in 0..1000 {
+        let m = (ok + ng) / 2.0;
+        let sum = wwpp
+            .iter()
+            .map(|&(w, p)| w * (p - m))
+            .sorted_unstable_by(|x, y| x.partial_cmp(y).unwrap())
+            .rev()
+            .take(k)
+            .sum::<f64>();
+        if 0.0 <= sum {
+            ok = m;
+        } else {
+            ng = m;
+        }
+    }
+    println!("{ok}");
 }
