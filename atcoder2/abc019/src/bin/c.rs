@@ -13,5 +13,13 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut hs = HashSet::new();
+    for mut a in aa {
+        while a % 2 == 0 {
+            a /= 2;
+        }
+        hs.insert(a);
+    }
+    let rs = hs.len();
+    println!("{rs}");
 }
