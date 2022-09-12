@@ -10,8 +10,31 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        q: u128,
     };
-    // println!("{rs}");
+    let mut bts = BTreeSet::new();
+    for i in 0..q {
+        input! {t: u8, x: u128};
+        match t.cmp(&2) {
+            std::cmp::Ordering::Less => {
+                bts.insert((x << 32) + i);
+            }
+            std::cmp::Ordering::Equal => {
+                input! {k: usize};
+                if let Some(&v) = bts.range(..((x + 1) << 32)).rev().nth(k - 1) {
+                    println!("{}", v >> 32);
+                } else {
+                    println!("-1");
+                }
+            }
+            std::cmp::Ordering::Greater => {
+                input! {k: usize};
+                if let Some(&v) = bts.range((x << 32)..).nth(k - 1) {
+                    println!("{}", v >> 32);
+                } else {
+                    println!("-1");
+                }
+            }
+        }
+    }
 }
