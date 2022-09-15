@@ -10,8 +10,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    // gとpが打ち消し、余ったgの個数 / 2
+    let mut cnt = 0;
+    for c in s {
+        if c == 'g' {
+            cnt += 1;
+        } else {
+            cnt -= 1;
+        }
+    }
+    let rs = cnt / 2;
+    println!("{rs}");
 }
