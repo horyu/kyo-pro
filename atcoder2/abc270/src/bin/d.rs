@@ -10,32 +10,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        mut n: usize,
+        n: usize,
         k: usize,
-        mut aa: [usize; k],
+        aa: [usize; k],
     };
-    let mut rs = 0;
-    let mut r = k - 1;
-    while 0 < n {
-        while n < aa[r] {
-            r -= 1;
+    let mut dp = vec![0; n + 1];
+    for i in 1..=n {
+        for &a in &aa {
+            if i < a {
+                break;
+            }
+            dp[i] = dp[i].max(i.saturating_sub(dp[i - a]));
         }
-        if 1 < r && aa[r] < 2 * aa[r - 1] && 2 * aa[r - 1] + aa[r] == n {
-            rs += 2 * aa[r - 1];
-            break;
-        }
-        rs += aa[r];
-        n -= aa[r];
-        if n == 0 {
-            break;
-        }
-        while n < aa[r] {
-            r -= 1;
-        }
-        if 1 < r && aa[r] < 2 * aa[r - 1] && 2 * aa[r - 1] + aa[r] == n {
-            break;
-        }
-        n -= aa[r];
     }
+    let rs = dp[n];
     println!("{rs}");
 }
