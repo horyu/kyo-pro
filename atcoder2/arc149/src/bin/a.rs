@@ -16,13 +16,13 @@ fn main() {
     let mut mm = (1..=9).map(|i| i % m).collect_vec();
     let cc = ('1'..='9').collect_vec();
     let mut len = 0;
-    let mut c = '\0';
+    let mut c = '0';
     for i in 1..=n {
         for j in (0..9).rev() {
             let jj = j + 1;
             if mm[j] == 0 {
                 let new_len = i * (n / i);
-                if new_len <= n && (len < new_len || (len == new_len && c <= cc[j])) {
+                if new_len <= n && (len < new_len || (len == new_len && c < cc[j])) {
                     len = new_len;
                     c = cc[j];
                 }
