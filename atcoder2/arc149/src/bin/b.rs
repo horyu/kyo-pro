@@ -12,6 +12,24 @@ fn main() {
     input! {
         n: usize,
         aa: [usize; n],
+        bb: [usize; n],
     };
-    // println!("{rs}");
+    let mut aabb = izip!(aa, bb).collect_vec();
+    // https://qiita.com/python_walker/items/d1e2be789f6e7a0851e5
+    let lis = |xx: &[usize]| -> usize {
+        let mut vv = vec![xx[0]];
+        for (i, &x) in xx.iter().enumerate() {
+            if *vv.last().unwrap() < x {
+                vv.push(x);
+            } else {
+                let i = vv.partition_point(|&v| v < x);
+                vv[i] = x;
+            }
+        }
+        vv.len()
+    };
+    aabb.sort_unstable_by_key(|ab| ab.0);
+    let rs = lis(aabb.iter().map(|ab| ab.0).collect_vec().as_ref())
+        + lis(aabb.iter().map(|ab| ab.1).collect_vec().as_ref());
+    println!("{rs}");
 }
