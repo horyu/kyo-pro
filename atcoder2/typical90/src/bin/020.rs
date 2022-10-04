@@ -10,8 +10,10 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        a: u128,
+        b: u32,
+        c: u128,
     };
-    // println!("{rs}");
+    let rs = if a < c.pow(b) { "Yes" } else { "No" };
+    println!("{rs}");
 }
