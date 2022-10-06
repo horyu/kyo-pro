@@ -10,8 +10,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        k: usize,
     };
-    // println!("{rs}");
+    // 2 * 12=> 2 * [1*12,2*6,3*4]
+    // 4 * 6 => 4 * [1*6,2*3]
+    let mut rs = 0;
+    for a in 1..=(k.sqrt()) {
+        let bc = k / a;
+        if a * bc == k {
+            for b in a..=(bc.sqrt()) {
+                let c = bc / b;
+                if b * c == bc && b <= c {
+                    // eprintln!("{a} {b} {c}");
+                    rs += 1;
+                }
+            }
+        }
+    }
+    println!("{rs}");
 }
