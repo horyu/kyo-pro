@@ -11,7 +11,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        a: usize,
+        b: usize,
+        c: usize,
     };
-    // println!("{rs}");
+    let mut rs = std::usize::MAX;
+    let max = 9999;
+    for i in 0..max {
+        let ai = a * i;
+        if n < ai {
+            break;
+        }
+        for j in 0..(max - i) {
+            let bj = b * j;
+            if n < ai + bj {
+                break;
+            }
+            let d = n - (ai + bj);
+            let k = d / c;
+            if c * k == d && i + j + k <= max {
+                rs = rs.min(i + j + k);
+            }
+        }
+    }
+    println!("{rs}");
 }
