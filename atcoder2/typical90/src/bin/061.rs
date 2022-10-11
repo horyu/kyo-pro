@@ -10,8 +10,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        q: usize,
+        ttxx: [(usize, usize); q],
     };
-    // println!("{rs}");
+    // 山札　[0]=一番上
+    let mut qq = VecDeque::new();
+    for (t, x) in ttxx {
+        match t {
+            1 => {
+                qq.push_front(x);
+            }
+            2 => {
+                qq.push_back(x);
+            }
+            _ => {
+                println!("{}", qq[x - 1]);
+            }
+        }
+    }
 }
