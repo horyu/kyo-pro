@@ -13,37 +13,28 @@ use std::{
 };
 
 fn main() {
-    // input! {
-    //     n: usize,
-    //     m: usize,
-    //     pp: [Usize1; n],
-    // };
-    // let mut rs = ModInt998244353::new(0);
-    // let mut free = n as u32;
-    // let mm = ModInt998244353::new(m);
-    // // let mut ttff = vec![false; n];
-    // let mut dsu = ac_library_rs::Dsu::new(n);
-    // for i in 0..n {
-    //     let p = pp[i];
-    //     if !dsu.same(i, p) {
-    //         if i != p {
-    //             let is = dsu.size(i);
-    //             let ps = dsu.size(p);
-    //             eprintln!("{i}:{is} {p}:{ps} {free}");
-    //             // rs += mm * (mm - 1) / 2 * m.pow(free - (is + ps) as u32);
-    //             if is == 1 && ps == 1 {
-    //                 rs += mm * (mm - 1) / 2 * m.pow(free - 2);
-    //                 dbg!(mm * (mm - 1) / 2 * m.pow(free - 2));
-    //             } else {
+    input! {
+        n: usize,
+        m: usize,
+        pp: [Usize1; n],
+    };
+    let mut rs = ModInt998244353::new(0);
+    let mut group_cnt = n as u64;
+    let mm = ModInt998244353::new(m);
+    let mul = mm * (mm - 1) / 2;
+    // dbg!(mul);
+    let mut uf = UnionFind::new(n);
+    for i in 0..n {
+        let p = pp[i];
+        if !uf.equiv(i, p) {
+            if i != p {
+                rs += mul * mm.pow(group_cnt.saturating_sub(2));
+                // dbg!(mul * mm.pow(group_cnt.saturating_sub(2) as u64));
+            }
+            uf.union(i, p);
+            group_cnt -= 1;
+        }
+    }
 
-    //             }
-    //         }
-    //         dsu.merge(i, p);
-    //         free -= 1;
-    //     }
-    //     // ttff[i] = true;
-    //     // ttff[p] = true;
-    // }
-
-    // println!("{rs}");
+    println!("{rs}");
 }
