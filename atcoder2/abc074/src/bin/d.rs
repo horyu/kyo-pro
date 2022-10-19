@@ -11,7 +11,36 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aaa: [[usize; n]; n],
     };
-    // println!("{rs}");
+    let mut btm = BTreeMap::new();
+    for k in 0..n {
+        for i in 0..n {
+            if k < i {
+                btm.entry(aaa[k][i]).or_insert_with(Vec::new).push((k, i))
+            }
+            for j in 0..n {
+                if aaa[i][k] + aaa[k][j] < aaa[i][j] {
+                    println!("-1");
+                    return;
+                }
+            }
+        }
+    }
+    let mut rs = 0usize;
+    let mut bbb = vec![vec![(!0usize) >> 2; n]; n];
+    for i in 0..n {
+        bbb[i][i] = 0;
+    }
+    for (l, iijj) in btm {
+        for (i, j) in iijj {
+            if (0..n).all(|k| l < bbb[i][k] + bbb[k][j]) {
+                rs += l;
+                // eprintln!("{l} {i}-{j}");
+            }
+            bbb[i][j] = l.min(bbb[i][j]);
+            bbb[j][i] = l.min(bbb[j][i]);
+        }
+    }
+    println!("{rs}");
 }
