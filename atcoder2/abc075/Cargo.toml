@@ -1,0 +1,45 @@
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+strip = true
+
+[package]
+name = "abc075"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.cargo-compete.bin]
+abc075-a = { alias = "a", problem = "https://atcoder.jp/contests/abc075/tasks/abc075_a" }
+abc075-b = { alias = "b", problem = "https://atcoder.jp/contests/abc075/tasks/abc075_b" }
+abc075-c = { alias = "c", problem = "https://atcoder.jp/contests/abc075/tasks/abc075_c" }
+abc075-d = { alias = "d", problem = "https://atcoder.jp/contests/abc075/tasks/abc075_d" }
+
+[[bin]]
+name = "abc075-a"
+path = "src/bin/a.rs"
+
+[[bin]]
+name = "abc075-b"
+path = "src/bin/b.rs"
+
+[[bin]]
+name = "abc075-c"
+path = "src/bin/c.rs"
+
+[[bin]]
+name = "abc075-d"
+path = "src/bin/d.rs"
+
+[dependencies]
+itertools = "0.10.3"
+itertools-num = "0.1.3"
+num-integer = "0.1.45"
+num-complex = "0.4.2"
+num-bigint = "0.4.3"
+petgraph = "0.6.2"
+proconio = { version = "0.3.7", features = ["derive"] }
+
+ac-library-rs = { git = "https://github.com/rust-lang-ja/ac-library-rs" }
+
+[dev-dependencies]
