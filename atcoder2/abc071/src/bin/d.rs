@@ -2,7 +2,7 @@
 #![allow(unused_imports, unused_variables)]
 #![feature(int_log, int_roundings)]
 use ac_library_rs::modint::ModInt1000000007 as Mint;
-use itertools::{iproduct, izip, Itertools as _};
+use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
 use petgraph::unionfind::UnionFind;
