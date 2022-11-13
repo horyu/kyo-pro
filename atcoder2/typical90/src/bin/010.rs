@@ -11,7 +11,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        ccpp: [(Usize1, usize); n],
+        q: usize,
+        llrr: [(Usize1, Usize1); q],
     };
-    // println!("{rs}");
+    let mut ss = vec![vec![0; n + 1]; 2];
+    for (i, (c, p)) in ccpp.into_iter().enumerate() {
+        for ci in 0..2 {
+            ss[ci][i + 1] = ss[ci][i];
+            if c == ci {
+                ss[ci][i + 1] += p;
+            }
+        }
+    }
+    for (l, r) in llrr {
+        let rs = (0..2).map(|c| ss[c][r + 1] - ss[c][l]).join(" ");
+        println!("{rs}");
+    }
 }
