@@ -15,27 +15,12 @@ fn main() {
         mut xxyyzz: [[isize; 3]; n],
     };
     let mut rs = 0isize;
-    for vv in [
-        [1, 1, 1],
-        [1, 1, -1],
-        [1, -1, 1],
-        [1, -1, -1],
-        [-1, 1, 1],
-        [-1, 1, -1],
-        [-1, -1, 1],
-        [-1, -1, -1],
-    ] {
-        xxyyzz.sort_unstable_by_key(|xyz| {
-            let mut tmp = 0;
-            for i in 0..3 {
-                tmp -= vv[i] * xyz[i];
-            }
-            tmp
-        });
+    for vv in (0..3).map(|i| [1, -1]).multi_cartesian_product() {
+        xxyyzz.sort_unstable_by_key(|xyz| izip!(&vv, xyz).fold(0, |acc, (v, xyz)| acc - v * xyz));
         let mut ww = [0; 3];
         for xyz in &xxyyzz[..m] {
-            for i in 0..3 {
-                ww[i] += xyz[i];
+            for (i, xyz) in xyz.iter().enumerate() {
+                ww[i] += xyz;
             }
         }
         rs = rs.max(ww.into_iter().map(|w| w.abs()).sum::<isize>());
