@@ -15,78 +15,50 @@ fn main() {
         ss: [String; n],
         tt: [String; m],
     };
-    let hs: HashSet<&str> = tt.iter().map(|t| t.as_str()).collect();
-    if n == 1 {
-        if hs.contains(ss[0].as_str()) || ss[0].len() < 3 {
-            println!("-1");
-        } else {
-            println!("{}", ss[0]);
-        }
-        return;
-    }
-    // 最小で結合して超過するか
-    let min_len = ss.iter().fold(0, |acc, s| acc + s.len()) + n - 1;
-    let over = 16 - min_len;
-    // dbg!(over, min_len);
-    for ii in (0..n).permutations(n) {
-        for over in 0..=over {
-            if let Some(s) = dfs(n, &ss, &hs, over, &ii, &mut vec![1; n - 1]) {
-                println!("{s}");
-                return;
-            }
+    let ngs: HashSet<String> = tt.into_iter().collect();
+    let remain = 16 - (n - 1) - ss.iter().fold(0, |acc, s| acc + s.len());
+    for strs in ss.iter().map(|s| s.as_str()).permutations(n) {
+        if let Some(rs) = dfs(0, remain as isize, &strs, &ngs, &mut String::new()) {
+            println!("{rs}");
+            return;
         }
     }
     println!("-1");
 }
 
-const UNDERS: [&str; 17] = [
-    "",
-    "_",
-    "__",
-    "___",
-    "____",
-    "_____",
-    "______",
-    "_______",
-    "________",
-    "_________",
-    "__________",
-    "___________",
-    "____________",
-    "_____________",
-    "______________",
-    "_______________",
-    "________________",
-];
-
 fn dfs(
-    n: usize,
-    ss: &[String],
-    hs: &HashSet<&str>,
-    over: usize,
-    ii: &[usize],
-    vv: &mut Vec<usize>,
+    cur: usize,
+    remain: isize,
+    strs: &[&str],
+    ngs: &HashSet<String>,
+    ans: &mut String,
 ) -> Option<String> {
-    if over == 0 {
-        let mut s = String::new();
-        for i in 0..(n - 1) {
-            s.push_str(ss[ii[i]].as_str());
-            s.push_str(UNDERS[vv[i]]);
-        }
-        s.push_str(ss[ii[n - 1]].as_str());
-        if hs.contains(s.as_str()) {
-            return None;
-        } else {
-            return Some(s);
-        }
+    if remain < 0 {
+        return None;
     }
-    for i in 0..(n - 1) {
-        vv[i] += 1;
-        if let Some(s) = dfs(n, ss, hs, over - 1, ii, vv) {
-            return Some(s);
+    if cur == strs.len() {
+        if 3 <= ans.len() && !ngs.contains(ans) {
+            return Some(ans.to_owned());
         }
-        vv[i] -= 1;
+        return None;
     }
 
-    None
+    if !ans.is_empty() && !ans.ends_with('_') {
+        ans.push('_');
+        dfs(cur, remain, strs, ngs, ans)
+    } else {
+        let mut new_ans = ans.clone();
+        new_ans.push_str(strs[cur]);
+        match dfs(cur + 1, remain, strs, ngs, &mut new_ans) {
+            None => {
+                if !ans.is_empty() {
+                    ans.push('_');
+                    dfs(cur, remain - 1, strs, ngs, ans)
+                } else {
+                    None
+                }
+            }
+            rs => rs,
+        }
+    }
 }
