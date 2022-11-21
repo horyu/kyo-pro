@@ -1,0 +1,55 @@
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+strip = true
+
+[package]
+name = "arc131"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.cargo-compete.bin]
+arc131-a = { alias = "a", problem = "https://atcoder.jp/contests/arc131/tasks/arc131_a" }
+arc131-b = { alias = "b", problem = "https://atcoder.jp/contests/arc131/tasks/arc131_b" }
+arc131-c = { alias = "c", problem = "https://atcoder.jp/contests/arc131/tasks/arc131_c" }
+arc131-d = { alias = "d", problem = "https://atcoder.jp/contests/arc131/tasks/arc131_d" }
+arc131-e = { alias = "e", problem = "https://atcoder.jp/contests/arc131/tasks/arc131_e" }
+arc131-f = { alias = "f", problem = "https://atcoder.jp/contests/arc131/tasks/arc131_f" }
+
+[[bin]]
+name = "arc131-a"
+path = "src/bin/a.rs"
+
+[[bin]]
+name = "arc131-b"
+path = "src/bin/b.rs"
+
+[[bin]]
+name = "arc131-c"
+path = "src/bin/c.rs"
+
+[[bin]]
+name = "arc131-d"
+path = "src/bin/d.rs"
+
+[[bin]]
+name = "arc131-e"
+path = "src/bin/e.rs"
+
+[[bin]]
+name = "arc131-f"
+path = "src/bin/f.rs"
+
+[dependencies]
+itertools = "0.10.3"
+itertools-num = "0.1.3"
+num-integer = "0.1.45"
+num-complex = "0.4.2"
+num-bigint = "0.4.3"
+petgraph = "0.6.2"
+proconio = { version = "0.3.7", features = ["derive"] }
+
+ac-library-rs = { git = "https://github.com/rust-lang-ja/ac-library-rs" }
+
+[dev-dependencies]
