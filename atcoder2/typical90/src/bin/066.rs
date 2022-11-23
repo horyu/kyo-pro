@@ -11,7 +11,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        llrr: [(Usize1, Usize1); n],
     };
-    // println!("{rs}");
+    let mut rs = 0.0;
+    let mut arr = [0.0; 100];
+    for (l, r) in llrr {
+        let mut new_arr = arr;
+        let size = (r - l + 1) as f64;
+        for i in l..=r {
+            let bigs = arr[(i + 1)..].iter().sum::<f64>();
+            if 0.0 < bigs {
+                rs += bigs / size;
+            }
+            new_arr[i] += 1.0 / size;
+        }
+        arr = new_arr;
+    }
+    println!("{rs}");
 }
