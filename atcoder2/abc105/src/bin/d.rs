@@ -11,7 +11,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        m: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut hm = HashMap::new();
+    hm.insert(0, 1);
+
+    let mut rs = 0usize;
+    let mut s = 0;
+    for a in aa {
+        s = (s + a) % m;
+        rs += hm.get(&s).copied().unwrap_or_default();
+        *hm.entry(s).or_insert(0) += 1;
+    }
+    println!("{rs}");
 }
