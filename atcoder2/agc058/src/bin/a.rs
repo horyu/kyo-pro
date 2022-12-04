@@ -11,45 +11,53 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        pp: [usize; 2 * n],
+        mut pp: [usize; 2 * n],
     };
-    let swap_even = |vv: &mut Vec<usize>, kk: &mut Vec<usize>| {
-        for i in (0..(2 * n - 1)).step_by(2) {
-            if vv[i] > vv[i + 1] {
-                kk.push(i);
-                vv.swap(i, i + 1);
+    let mut rs = vec![];
+    for i in 0..(2 * n - 2) {
+        if i.is_even() {
+            if pp[i + 1] < pp[i] {
+                if pp[i] < pp[i + 2] {
+                    // 213
+                    rs.push(i + 1);
+                    pp.swap(i + 1, i + 2);
+                } else {
+                    // 312
+                    rs.push(i);
+                    pp.swap(i, i + 1);
+                }
             }
-        }
-    };
-    let swap_odd = |vv: &mut Vec<usize>, kk: &mut Vec<usize>| {
-        for i in (1..(2 * n - 1)).step_by(2) {
-            if vv[i] < vv[i + 1] {
-                kk.push(i);
-                vv.swap(i, i + 1);
-            }
-        }
-    };
-
-    let mut qq = pp.clone();
-    let mut kk = vec![];
-    swap_even(&mut qq, &mut kk);
-    swap_odd(&mut qq, &mut kk);
-    if kk.len() <= n {
-        if kk.is_empty() {
-            println!("0");
         } else {
-            println!("{}\n{}", kk.len(), kk.into_iter().map(|k| k + 1).join(" "));
+            if pp[i] < pp[i + 1] {
+                if pp[i] < pp[i + 2] {
+                    // 123
+                    rs.push(i);
+                    pp.swap(i, i + 1);
+                } else {
+                    // 231
+                    rs.push(i + 1);
+                    pp.swap(i + 1, i + 2);
+                }
+            }
         }
-        return;
-    };
-
-    qq = pp;
-    kk.clear();
-    swap_odd(&mut qq, &mut kk);
-    swap_even(&mut qq, &mut kk);
-    if kk.is_empty() {
-        println!("0")
-    } else {
-        println!("{}\n{}", kk.len(), kk.into_iter().map(|k| k + 1).join(" "));
+    }
+    if pp[2 * n - 1] < pp[2 * n - 2] {
+        rs.push(2 * n - 2);
+        pp.swap(2 * n - 2, 2 * n - 1);
+    }
+    for i in 0..(n - 1) {
+        if i.is_even() {
+            if pp[i] > pp[i + 1] {
+                panic!("{i}:{}", pp.iter().join(""));
+            }
+        } else {
+            if pp[i] < pp[i + 1] {
+                panic!("{}:{}", i, pp.iter().join(""));
+            }
+        }
+    }
+    println!("{}", rs.len());
+    if !rs.is_empty() {
+        println!("{}", rs.into_iter().map(|rs| rs + 1).join(" "));
     }
 }
