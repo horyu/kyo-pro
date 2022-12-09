@@ -11,7 +11,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        a: usize,
+        b: usize,
     };
-    // println!("{rs}");
+    let mut rs = vec![vec!['.'; b * n]; a * n];
+    for i in 0..(a * n) {
+        for j in 0..(b * n) {
+            let ii = i / a;
+            let jj = j / b;
+            if (ii + jj).is_odd() {
+                rs[i][j] = '#';
+            }
+        }
+    }
+
+    for rs in rs {
+        println!("{}", rs.iter().join(""));
+    }
 }
