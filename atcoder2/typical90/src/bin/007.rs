@@ -11,7 +11,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aa: [isize; n],
+        q: usize,
+        bb: [isize; q],
     };
-    // println!("{rs}");
+    let bts = BTreeSet::from_iter(aa);
+    for b in bb {
+        let r = bts
+            .range(b..)
+            .next()
+            .copied()
+            .unwrap_or(std::isize::MAX >> 2);
+        let l = bts
+            .range(..b)
+            .next_back()
+            .copied()
+            .unwrap_or(std::isize::MAX >> 2);
+        let rs = (r - b).abs().min((l - b).abs());
+        println!("{rs}");
+    }
 }
