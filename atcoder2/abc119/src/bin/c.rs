@@ -14,31 +14,25 @@ fn main() {
         // a: usize,
         // b: usize,
         // c: usize,
-        mut abc: [isize; 3],
-        mut ll: [isize; n],
+        abc: [isize; 3],
+        ll: [isize; n],
     };
-    let rs = dfs(n, &abc, &ll, 0, 0, 0, 0);
-    println!("{rs}");
-}
-
-fn dfs(n: usize, abc: &[isize], ll: &[isize], cur: usize, x: isize, y: isize, z: isize) -> isize {
-    if cur == n {
-        let xyz = [x, y, z];
-        if 0 < xyz.iter().min().copied().unwrap() {
-            (0..3).fold(0, |acc, i| acc + (abc[i] - xyz[i]).abs()) - 30
-        } else {
-            std::isize::MAX >> 4
+    let mut rs = std::usize::MAX;
+    for vv in (0..n).map(|_| 0..4).multi_cartesian_product() {
+        let mut cnts = [0; 4];
+        for &v in &vv {
+            cnts[v] += 1;
         }
-    } else {
-        let l = ll[cur];
-        [
-            dfs(n, abc, ll, cur + 1, x, y, z),
-            dfs(n, abc, ll, cur + 1, x + l, y, z) + 10,
-            dfs(n, abc, ll, cur + 1, x, y + l, z) + 10,
-            dfs(n, abc, ll, cur + 1, x, y, z + l) + 10,
-        ]
-        .into_iter()
-        .min()
-        .unwrap()
+        if cnts[..3].iter().all(|&v| 0 < v) {
+            let mut ww = [0; 4];
+            for (i, v) in vv.iter().copied().enumerate() {
+                ww[v] += ll[i];
+            }
+            let tmp = (0..3).fold(0, |acc, i| {
+                acc + (cnts[i] - 1) * 10 + abc[i].abs_diff(ww[i])
+            });
+            rs = rs.min(tmp);
+        }
     }
+    println!("{rs}");
 }
