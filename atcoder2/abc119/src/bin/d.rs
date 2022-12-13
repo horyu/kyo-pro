@@ -10,8 +10,29 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        a: usize,
+        b: usize,
+        q: usize,
+        ss: [isize; a],
+        tt: [isize; b],
+        xx: [isize; q],
     };
-    // println!("{rs}");
+    let ss = BTreeSet::from_iter(chain!([std::isize::MIN >> 2], ss, [std::isize::MAX >> 2]));
+    let tt = BTreeSet::from_iter(chain!([std::isize::MIN >> 2], tt, [std::isize::MAX >> 2]));
+    for x in xx {
+        let ss = [
+            ss.range(..=x).next_back().copied().unwrap(),
+            ss.range(x..).next().copied().unwrap(),
+        ];
+        let tt = [
+            tt.range(..=x).next_back().copied().unwrap(),
+            tt.range(x..).next().copied().unwrap(),
+        ];
+        let mut rs = std::usize::MAX;
+        for (s, t) in ss.into_iter().cartesian_product(tt) {
+            rs = rs.min(x.abs_diff(s) + s.abs_diff(t));
+            rs = rs.min(x.abs_diff(t) + t.abs_diff(s));
+        }
+        println!("{rs}");
+    }
 }
