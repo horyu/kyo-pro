@@ -11,7 +11,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
+        llrr: [(Usize1, Usize1); q],
     };
-    // println!("{rs}");
+    let mut vv = vec![false; n + 1];
+    for (l, r) in llrr {
+        vv[l] = !vv[l];
+        vv[r + 1] = !vv[r + 1];
+    }
+    let mut rs = String::new();
+    let mut tf = false;
+    for &v in &vv[..n] {
+        tf ^= v;
+        rs.push(if tf { '1' } else { '0' });
+    }
+    println!("{rs}");
 }
