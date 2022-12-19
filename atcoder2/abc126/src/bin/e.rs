@@ -11,7 +11,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        xxyyzz: [(Usize1, Usize1, usize); m],
     };
-    // println!("{rs}");
+    // 121
+    // 12: 1 : 21
+    // 21: 1 : 12
+    // 11: 0 : 22
+    let mut dsu = ac_library_rs::Dsu::new(n);
+    for (x, y, z) in xxyyzz.iter().copied() {
+        dsu.merge(x, y);
+    }
+    let rs = dsu.groups().len();
+    println!("{rs}");
 }
