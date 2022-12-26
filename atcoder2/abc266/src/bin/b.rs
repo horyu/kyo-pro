@@ -12,5 +12,10 @@ fn main() {
     input! {
         n: isize,
     };
-    // println!("{rs}");
+    let k = 998244353isize;
+    let mut rs = n - n / k * k;
+    if rs < 0 {
+        rs += k
+    }
+    println!("{rs}");
 }
