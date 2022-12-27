@@ -10,8 +10,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        xxyy: [(f64, f64); 4],
     };
-    // println!("{rs}");
+    let cal = |i: usize, j: usize, k: usize| -> f64 {
+        ((xxyy[i].0 - xxyy[k].0) * (xxyy[j].1 - xxyy[k].1)
+            - (xxyy[j].0 - xxyy[k].0) * (xxyy[i].1 - xxyy[k].1))
+            .signum()
+    };
+    let tf = (0..4)
+        .cycle()
+        .tuple_windows()
+        .take(4)
+        .all(|(i, j, k)| !cal(i, j, k).is_sign_negative());
+    let rs = ["No", "Yes"][tf as usize];
+    println!("{rs}");
 }
