@@ -11,7 +11,32 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        ttxxaa: [(usize, usize, usize); n],
     };
-    // println!("{rs}");
+    let mut ttxxaa: VecDeque<_> = ttxxaa.into_iter().collect();
+    let mut dp = [0; 5];
+    for tt in 0..=100000 {
+        if let Some((t, x, a)) = ttxxaa.front().copied() {
+            if t == tt {
+                ttxxaa.pop_front();
+                if x <= tt {
+                    dp[x] += a;
+                    // eprintln!("[{tt}] {}", dp.iter().join(" "));
+                }
+            }
+        }
+        let mut new_dp = dp;
+        for i in 0..5 {
+            if 0 < i {
+                new_dp[i] = new_dp[i].max(dp[i - 1]);
+            }
+            if i < 4 {
+                new_dp[i] = new_dp[i].max(dp[i + 1]);
+            }
+        }
+        dp = new_dp;
+    }
+    // eprintln!("[] {}", dp.iter().join(" "));
+    let rs = dp.into_iter().max().unwrap();
+    println!("{rs}");
 }
