@@ -11,7 +11,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
+        aabb: [(usize, usize); n],
     };
-    // println!("{rs}");
+    let mut bh: BinaryHeap<_> = aabb
+        .iter()
+        .copied()
+        .enumerate()
+        .map(|(i, ab)| (ab.1, i, true))
+        .collect();
+    let mut rs = 0;
+    for _ in 0..k {
+        let (score, i, is_bubun) = bh.pop().unwrap();
+        rs += score;
+        if is_bubun {
+            bh.push((aabb[i].0 - score, i, false));
+        }
+    }
+    println!("{rs}");
 }
