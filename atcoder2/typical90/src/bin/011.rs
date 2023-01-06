@@ -11,7 +11,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        mut ddccss: [(usize, usize, usize); n],
     };
-    // println!("{rs}");
+    // ddccss.retain(|dcs| dcs.1 <= dcs.0);
+    ddccss.sort_unstable_by_key(|dcs| dcs.0);
+    // dp[見終わった仕事][合計仕事時間]
+    let mut dp = vec![vec![0; 5001]; n + 1];
+    for i in 0..n {
+        let (d, c, s) = ddccss[i];
+        for j in 0..5001 {
+            if j < c || d < j {
+                dp[i + 1][j] = dp[i][j];
+            } else {
+                dp[i + 1][j] = dp[i][j].max(dp[i][j - c] + s);
+            }
+        }
+    }
+    let rs = dp[n].iter().max().copied().unwrap();
+    println!("{rs}");
 }
