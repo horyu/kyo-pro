@@ -119,6 +119,9 @@ cases:
       53
       51
       50
+  - name: sample8
+    in: |
+      100000
 
 extend:
   - type: Text
