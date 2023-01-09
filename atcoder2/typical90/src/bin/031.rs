@@ -18,17 +18,17 @@ fn main() {
     let mut grundy = vec![vec![0; MAX + 50]; 50 + 1];
     for i in 0..=50 {
         for j in 0..=MAX {
-            let mut mex = vec![0; MAX + 50];
+            let mut mex = vec![true; MAX + 50];
             if 1 <= i {
-                mex[grundy[i - 1][j + 1]] = 1;
+                mex[grundy[i - 1][j + 1]] = false;
             }
             if 2 <= j {
                 for k in 1..=(j / 2) {
-                    mex[grundy[i][j - k]] = 1;
+                    mex[grundy[i][j - k]] = false;
                 }
             }
             for k in 0..=MAX {
-                if mex[k] == 0 {
+                if mex[k] {
                     grundy[i][j] = k;
                     break;
                 }
