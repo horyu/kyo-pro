@@ -14,24 +14,19 @@ fn main() {
         ww: [usize; n],
         bb: [usize; n],
     };
-    const MAX: usize = (1 + 50) * 50 / 2 + 50;
-    let mut grundy = vec![vec![0; MAX + 50]; 50 + 1];
+    const MAX: usize = 1500;
+    let mut grundy = vec![vec![0; MAX]; 50 + 1];
     for i in 0..=50 {
-        for j in 0..=MAX {
-            let mut mex = vec![true; MAX + 50];
-            if 1 <= i {
-                mex[grundy[i - 1][j + 1]] = false;
+        for j in 0..MAX {
+            let mut mex = vec![false; MAX];
+            if 0 < i && j + i < MAX {
+                mex[grundy[i - 1][j + i]] = true;
             }
-            if 2 <= j {
-                for k in 1..=(j / 2) {
-                    mex[grundy[i][j - k]] = false;
-                }
+            for k in 1..=(j / 2) {
+                mex[grundy[i][j - k]] = true;
             }
-            for k in 0..=MAX {
-                if mex[k] {
-                    grundy[i][j] = k;
-                    break;
-                }
+            if let Some(k) = mex.iter().position(|&m| !m) {
+                grundy[i][j] = k;
             }
         }
     }
@@ -39,6 +34,6 @@ fn main() {
     let sum_xor = izip!(ww, bb)
         .map(|(w, b)| grundy[w][b])
         .fold(0, |acc, g| acc ^ g);
-    let rs = ["Second", "First"][(sum_xor != 0) as usize];
+    let rs = ["First", "Second"][(sum_xor == 0) as usize];
     println!("{rs}");
 }
