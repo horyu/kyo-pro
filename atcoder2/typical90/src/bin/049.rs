@@ -11,7 +11,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        mut ccllrr: [(usize, usize, usize); m],
     };
-    // println!("{rs}");
+    ccllrr.sort_unstable();
+
+    let mut uf = UnionFind::new(n + 2);
+    let mut c1 = 0;
+    let mut c2 = 0;
+    for (c, l, r) in ccllrr {
+        if uf.union(l - 1, r) {
+            c1 += c;
+            c2 += 1;
+        }
+    }
+
+    if c2 == n {
+        println!("{c1}");
+    } else {
+        println!("-1");
+    }
 }
