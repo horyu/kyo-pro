@@ -11,7 +11,45 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
+        q: usize,
+        xxyy: [(Usize1, usize); q],
     };
-    // println!("{rs}");
+    let xx = xxyy.iter().copied().map(|xy| xy.0).collect_vec();
+    let yy = xxyy.iter().copied().map(|xy| xy.1).collect_vec();
+
+    let mut g = vec![vec![]; n];
+    for (a, b) in aabb.iter().copied() {
+        g[a].push(b);
+        g[b].push(a);
+    }
+    for vv in &mut g {
+        vv.sort_unstable();
+    }
+
+    let mut cc = vec![1; n];
+    let b = q.sqrt();
+    for i in 0..b {
+        let ql = i * q / b;
+        let qr = (i + 1) * q / b;
+        for j in ql..qr {
+            let mut c = cc[xx[j]];
+            for k in ql..j {
+                if xx[j] == xx[k] || g[xx[k]].binary_search(&xx[j]).is_ok() {
+                    c = yy[k];
+                }
+            }
+            println!("{c}");
+        }
+
+        for j in ql..qr {
+            if !xx[(j + 1)..qr].contains(&xx[j]) {
+                cc[xx[j]] = yy[j];
+                for k in g[xx[j]].iter().copied() {
+                    cc[k] = yy[j];
+                }
+            }
+        }
+    }
 }
