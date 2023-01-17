@@ -19,13 +19,10 @@ fn main() {
     let xx = xxyy.iter().copied().map(|xy| xy.0).collect_vec();
     let yy = xxyy.iter().copied().map(|xy| xy.1).collect_vec();
 
-    let mut g = vec![vec![]; n];
+    let mut g = vec![HashSet::new(); n];
     for (a, b) in aabb.iter().copied() {
-        g[a].push(b);
-        g[b].push(a);
-    }
-    for vv in &mut g {
-        vv.sort_unstable();
+        g[a].insert(b);
+        g[b].insert(a);
     }
 
     let mut cc = vec![1; n];
@@ -36,7 +33,7 @@ fn main() {
         for j in ql..qr {
             let mut c = cc[xx[j]];
             for k in ql..j {
-                if xx[j] == xx[k] || g[xx[k]].binary_search(&xx[j]).is_ok() {
+                if xx[j] == xx[k] || g[xx[k]].contains(&xx[j]) {
                     c = yy[k];
                 }
             }
