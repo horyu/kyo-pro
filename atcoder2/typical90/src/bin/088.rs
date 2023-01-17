@@ -11,7 +11,34 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        q: usize,
         aa: [usize; n],
+        xxyy: [(Usize1, Usize1); q],
     };
-    // println!("{rs}");
+    let mut ngs = vec![vec![false; n]; n];
+    for (x, y) in xxyy {
+        ngs[x][y] = true;
+        ngs[y][x] = true;
+    }
+    let mut hm = HashMap::new();
+    hm.insert(0, Vec::<usize>::new());
+    for (i, a) in aa.iter().copied().enumerate() {
+        let mut new_hm = hm.clone();
+        for (k, mut jj) in hm {
+            if jj.iter().any(|&j| ngs[i][j]) {
+                continue;
+            }
+            jj.push(i);
+            let new_k = k + a;
+            if let Some(kk) = new_hm.remove(&new_k) {
+                for xx in [kk, jj] {
+                    println!("{}\n{}", xx.len(), xx.iter().map(|x| 1 + x).join(" "));
+                    // eprintln!("{}", xx.iter().copied().map(|x| aa[x]).sum::<usize>());
+                }
+                return;
+            }
+            new_hm.insert(new_k, jj);
+        }
+        hm = new_hm;
+    }
 }
