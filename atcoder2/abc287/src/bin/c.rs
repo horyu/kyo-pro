@@ -15,14 +15,18 @@ fn main() {
         m: usize,
         uuvv: [(Usize1, Usize1); m],
     };
+    let mut cc = vec![0usize; n];
     let mut uf = UnionFind::new(n);
     for (u, v) in uuvv {
+        cc[u] += 1;
+        cc[v] += 1;
         if !uf.union(u, v) {
             println!("No");
             return;
         }
     }
-    if n == m + 1 {
+    let hm = cc.into_iter().counts();
+    if n == m + 1 && hm.get(&1) == Some(&2) && hm.get(&2).copied().unwrap_or_default() == n - 2 {
         println!("Yes");
     } else {
         println!("No");
