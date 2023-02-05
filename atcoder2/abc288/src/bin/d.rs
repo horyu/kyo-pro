@@ -16,23 +16,20 @@ fn main() {
         q: usize,
         llrr: [(Usize1, Usize1); q],
     };
-    if k == 1 {
-        let rs = "Yes\n".repeat(q);
-        println!("{rs}");
-        return;
-    }
-    let mut ddd = vec![vec![0]; k];
-    for (i, a) in aa.iter().copied().enumerate() {
-        let last = ddd[i % k].last().copied().unwrap();
-        ddd[i % k].push(last + a);
-    }
-    for (l, r) in llrr {
-        let mut vv = aa[(r - k + 1)..r].iter().copied().collect_vec();
-        for (j, v) in vv.iter_mut().enumerate() {
-            // *v -= ddd[(r - k + 1) % m][(r - k + 1) / m] - ddd[(r - k + 1) % m][l / m];
-            // *v += ddd[(r - k + 1 + j) / k * k + 1];
+    let mut xxx = vec![vec![0; n + 1]; k];
+    for j in 0..k {
+        for (i, a) in aa.iter().copied().enumerate() {
+            xxx[j][i + 1] = xxx[j][i] + if i % k == j { a } else { 0 };
         }
-        let rs = ["No", "Yes"][vv.into_iter().all(|v| v.is_zero()) as usize];
+    }
+    let get = |j: usize, l: usize, r: usize| -> isize { xxx[j][r] - xxx[j][l] };
+    for (l, r) in llrr {
+        let mut tf = true;
+        let tmp = get(0, l, r + 1);
+        for j in 1..k {
+            tf &= tmp == get(j, l, r + 1);
+        }
+        let rs = ["No", "Yes"][tf as usize];
         println!("{rs}");
     }
 }
