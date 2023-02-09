@@ -15,17 +15,16 @@ fn main() {
         q: usize,
         llrr: [(Usize1, Usize1); q],
     };
-    let mut ss = vec![vec![0; n + 1]; 2];
+    let mut s = vec![vec![0; n + 1]; 2];
     for (i, (c, p)) in ccpp.into_iter().enumerate() {
-        for ci in 0..2 {
-            ss[ci][i + 1] = ss[ci][i];
-            if c == ci {
-                ss[ci][i + 1] += p;
+        for j in 0..2 {
+            s[j][i + 1] = s[j][i];
+            if c == j {
+                s[j][i + 1] += p;
             }
         }
     }
     for (l, r) in llrr {
-        let rs = (0..2).map(|c| ss[c][r + 1] - ss[c][l]).join(" ");
-        println!("{rs}");
+        println!("{} {}", s[0][r + 1] - s[0][l], s[1][r + 1] - s[1][l]);
     }
 }
