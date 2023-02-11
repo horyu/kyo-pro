@@ -10,8 +10,16 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        a: usize,
+        b: usize,
     };
-    // println!("{rs}");
+    use num_bigint::ToBigUint;
+    let a = a.to_biguint().unwrap();
+    let b = b.to_biguint().unwrap();
+    let lcm = a.lcm(&b);
+    if lcm <= 1e18.to_biguint().unwrap() {
+        println!("{lcm}");
+    } else {
+        println!("Large");
+    }
 }
