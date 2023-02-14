@@ -17,14 +17,13 @@ fn main() {
     //  1*: 10..19 110..119 210..219
     // 1**: 100..199 1100..1199
     let mut rs = 0usize;
-    for i in 1u32..=9 {
+    for i in 1u32..=(n.ilog10() + 1) {
+        // 10^i のループの個数
         rs += dbg!(n / 10usize.pow(i) * 10usize.pow(i - 1));
+        // 最後のループの個数
         rs += dbg!((n % 10usize.pow(i))
             .min(10usize.pow(i - 1) * 2 - 1)
             .saturating_sub(10usize.pow(i - 1) - 1));
-        if n.ilog10() == i - 1 {
-            break;
-        }
     }
     println!("{rs}");
 }
