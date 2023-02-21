@@ -11,7 +11,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        l: usize,
     };
-    // println!("{rs}");
+    const MOD: usize = 1e9 as usize + 7;
+    let mut vv = vec![0; n + 1];
+    vv[0] = 1;
+    for i in 0..n {
+        vv[i + 1] = (vv[i + 1] + vv[i]) % MOD;
+        if i + l <= n {
+            vv[i + l] = (vv[i + l] + vv[i]) % MOD;
+        }
+    }
+    let rs = vv[n];
+    println!("{rs}");
 }
