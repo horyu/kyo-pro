@@ -11,7 +11,16 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut g = petgraph::Graph::<(), ()>::new();
+    let nodes = (0..n).map(|_| g.add_node(())).collect_vec();
+    g.extend_with_edges(aabb.iter().unique().map(|&(i, j)| (nodes[i], nodes[j])));
+
+    let rs = petgraph::algo::tarjan_scc(&g)
+        .into_iter()
+        .map(|vv| vv.len())
+        .fold(0, |acc, len| acc + len * (len.saturating_sub(1)) / 2);
+    println!("{rs}");
 }
