@@ -14,18 +14,19 @@ fn main() {
         m: usize,
         aabb: [(Usize1, Usize1); m],
     };
-    let mut rs = vec![n * (n - 1) / 2; m];
     let mut dsu = ac_library_rs::Dsu::new(n);
-    let mut sub = 0;
-    for (i, (a, b)) in aabb.into_iter().enumerate().rev() {
-        rs[i] -= sub;
-
-        if !dsu.same(a, b) {
-            sub += dsu.size(a) * dsu.size(b);
-            dsu.merge(a, b);
+    let mut rs = vec![n * (n - 1) / 2; m];
+    for (i, (a, b)) in aabb[1..].iter().copied().enumerate().rev() {
+        rs[i] = rs[i + 1];
+        if dsu.same(a, b) {
+            continue;
         }
+        let a_size = dsu.size(a);
+        let b_size = dsu.size(b);
+        dsu.merge(a, b);
+        rs[i] -= a_size * b_size;
     }
-    for rs in rs {
-        println!("{rs}");
-    }
+
+    let rs = rs.iter().join("\n");
+    println!("{rs}");
 }
