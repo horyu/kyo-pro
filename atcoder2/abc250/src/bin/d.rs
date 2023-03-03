@@ -10,8 +10,35 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        n: u128,
     };
-    // println!("{rs}");
+    let max = (n / 2).nth_root(3) as usize;
+    let mut vv = vec![true; max + 2];
+    for i in 0..=1 {
+        vv[i] = false;
+    }
+    let mut pp = vec![];
+    for i in 2..=max {
+        if !vv[i] {
+            continue;
+        }
+        pp.push(i as u128);
+        for j in 0.. {
+            let ij = i * j;
+            if max < ij {
+                break;
+            }
+            vv[ij] = false;
+        }
+    }
+    // eprintln!("{}", pp.iter().join(" "));
+    let mut rs = 0;
+    for (i, a) in pp.iter().copied().enumerate() {
+        let j = pp.partition_point(|&b| a.saturating_mul(b.saturating_pow(3)) <= n);
+        if i < j {
+            // eprintln!("{i}-{j}");
+            rs += j - i - 1;
+        }
+    }
+    println!("{rs}");
 }
