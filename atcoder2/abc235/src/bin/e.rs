@@ -13,31 +13,35 @@ fn main() {
         n: usize,
         m: usize,
         q: usize,
-        aabbcc: [(Usize1, Usize1, usize); m],
+        mut aabbcc: [(Usize1, Usize1, usize); m],
         uuvvww: [(Usize1, Usize1, usize); q],
     };
-    let mut rs = vec![false; q];
-    let mut ee = vec![];
-    for abc in aabbcc {
-        ee.push((std::usize::MAX, abc));
-    }
-    for (i, abc) in uuvvww.into_iter().enumerate() {
-        ee.push((i, abc));
-    }
-    ee.sort_unstable_by_key(|iabc| iabc.1 .2);
+    aabbcc.sort_unstable_by_key(|abc| abc.2);
+    aabbcc.dedup_by_key(|abc| (abc.0, abc.1));
     let mut uf = UnionFind::new(n);
-    for (i, (a, b, _c)) in ee {
-        if !uf.equiv(a, b) {
-            if i == std::usize::MAX {
-                uf.union(a, b);
+    let mut ttff = vec![false; q];
+    let mut jjuuvvww = uuvvww
+        .into_iter()
+        .enumerate()
+        .sorted_unstable_by_key(|juvw| juvw.1 .2)
+        .peekable();
+    // for (j, uvw) in jjuuvvww {
+    //     eprintln!("{j} {uvw:?}");
+    // }
+    // return;
+    for (a, b, c) in aabbcc.iter().copied() {
+        while let Some(&(j, (u, v, w))) = jjuuvvww.peek() {
+            if w < c {
+                ttff[j] = !uf.equiv(u, v);
+                jjuuvvww.next();
             } else {
-                rs[i] = true;
+                break;
             }
         }
+        uf.union(a, b);
     }
-    let rs = rs
-        .into_iter()
-        .map(|tf| ["No", "Yes"][tf as usize])
-        .join("\n");
-    println!("{rs}");
+    for tf in ttff {
+        let rs = ["No", "Yes"][tf as usize];
+        println!("{rs}");
+    }
 }
