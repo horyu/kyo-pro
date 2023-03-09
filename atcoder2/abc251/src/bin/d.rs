@@ -10,13 +10,11 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        _w: usize,
+        w: usize,
     };
-    let mut vv = Vec::with_capacity(300);
-    for exp in [0, 2, 4] {
-        for i in 1usize..=99 {
-            vv.push(i * 10usize.pow(exp));
-        }
+    let mut vv = vec![];
+    for j in 0..3 {
+        vv.extend((1..100).map(|i| i * 10usize.pow(j * 2)));
     }
-    println!("{}\n{}", vv.len(), vv.into_iter().join(" "));
+    println!("{}\n{}", vv.len(), vv.iter().join(" "));
 }
