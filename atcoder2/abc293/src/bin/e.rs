@@ -12,6 +12,33 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
+        a: u128,
+        x: u128,
+        m: u128,
+    };
+    if a == 1 {
+        println!("{}", x % m);
+    } else {
+        // https://blog.spiralray.net/cp/modulo#i-8
+        fn mod_pow(mut x: u128, mut n: u128, m: u128) -> u128 {
+            let mut ans = 1;
+            while n != 0 {
+                if n.is_odd() {
+                    ans = ans * x % m;
+                }
+                x = x * x % m;
+                n >>= 1;
+            }
+            ans
+        }
+        let rs = (mod_pow(a, x, m * (a - 1)) - 1) / (a - 1) % m;
+        println!("{rs}");
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
         a: u64,
         x: u64,
         m: u32,
