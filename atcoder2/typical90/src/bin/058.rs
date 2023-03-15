@@ -11,7 +11,26 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
     };
-    // println!("{rs}");
+    const MAX: usize = 1e5 as usize;
+    let mut x_to_i = vec![std::usize::MAX; MAX];
+    let mut x = n;
+    x_to_i[x] = 0;
+    let mut i_to_x = vec![x];
+    for r in 1..=k {
+        x = ((0..5).map(|a| x / 10usize.pow(a) % 10).sum::<usize>() + x) % MAX;
+        i_to_x.push(x);
+        if x_to_i[x] != std::usize::MAX {
+            // ループ
+            let l = x_to_i[x];
+            let loop_size = r - l;
+            let rs = i_to_x[l + (k - l) % loop_size];
+            println!("{rs}");
+            return;
+        }
+        x_to_i[x] = r;
+    }
+    let rs = x;
+    println!("{rs}");
 }
