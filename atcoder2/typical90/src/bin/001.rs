@@ -17,25 +17,21 @@ fn main() {
     };
     let mut ok = 1;
     let mut ng = l + 1;
-    let f = |x: usize| -> bool {
+    while 1 < ng - ok {
+        let m = (ng + ok) / 2;
         let mut cnt = 0;
         let mut pre = 0;
-        for &a in &aa {
-            if x <= a - pre && x <= l - a {
-                pre = a;
+        for a in aa.iter().copied() {
+            if m <= (a - pre).min(l - a) {
                 cnt += 1;
+                pre = a;
             }
         }
-        k <= cnt
-    };
-    while ok + 1 < ng {
-        let m = (ok + ng) / 2;
-        if f(m) {
-            ok = m;
-        } else {
+        if cnt < k {
             ng = m;
+        } else {
+            ok = m;
         }
-        eprintln!("{ok} {ng}");
     }
     let rs = ok;
     println!("{rs}");
