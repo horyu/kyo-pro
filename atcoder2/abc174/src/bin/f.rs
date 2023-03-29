@@ -11,7 +11,63 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
+        cc: [Usize1; n],
+        llrr: [(usize, usize); q],
     };
-    // println!("{rs}");
+    // Mo's algorithm
+    // https://kanpurin.hatenablog.com/entry/2021/04/09/001439
+    let size = n.sqrt();
+    let ii = (0..q).sorted_unstable_by(|&a, &b| {
+        let (al, ar) = llrr[a];
+        let (bl, br) = llrr[b];
+        if al / size != bl / size {
+            al.cmp(&bl)
+        } else if al / size % 2 == 1 {
+            br.cmp(&ar)
+        } else {
+            ar.cmp(&br)
+        }
+    });
+    let mut rrss = vec![0; q];
+    let mut l = 0;
+    let mut r = 0;
+    let mut vv = vec![0i32; n];
+    let mut cnt = 0;
+    for i in ii {
+        let (ql, qr) = llrr[i];
+        let ql = ql - 1;
+        while qr < r {
+            r -= 1;
+            vv[cc[r]] -= 1;
+            if vv[cc[r]] == 0 {
+                cnt -= 1;
+            }
+        }
+        while r < qr {
+            vv[cc[r]] += 1;
+            if vv[cc[r]] == 1 {
+                cnt += 1;
+            }
+            r += 1;
+        }
+        while l < ql {
+            vv[cc[l]] -= 1;
+            if vv[cc[l]] == 0 {
+                cnt -= 1;
+            }
+            l += 1;
+        }
+        while ql < l {
+            l -= 1;
+            vv[cc[l]] += 1;
+            if vv[cc[l]] == 1 {
+                cnt += 1;
+            }
+        }
+        rrss[i] = cnt;
+    }
+    for rs in rrss {
+        println!("{rs}");
+    }
 }
