@@ -10,8 +10,10 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Chars,
+        t: Chars,
     };
-    // println!("{rs}");
+    let n = s.len();
+    let rs = izip!(&s, &t).position(|(sc, tc)| sc != tc).unwrap_or(n) + 1;
+    println!("{rs}");
 }
