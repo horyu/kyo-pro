@@ -10,8 +10,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        r: usize,
+        c: usize,
+        k: usize,
+        rrccvv: [(usize, usize, isize); k],
     };
-    // println!("{rs}");
+    let mut hm = HashMap::new();
+    for (r, c, v) in rrccvv {
+        hm.insert((r, c), v);
+    }
+    let mut dp = vec![vec![[0isize; 4]; c + 1]; r + 1];
+    for y in 1..=r {
+        for x in 1..=c {
+            dp[y][x] = dp[y][x - 1];
+            dp[y][x][0] = dp[y][x][0].max(dp[y - 1][x].iter().max().copied().unwrap());
+
+            if let Some(v) = hm.get(&(y, x)).copied() {
+                for kk in (0..3).rev() {
+                    dp[y][x][kk + 1] = dp[y][x][kk + 1].max(dp[y][x][kk] + v);
+                }
+            }
+        }
+    }
+    let rs = dp[r][c].iter().max().unwrap();
+    println!("{rs}");
 }
