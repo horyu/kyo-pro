@@ -5,6 +5,7 @@ use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_bigint::ToBigUint;
 use num_integer::*;
+use num_traits::ToPrimitive;
 use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
 use std::{
@@ -15,38 +16,35 @@ use std::{
 fn main() {
     input! {
         n: usize,
-        a: Usize1,
+        mut a: Usize1,
         k: String,
         bb: [Usize1; n],
     };
     let k = num_bigint::BigUint::from_str(&k).unwrap();
-
-    let mut b_to_i = vec![std::usize::MAX; n];
-    let mut b = a;
-    b_to_i[b] = 0;
-    for i in 1..(2 * n) {
-        let new_b = bb[b];
-        // eprintln!("{i} {b}->{new_b}");
-        if k == i.to_biguint().unwrap() {
-            println!("{}", new_b + 1);
+    let mut a2i = vec![!0; n];
+    a2i[a] = 0;
+    for r in 1usize.. {
+        a = bb[a];
+        if k == r.into() {
+            let rs = a + 1;
+            println!("{rs}");
             return;
         }
-        if b_to_i[new_b] != std::usize::MAX {
-            let pre_i = b_to_i[new_b];
-            let loop_size = i - pre_i;
-            // dbg!(i, &k, pre_i, loop_size, (&k - pre_i) % loop_size);
-            let from_loop_start = *((k - pre_i) % loop_size)
-                .to_u64_digits()
-                .first()
-                .unwrap_or(&0) as usize;
-            b = new_b;
-            for _ in 0..from_loop_start {
-                b = bb[b];
+        if a2i[a] != !0 {
+            let l = a2i[a];
+            let loop_size = r - l;
+            for _ in 0..((k - r.to_biguint().unwrap()) % loop_size)
+                .to_u64()
+                .unwrap()
+            {
+                a = bb[a];
             }
-            println!("{}", b + 1);
+            let rs = a + 1;
+            println!("{rs}");
             return;
         }
-        b_to_i[new_b] = i;
-        b = new_b;
+        a2i[a] = r;
     }
+    let rs = a + 1;
+    println!("{rs}");
 }
