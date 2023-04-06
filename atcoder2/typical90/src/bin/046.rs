@@ -11,26 +11,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
-        bb: [usize; n],
-        cc: [usize; n],
+        // aa: [usize; n],
+        // bb: [usize; n],
+        // cc: [usize; n],
+        xxx: [[usize; n]; 3],
     };
     const SIZE: usize = 46;
-    let to_arr = |vv: Vec<usize>| -> [usize; SIZE] {
-        let mut arr = [0; SIZE];
-        for v in vv {
-            arr[v % SIZE] += 1;
+    let mut ccc = [[0usize; SIZE]; 3];
+    for (i, xx) in xxx.into_iter().enumerate() {
+        for x in xx {
+            ccc[i][x % SIZE] += 1;
         }
-        arr
-    };
-    let aa = to_arr(aa);
-    let bb = to_arr(bb);
-    let cc = to_arr(cc);
+    }
     let mut rs = 0usize;
     for i in 0..SIZE {
         for j in 0..SIZE {
-            let k = (SIZE - (i + j) % SIZE) % SIZE;
-            rs += aa[i] * bb[j] * cc[k];
+            let k = (SIZE * 2 - i - j) % SIZE;
+            rs += ccc[0][i] * ccc[1][j] * ccc[2][k];
         }
     }
     println!("{rs}");
