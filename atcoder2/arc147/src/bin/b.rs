@@ -8,75 +8,50 @@ use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
-
 fn main() {
     input! {
         n: usize,
         mut pp: [Usize1; n],
     };
     let mut rs = vec![];
-    for l in 0..(n - 1) {
-        if pp[l] == l {
-            continue;
-        }
-        let mut ll = pp.iter().position(|&p| p == l).unwrap();
-        if l.is_even() == ll.is_even() {
-            continue;
-        }
-        let mut r = l + 1;
-        let mut rr = loop {
-            let rr = pp.iter().position(|&p| p == r).unwrap();
-            if r.is_even() == rr.is_even() {
-                r += 2;
-                continue;
-            }
-            break rr;
-        };
-        if ll + 1 <= rr {
-            while ll + 1 != rr {
-                pp.swap(rr - 2, rr);
-                rs.push(('B', rr - 1));
-                rr -= 2;
-            }
-            rs.push(('A', rr));
-            pp.swap(ll, rr);
-        } else {
-            while rr + 1 != ll {
-                pp.swap(ll - 2, ll);
-                rs.push(('B', ll - 1));
-                ll -= 2;
-            }
-            rs.push(('A', ll));
-            pp.swap(ll, rr);
-        }
-    }
-    for oe in [0, 1] {
-        let mut l = oe;
-        let mut r = (oe..n).step_by(2).last().unwrap();
-        while l < r {
-            let mut ll = pp.iter().position(|&p| p == l).unwrap();
-            let mut rr = pp.iter().position(|&p| p == r).unwrap();
-            let ld = ll.abs_diff(l);
-            let rd = rr.abs_diff(r);
-            if ld <= rd {
-                while l != ll {
-                    pp.swap(ll - 2, ll);
-                    rs.push(('B', ll - 1));
-                    ll -= 2;
-                }
-                l += 2;
+    let mut xx = vec![];
+    let mut yy = vec![];
+    for (i, p) in pp.iter().copied().enumerate() {
+        if i & 1 != p & 1 {
+            if i & 1 == 0 {
+                xx.push(i);
             } else {
-                while r != rr {
-                    pp.swap(rr, rr + 2);
-                    rs.push(('B', rr + 1));
-                    rr += 2;
-                }
-                r -= 2;
+                yy.push(i);
             }
         }
     }
+    for (x, y) in izip!(xx, yy) {
+        let l = x.min(y);
+        let mut r = x.max(y);
+        while l + 1 != r {
+            pp.swap(r - 2, r);
+            rs.push(('B', r - 1));
+            r -= 2;
+        }
+        pp.swap(l, r);
+        rs.push(('A', r));
+    }
+    loop {
+        let mut ok = true;
+        for i in 0..(n - 2) {
+            if pp[i + 2] < pp[i] {
+                pp.swap(i, i + 2);
+                rs.push(('B', i + 1));
+                ok = false;
+            }
+        }
+        if ok {
+            break;
+        }
+    }
+    // eprintln!("{}", pp.iter().join(" "));
     println!("{}", rs.len());
-    for (c, i) in rs {
-        println!("{c} {i}");
+    for (o, i) in rs {
+        println!("{o} {i}");
     }
 }
