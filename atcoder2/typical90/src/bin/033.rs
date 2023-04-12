@@ -10,8 +10,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
     };
-    // println!("{rs}");
+    let min = h.min(w);
+    let max = h.max(w);
+    let rs = if min == 1 {
+        max
+    } else {
+        min.div_ceil(2) * max.div_ceil(2)
+    };
+    println!("{rs}");
 }
