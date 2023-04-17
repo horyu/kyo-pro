@@ -13,53 +13,42 @@ fn main() {
         n: usize,
         aaa: [[usize; n]; n],
     };
-    let mut hhmm = vec![HashMap::new()];
-    hhmm[0].insert(aaa[0][0], 1usize);
-    // 左上から対角まで
-    for size in 2..=n {
-        let mut new_hhmm = vec![HashMap::new(); size];
-        for (index, hm) in hhmm.into_iter().enumerate() {
-            let i = index;
-            let j = size - 2 - index;
-            let ar = aaa[i][j + 1];
-            let ad = aaa[i + 1][j];
-            for (k, v) in hm {
-                *new_hhmm[index].entry(k ^ ar).or_insert(0) += v;
-                *new_hhmm[index + 1].entry(k ^ ad).or_insert(0) += v;
+    // https://seelx3.hatenablog.jp/entry/2022/10/02/004652
+    let mut lu = vec![HashMap::new(); n];
+    let mut rd = lu.clone();
+
+    for i in 0..(1 << (n - 1)) {
+        let (mut x, mut y) = (0, 0);
+        let mut p = 0;
+        for j in 0..n {
+            p ^= aaa[x][y];
+            if 0 != i & (1 << j) {
+                x += 1;
+            } else {
+                y += 1;
             }
         }
-        hhmm = new_hhmm;
+        *lu[x].entry(p).or_insert(0usize) += 1;
     }
-    let old_hhmm = hhmm;
-    let mut hhmm = vec![HashMap::new()];
-    hhmm[0].insert(aaa[n - 1][n - 1], 1usize);
-    // 右下から対角まで
-    for size in 2..=n {
-        let mut new_hhmm = vec![HashMap::new(); size];
-        for (index, hm) in hhmm.into_iter().enumerate() {
-            let i = n + 1 - size + index;
-            let j = n - 1 - index;
-            // eprintln!("{size} {index} {i} {j}");
-            // 対角要素を2回使わないようにする
-            let au = if size == n { 0 } else { aaa[i - 1][j] };
-            let al = if size == n { 0 } else { aaa[i][j - 1] };
-            for (k, v) in hm {
-                *new_hhmm[index].entry(k ^ au).or_insert(0) += v;
-                *new_hhmm[index + 1].entry(k ^ al).or_insert(0) += v;
+    for i in 0..(1 << (n - 1)) {
+        let (mut x, mut y) = (n - 1, n - 1);
+        let mut q = 0;
+        for j in 0..n {
+            q ^= aaa[x][y];
+            if 0 != i & (1 << j) {
+                x = x.saturating_sub(1);
+            } else {
+                y = y.saturating_sub(1);
             }
         }
-        hhmm = new_hhmm;
+        *rd[x].entry(q).or_insert(0) += 1;
     }
-    // dbg!(&old_hhmm, &hhmm);
+
     let mut rs = 0;
-    for (i, mut x, mut y) in izip!(0..n, old_hhmm, hhmm) {
-        if x.len() < y.len() {
-            std::mem::swap(&mut x, &mut y);
-        }
-        for (k, vx) in x {
-            if let Some(&vy) = y.get(&(k)) {
-                // eprintln!("{k} {vx} {vy}");
-                rs += vx * vy;
+    for (i, (lu, rd)) in izip!(lu, rd).enumerate() {
+        for (k, v) in lu {
+            if let Some(vv) = rd.get(&(k ^ aaa[i][n - 1 - i])) {
+                rs += v * vv;
             }
         }
     }
