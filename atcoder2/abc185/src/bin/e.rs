@@ -11,7 +11,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        m: usize,
         aa: [usize; n],
+        bb: [usize; m],
     };
-    // println!("{rs}");
+    let rs = f(&aa, &bb, &mut HashMap::new());
+    println!("{rs}");
+}
+
+fn f(cc: &[usize], dd: &[usize], memo: &mut HashMap<(usize, usize), usize>) -> usize {
+    let clen = cc.len();
+    let dlen = dd.len();
+    if let Some(rs) = memo.get(&(clen, dlen)).copied() {
+        return rs;
+    }
+    let rs = if clen == 0 || dlen == 0 {
+        clen.max(dlen)
+    } else {
+        ((cc[0] != dd[0]) as usize + f(&cc[1..], &dd[1..], memo))
+            .min(1 + f(cc, &dd[1..], memo))
+            .min(1 + f(&cc[1..], dd, memo))
+    };
+    memo.insert((clen, dlen), rs);
+    rs
 }
