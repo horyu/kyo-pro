@@ -16,13 +16,13 @@ fn main() {
     };
     let mut ok = 0.0;
     let mut ng = 100.1;
-    for _ in 0..1000 {
+    for i in 0..10000 {
         let m = (ok + ng) / 2.0;
         let sum = wwpp
             .iter()
-            .map(|&(w, p)| w * (p - m))
-            .sorted_unstable_by(|x, y| x.partial_cmp(y).unwrap())
-            .rev()
+            .copied()
+            .map(|(w, p)| w * (p - m))
+            .sorted_unstable_by(|a, b| b.partial_cmp(a).unwrap())
             .take(k)
             .sum::<f64>();
         if 0.0 <= sum {
@@ -31,5 +31,6 @@ fn main() {
             ng = m;
         }
     }
-    println!("{ok}");
+    let rs = ok;
+    println!("{rs}");
 }
