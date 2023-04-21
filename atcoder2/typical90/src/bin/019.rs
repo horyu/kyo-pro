@@ -11,36 +11,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [isize; 2 * n],
+        aa: [usize; 2 * n],
     };
     let nn = 2 * n;
-    let mut dp = vec![vec![1e9 as isize; nn + 1]; nn + 1];
-    for i in 0..(nn - 1) {
-        dp[i][i + 2] = (aa[i] - aa[i + 1]).abs();
+    let mut dp = vec![vec![!0usize >> 2; nn]; nn];
+    for (i, (ax, ay)) in aa.iter().copied().tuple_windows().enumerate() {
+        dp[i][i + 1] = ax.abs_diff(ay);
     }
-    for range in (4..=nn).step_by(2) {
-        for l in 0..=(nn - range) {
-            let r = l + range;
-            // eprintln!("{range} {l}-{r}");
-            dp[l][r] = (aa[l] - aa[r - 1]).abs() + dp[l + 1][r - 1];
-            for m in ((l + 2)..=(r - 2)).step_by(2) {
-                dp[l][r] = dp[l][r].min(dp[l][m] + dp[m][r]);
-            }
-            // dp[l][r] = [
-            //     (aa[l] - aa[r - 1]).abs() + dp[l + 1][r - 1],
-            //     dp[l][l + 2] + dp[l + 2][r],
-            //     dp[l][r - 2] + dp[r - 2][r],
-            // ]
-            // .iter()
-            // .min()
-            // .copied()
-            // .unwrap();
+    for size in (4..=nn).step_by(2) {
+        for l in 0..=(nn - size) {
+            let r = l + size - 1;
+            dp[l][r] = ((l + 1)..(r - 1))
+                .step_by(2)
+                .map(|i| dp[l][i] + dp[i + 1][r])
+                .chain([aa[l].abs_diff(aa[r]) + dp[l + 1][r - 1]])
+                .min()
+                .unwrap();
         }
     }
-    let rs = dp[0][nn];
-    // for (i, dp) in dp.into_iter().enumerate() {
-    //     let s = dp.into_iter().map(|x| if x == (1e9 as isize) { "___".to_string() } else { format!("{x:3}")}).join(",");
-    //     eprintln!("[{i:2}] {}", s);
+    // for dp in &dp {
+    //     eprintln!("{}", dp.iter().map(|x| format!("{x:3}")).join(" "));
     // }
+    let rs = dp[0][nn - 1];
     println!("{rs}");
 }
