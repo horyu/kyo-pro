@@ -19,7 +19,7 @@ fn main() {
     let xx = xxyy.iter().copied().map(|xy| xy.0).collect_vec();
     let yy = xxyy.iter().copied().map(|xy| xy.1).collect_vec();
 
-    let mut g = vec![HashSet::new(); n];
+    let mut g = (0..n).map(|i| HashSet::from([i])).collect_vec();
     for (a, b) in aabb.iter().copied() {
         g[a].insert(b);
         g[b].insert(a);
@@ -32,10 +32,8 @@ fn main() {
         let qr = (i + 1) * q / b;
         for j in ql..qr {
             let mut c = cc[xx[j]];
-            for k in ql..j {
-                if xx[j] == xx[k] || g[xx[k]].contains(&xx[j]) {
-                    c = yy[k];
-                }
+            if let Some(k) = (ql..j).rfind(|&k| g[xx[k]].contains(&xx[j])) {
+                c = yy[k];
             }
             println!("{c}");
         }
