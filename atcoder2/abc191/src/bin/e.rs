@@ -15,6 +15,46 @@ fn main() {
         aabbcc: [(Usize1, Usize1, usize); m],
     };
     let mut rs = vec![!0usize; n];
+    let mut g = petgraph::Graph::new();
+    let nodes = (0..n).map(|i| g.add_node(())).collect_vec();
+    for (a, b, c) in aabbcc.iter().copied() {
+        if a == b {
+            rs[a] = rs[a].min(c);
+        } else {
+            g.add_edge(nodes[a], nodes[b], c);
+        }
+    }
+    let mut ddd = vec![vec![!0; n]; n];
+    for i in 0..n {
+        for (j, d) in petgraph::algo::dijkstra(&g, nodes[i], None, |e| *e.weight()) {
+            ddd[i][j.index()] = d;
+        }
+    }
+    for i in 0..n {
+        for j in 0..n {
+            if i == j {
+                continue;
+            }
+            rs[i] = rs[i].min(ddd[i][j].saturating_add(ddd[j][i]));
+        }
+    }
+    for rs in rs {
+        if rs == !0 {
+            println!("-1");
+        } else {
+            println!("{rs}");
+        }
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        aabbcc: [(Usize1, Usize1, usize); m],
+    };
+    let mut rs = vec![!0usize; n];
     let mut g = vec![HashMap::new(); n];
     for (a, b, c) in aabbcc.iter().copied() {
         if a == b {
