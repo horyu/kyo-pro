@@ -17,32 +17,25 @@ fn main() {
     let hh = h - 1;
     let ww = w - 1;
     let mut rs = vec![vec!['.'; w]; h];
-    let mut check = vec![vec!['.'; w]; h];
-    for i in 0..h {
-        let mut xx = vec![i];
-        if i != 0 {
-            xx.push(i - 1);
-        }
-        if i != hh {
-            xx.push(i + 1);
-        }
-        for j in 0..w {
-            let mut yy = vec![j];
-            if j != 0 {
-                yy.push(j - 1);
-            }
-            if j != ww {
-                yy.push(j + 1);
-            }
-            if iproduct!(&xx, &yy).all(|(&x, &y)| ss[x][y] == '#') {
+    let mut tt = rs.clone();
+    for (i, s) in ss.iter().enumerate() {
+        for (j, c) in s.iter().copied().enumerate() {
+            if c == '#' && mawari(i, j, hh, ww).all(|(x, y)| ss[x][y] == '#') {
                 rs[i][j] = '#';
-                for (&x, &y) in iproduct!(&xx, &yy) {
-                    check[x][y] = '#';
+            }
+        }
+    }
+    for (i, s) in rs.iter().enumerate() {
+        for (j, c) in s.iter().copied().enumerate() {
+            if c == '#' {
+                tt[i][j] = '#';
+                for (x, y) in mawari(i, j, hh, ww) {
+                    tt[x][y] = '#';
                 }
             }
         }
     }
-    if ss == check {
+    if ss == tt {
         println!("possible");
         for rs in rs {
             println!("{}", rs.iter().join(""));
@@ -50,4 +43,22 @@ fn main() {
     } else {
         println!("impossible");
     }
+}
+
+fn mawari(i: usize, j: usize, hh: usize, ww: usize) -> impl Iterator<Item = (usize, usize)> {
+    let tate = match i {
+        0 if hh == 0 => vec![0],
+        0 => vec![0, 1],
+        i if i == hh => vec![i - 1, i],
+        i => vec![i - 1, i, i + 1],
+    };
+    let yoko = match j {
+        0 if ww == 0 => vec![0],
+        0 => vec![0, 1],
+        j if j == ww => vec![j - 1, j],
+        j => vec![j - 1, j, j + 1],
+    };
+    tate.into_iter()
+        .cartesian_product(yoko.into_iter())
+        .filter(move |&(ii, jj)| ii != i || jj != j)
 }
