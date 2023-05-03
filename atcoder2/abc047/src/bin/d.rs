@@ -14,6 +14,56 @@ fn main() {
         t: usize,
         aa: [isize; n],
     };
+    let mut btm = BTreeMap::new();
+    for (i, a) in aa.iter().copied().enumerate() {
+        btm.entry(a).or_insert_with(VecDeque::new).push_back(i);
+    }
+    let mut diff = 0;
+    let mut sml = HashMap::new();
+    let mut big = HashMap::new();
+    for (i, a) in aa.iter().copied().enumerate() {
+        if let Some(vd) = btm.get_mut(&a) {
+            vd.pop_front();
+            if vd.is_empty() {
+                btm.remove(&a);
+            }
+        }
+        if let Some((&b, jj)) = btm.iter().max() {
+            if a < b {
+                match (b - a).cmp(&diff) {
+                    std::cmp::Ordering::Less => (),
+                    std::cmp::Ordering::Equal => {
+                        let e = sml.entry(a).or_insert(0);
+                        if *e == 0 {
+                            big.insert(b, jj.len());
+                        }
+                        *e += 1;
+                    }
+                    std::cmp::Ordering::Greater => {
+                        diff = b - a;
+                        sml.clear();
+                        sml.insert(a, 1);
+                        big.clear();
+                        big.insert(b, jj.len());
+                    }
+                }
+            }
+        }
+    }
+    let mut rs = 0;
+    for (sk, sc) in sml {
+        let bc = big.get(&(sk + diff)).copied().unwrap();
+        rs += sc.min(bc);
+    }
+    println!("{rs}");
+}
+
+fn _main() {
+    input! {
+        n: usize,
+        t: usize,
+        aa: [isize; n],
+    };
     // 現在地と左側の (最も安い価格, 価格で取引できる街の数)
     let mut ll = vec![(0, 0); n];
     // 現在地と右側の (最も高い価格, 価格で取引できる街の数)
