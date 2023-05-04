@@ -29,30 +29,25 @@ fn main() {
         .tuples()
         .map(|(x, y)| x.abs_diff(y))
         .collect_vec();
-
-    let lsum = chain!([0], ll).cumsum::<usize>().collect_vec();
-    let rsum = chain!([0], rr).cumsum::<usize>().collect_vec();
-
+    let lsum = chain!([0], ll.iter().copied())
+        .cumsum::<usize>()
+        .collect_vec();
+    let rsum = chain!([0], rr.iter().copied())
+        .cumsum::<usize>()
+        .collect_vec();
+    let ww = BTreeSet::from_iter(ww);
+    let mut rs = !0usize;
+    // eprintln!("{}", hh.iter().join(" "));
     // eprintln!("{}", lsum.iter().join(" "));
     // eprintln!("{}", rsum.iter().join(" "));
-    // eprintln!("{}", hh.iter().join(" "));
-    let mut rs = std::usize::MAX;
-    for &w in &ww {
-        let i = hh.partition_point(|&h| h <= w);
-        // eprintln!("{w} {i}");
-        if i.is_even() {
-            if let Some(&h) = hh.get(i) {
-                let tmp = lsum[i / 2] + h.abs_diff(w) + rsum[n / 2 - i / 2];
-                // eprintln!("{w} {i} {h} {} {} {tmp}", lsum[i / 2], rsum[n / 2 - i / 2]);
-                rs = rs.min(tmp);
-            }
-        } else {
-            if let Some(&h) = hh.get(i - 1) {
-                let tmp = lsum[i / 2] + h.abs_diff(w) + rsum[n / 2 - i / 2];
-                // eprintln!("{w} {i} {h} {} {} {tmp}", lsum[i / 2], rsum[n / 2 - i / 2]);
-                rs = rs.min(tmp);
-            }
-        }
+    for (i, h) in hh.iter().copied().enumerate().step_by(2) {
+        let d = [ww.range(..=h).next_back(), ww.range(h..).next()]
+            .into_iter()
+            .filter_map(|wopt| wopt.map(|w| w.abs_diff(h)))
+            .min()
+            .unwrap();
+        let j = i / 2;
+        rs = rs.min(d + lsum[j] + rsum[n / 2 - j]);
     }
     println!("{rs}");
 }
