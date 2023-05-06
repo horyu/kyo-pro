@@ -11,41 +11,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        s: Chars,
+        s: Bytes,
     };
-    let ii = s
-        .iter()
-        .copied()
-        .map(|c| match c {
-            'a' => 0,
-            'b' => 1,
-            _ => 2,
-        })
-        .collect_vec();
-
-    let mut hm = HashMap::new();
-    for i in 0..3 {
-        hm.insert(vec![i], i);
+    let s = s.into_iter().map(|b| (b - b'a') as usize).collect_vec();
+    // bbb:abb:bab:aab:bba:aba:baa:aaa
+    let mut memo = vec![0usize; n + 1];
+    memo[0] = 1;
+    for i in 1..n {
+        memo[i] = (0..i).fold(1, |acc, j| acc + memo[j]);
     }
-
-    let rs = dfs(&ii, &mut hm);
+    // eprintln!("{}", memo.iter().join(" "));
+    let mut rs = 0;
+    for (i, b) in s.iter().copied().enumerate() {
+        rs += b * memo[i];
+    }
     println!("{rs}");
-}
-
-fn dfs(ii: &[usize], hm: &mut HashMap<Vec<usize>, usize>) -> usize {
-    if let Some(cnt) = hm.get(&ii.to_vec()).copied() {
-        return cnt;
-    }
-
-    let len = ii.len();
-    let init_cnt = dfs(&ii[..(len - 1)], hm);
-
-    let rs = match ii[len - 1] {
-        0 => init_cnt,
-        1 => init_cnt + dfs(&vec![1; len - 1], hm) + 1,
-        _ => init_cnt + dfs(&vec![1; len - 1], hm) * 2 + 2,
-    };
-    hm.insert(ii.to_vec(), rs);
-
-    rs
 }
