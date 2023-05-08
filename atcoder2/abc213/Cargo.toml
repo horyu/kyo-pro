@@ -1,0 +1,67 @@
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+strip = true
+
+[package]
+name = "abc213"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.cargo-compete.bin]
+abc213-a = { alias = "a", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_a" }
+abc213-b = { alias = "b", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_b" }
+abc213-c = { alias = "c", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_c" }
+abc213-d = { alias = "d", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_d" }
+abc213-e = { alias = "e", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_e" }
+abc213-f = { alias = "f", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_f" }
+abc213-g = { alias = "g", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_g" }
+abc213-h = { alias = "h", problem = "https://atcoder.jp/contests/abc213/tasks/abc213_h" }
+
+[[bin]]
+name = "abc213-a"
+path = "src/bin/a.rs"
+
+[[bin]]
+name = "abc213-b"
+path = "src/bin/b.rs"
+
+[[bin]]
+name = "abc213-c"
+path = "src/bin/c.rs"
+
+[[bin]]
+name = "abc213-d"
+path = "src/bin/d.rs"
+
+[[bin]]
+name = "abc213-e"
+path = "src/bin/e.rs"
+
+[[bin]]
+name = "abc213-f"
+path = "src/bin/f.rs"
+
+[[bin]]
+name = "abc213-g"
+path = "src/bin/g.rs"
+
+[[bin]]
+name = "abc213-h"
+path = "src/bin/h.rs"
+
+[dependencies]
+itertools = "0.10.3"
+itertools-num = "0.1.3"
+ndarray = "0.15.6"
+num-integer = "0.1.45"
+num-complex = "0.4.2"
+num-bigint = "0.4.3"
+num-traits = "0.2.15"
+petgraph = "0.6.2"
+proconio = { version = "0.3.7", features = ["derive"] }
+
+ac-library-rs = { git = "https://github.com/rust-lang-ja/ac-library-rs" }
+
+[dev-dependencies]
