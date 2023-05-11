@@ -13,21 +13,7 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // この手番で勝つ
-    // 1; 1,1,..,1
-    // どうしても負け
-    // 2; 4; 2,2
-
-    // 22
-    // 12 11
-    // 02 x
-    // 01
-    // x
-
-    // 13 -> 02 -> o
-    // 23 -> 22 -> o
-
-    let tf = aa.into_iter().all(|a| a.is_even());
-    let rs = if tf { "second" } else { "first" };
+    let tf = aa.iter().copied().any(|a| a.is_odd());
+    let rs = ["second", "first"][tf as usize];
     println!("{rs}");
 }
