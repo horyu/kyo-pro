@@ -10,38 +10,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: isize,
+        mut n: isize,
     };
-    if n == 0 {
-        println!("0");
-        return;
-    }
-    let mut pp = vec![];
-    let mut nn = vec![];
-    for i in 0u32..34 {
-        let vv = if i.is_even() { &mut pp } else { &mut nn };
-        let w = (-2isize).pow(i);
-        let b = 1usize << i;
-        for j in 0..vv.len() {
-            let (ww, bb) = vv[j];
-            vv.push((ww + w, bb | b));
+    // -9
+    // +1 => -10
+    // -2 => -8
+    let mut rs = 0;
+    for i in 0.. {
+        if n == 0 {
+            break;
         }
-        vv.push((w, b));
-        // eprintln!("{w:12} {b:34b}");
-    }
-    let pp: HashMap<_, _> = pp.into_iter().collect();
-    let nn: HashMap<_, _> = nn.into_iter().collect();
-    for hm in [&pp, &nn] {
-        if let Some(rs) = hm.get(&n) {
-            println!("{rs:b}");
-            return;
+        let div = (-2isize).pow(i);
+        if (n / div).is_odd() {
+            rs |= 1 << i;
+            n -= div;
         }
     }
-    for (pw, pb) in pp {
-        if let Some(nb) = nn.get(&(n - pw)) {
-            let rs = pb | nb;
-            println!("{rs:b}");
-            return;
-        }
-    }
+    println!("{rs:b}");
 }
