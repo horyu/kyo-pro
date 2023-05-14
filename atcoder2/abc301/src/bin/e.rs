@@ -126,6 +126,7 @@ fn main() {
     // }
 
     let mut dp = vec![vec![1usize << 60; olen]; 1 << olen];
+    #[allow(clippy::manual_memcpy)]
     for i in 0..olen {
         dp[1 << i][i] = s2o[i];
     }

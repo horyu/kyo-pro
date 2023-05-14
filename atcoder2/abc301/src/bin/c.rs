@@ -32,22 +32,23 @@ fn main() {
     }
     for i in 'a'..='z' {
         let cnt = cnts[i as u8 as usize];
-        if matches!(i, 'a' | 't' | 'c' | 'o' | 'd' | 'e' | 'r') {
-            if 0 < cnt {
-                ta -= cnt;
-                if ta < 0 {
-                    println!("No");
-                    return;
+        if "atcoder".contains(i) {
+            match cnt.cmp(&0) {
+                std::cmp::Ordering::Less => {
+                    sa -= cnt;
+                    if sa < 0 {
+                        println!("No");
+                        return;
+                    }
                 }
-                continue;
-            }
-            if cnt < 0 {
-                sa -= cnt;
-                if sa < 0 {
-                    println!("No");
-                    return;
+                std::cmp::Ordering::Equal => (),
+                std::cmp::Ordering::Greater => {
+                    ta -= cnt;
+                    if ta < 0 {
+                        println!("No");
+                        return;
+                    }
                 }
-                continue;
             }
         } else if cnt != 0 {
             println!("No");
