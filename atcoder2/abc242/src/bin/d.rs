@@ -14,22 +14,17 @@ fn main() {
         q: usize,
         ttkk: [(usize, Usize1); q],
     };
-    // C   B   A
-    // A B C A B C
-    // BCCAABBCCAAB
-    let s = s.into_iter().map(|c| (c - b'A') as usize).collect_vec();
     for (mut t, mut k) in ttkk {
-        let mut diff = 0;
-        while 0 < t && 0 < k {
-            if k.is_even() {
-                diff += 1;
-            } else {
-                diff += 2;
-            }
-            k /= 2;
+        let mut diff = 0u8;
+        while 0 < t {
+            diff = (diff + [1, 2][k % 2]) % 3;
             t -= 1;
+            k /= 2;
+            if k == 0 {
+                t %= 3;
+            }
         }
-        let rs = ['A', 'B', 'C'][(s[k] + t + diff) % 3];
+        let rs = (b'A' + (s[k] - b'A' + diff) % 3) as char;
         println!("{rs}");
     }
 }
