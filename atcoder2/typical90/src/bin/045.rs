@@ -16,10 +16,9 @@ fn main() {
     };
     // bitDP
     let mut d = vec![vec![0; n]; n];
-    for (i, (ax, ay)) in xxyy.iter().copied().enumerate() {
-        for (j, (bx, by)) in xxyy.iter().copied().enumerate() {
-            d[i][j] = (ax - bx).pow(2) + (ay - by).pow(2);
-        }
+    for ((i, (ax, ay)), (j, (bx, by))) in xxyy.iter().copied().enumerate().tuple_combinations() {
+        d[i][j] = (ax - bx).pow(2) + (ay - by).pow(2);
+        d[j][i] = d[i][j];
     }
     let nn = 1 << n;
     let mut cost = vec![0; nn];
