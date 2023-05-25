@@ -14,33 +14,29 @@ fn main() {
         mut aa: [isize; n],
     };
     let mut rs = vec![];
-    if let itertools::MinMaxResult::MinMax(&min, &max) = aa.iter().minmax() {
-        if min == 0 || min.abs() <= max.abs() {
-            // 正整数を足していく
-            let mut j = aa.iter().position_max().unwrap();
-            for i in 0..(n - 1) {
-                while aa[i + 1] < aa[i] {
-                    aa[i + 1] += aa[j];
-                    rs.push((j + 1, i + 2));
-                    j = aa.iter().position_max().unwrap();
-                }
+    while let itertools::MinMaxResult::MinMax(min_pos, max_pos) =
+        aa.iter().copied().position_minmax()
+    {
+        if min_pos == 0 && max_pos == n - 1 {
+            break;
+        }
+        let min = aa[min_pos];
+        let max = aa[max_pos];
+        if min.abs() <= max.abs() {
+            if let Some(i) = (0..(n - 1)).position(|i| aa[i + 1] < aa[i]) {
+                aa[i + 1] += max;
+                rs.push([max_pos + 1, i + 2]);
             }
         } else {
-            // 負整数を足していく
-            let mut j = aa.iter().position_min().unwrap();
-            for i in (0..(n - 1)).rev() {
-                while aa[i + 1] < aa[i] {
-                    aa[i] += aa[j];
-                    rs.push((j + 1, i + 1));
-                    j = aa.iter().position_min().unwrap();
-                }
+            if let Some(i) = (0..(n - 1)).rposition(|i| aa[i + 1] < aa[i]) {
+                aa[i] += min;
+                rs.push([min_pos + 1, i + 1]);
             }
         }
+        // eprintln!("{}", aa.iter().join(" "));
     }
-    assert!(rs.len() <= 2 * n, "{}", rs.len());
     println!("{}", rs.len());
-    for (x, y) in rs {
-        println!("{x} {y}");
+    for rs in rs {
+        println!("{}", rs.iter().join(" "));
     }
-    // eprintln!("{}", aa.iter().join(" "));
 }
