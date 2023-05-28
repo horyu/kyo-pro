@@ -25,7 +25,7 @@ fn main() {
         rs[a] -= 1;
         rs[b] -= 1;
     }
-    for (c, d) in ccdd {
+    for (c, d) in ccdd.iter().copied() {
         if dsu.same(c, d) {
             rs[c] -= 1;
             rs[d] -= 1;
