@@ -10,8 +10,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        aaa: [[usize; w]; h],
     };
-    // println!("{rs}");
+    let yoko_sum = (0..h)
+        .map(|y| (0..w).fold(0, |acc, x| acc + aaa[y][x]))
+        .collect_vec();
+    let tate_sum = (0..w)
+        .map(|x| (0..h).fold(0, |acc, y| acc + aaa[y][x]))
+        .collect_vec();
+    for (i, aa) in aaa.into_iter().enumerate() {
+        let mut vv = vec![];
+        for (j, a) in aa.into_iter().enumerate() {
+            vv.push(yoko_sum[i] + tate_sum[j] - a);
+        }
+        println!("{}", vv.iter().join(" "));
+    }
 }
