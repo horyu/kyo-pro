@@ -17,11 +17,11 @@ fn main() {
         if k == 1 {
             continue;
         }
-        let mut n = n;
-        while n % k == 0 {
-            n /= k;
+        let mut m = n;
+        while m % k == 0 {
+            m /= k;
         }
-        if n % k == 1 {
+        if m % k == 1 {
             hs.insert(k);
         }
     }
