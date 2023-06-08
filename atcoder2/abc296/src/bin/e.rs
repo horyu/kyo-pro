@@ -11,6 +11,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        mut aa: [Usize1; n],
+    };
+    for _ in 0..30 {
+        aa = aa.iter().copied().map(|a| aa[a]).collect_vec();
+    }
+    let rs = aa.into_iter().unique().count();
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
         aa: [Usize1; n],
     };
     let mut g = petgraph::Graph::new();
