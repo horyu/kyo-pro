@@ -14,6 +14,38 @@ fn main() {
         m: usize,
         k: usize,
         uuvv: [(Usize1, Usize1); m],
+        pphh: [(Usize1, isize); k],
+    };
+    let mut g = vec![vec![]; n];
+    for (u, v) in uuvv.iter().copied() {
+        g[u].push(v);
+        g[v].push(u);
+    }
+
+    let mut dd = vec![-1; n];
+    let mut bh = BinaryHeap::from_iter(pphh.iter().copied().map(|(p, h)| (h, p)));
+    while let Some((h, p)) = bh.pop() {
+        if dd[p] < h {
+            dd[p] = h;
+            if 0 < h {
+                for i in g[p].iter().copied() {
+                    bh.push((h - 1, i));
+                }
+            }
+        }
+    }
+    let rs = (1..=n).filter(|i| 0 <= dd[i - 1]).collect_vec();
+    println!("{}", rs.len());
+    println!("{}", rs.into_iter().join(" "));
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        k: usize,
+        uuvv: [(Usize1, Usize1); m],
         mut pphh: [(Usize1, usize); k],
     };
     let mut g = vec![vec![]; n];
