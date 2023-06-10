@@ -27,7 +27,13 @@ fn main() {
     let mut checking = HashSet::new();
     let mut nokori: HashSet<usize> = (0..n).collect();
     let mut pre_h = 0;
-    for (h, gg) in pphh.into_iter().group_by(|&ph| ph.1).into_iter() {
+    let vv = pphh
+        .into_iter()
+        .group_by(|&ph| ph.1)
+        .into_iter()
+        .map(|(h, pphh)| (h, pphh.map(|ph| ph.0).collect_vec()))
+        .collect_vec();
+    for (h, pp) in vv.into_iter().chain([Default::default()]) {
         while h < pre_h {
             pre_h -= 1;
             let mut new_checking = HashSet::new();
@@ -41,26 +47,13 @@ fn main() {
             }
             checking = new_checking;
         }
-        for (p, _) in gg {
+        for p in pp {
             if nokori.remove(&p) {
                 // eprintln!("* {pre_h}->{h}: {p}");
                 checking.insert(p);
             }
         }
         pre_h = h;
-    }
-    while 0 < pre_h {
-        pre_h -= 1;
-        let mut new_checking = HashSet::new();
-        for c in checking {
-            for &j in &g[c] {
-                if nokori.remove(&j) {
-                    // eprintln!("_ {pre_h}: {c} {j}");
-                    new_checking.insert(j);
-                }
-            }
-        }
-        checking = new_checking;
     }
     let rs = (0..n)
         .filter_map(|i| (!nokori.contains(&i)).then_some(i + 1))
