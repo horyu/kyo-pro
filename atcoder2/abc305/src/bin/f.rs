@@ -9,27 +9,20 @@ use proconio::{input, marker::*};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
 fn main() {
-    let stdin = std::io::stdin();
-    let mut s = String::new();
+    let mut stdin =
+        proconio::source::line::LineSource::new(std::io::BufReader::new(std::io::stdin()));
+    macro_rules! input(($($tt:tt)*) => (proconio::input!(from &mut stdin, $($tt)*)));
 
-    stdin.read_line(&mut s).unwrap();
-    let nm = s
-        .split_ascii_whitespace()
-        .map(|s| s.parse::<usize>().unwrap())
-        .collect_vec();
-    s.clear();
-    let n = nm[0];
-    let m = nm[1];
+    input! {
+        n: usize,
+        m: usize,
+    };
+    input! {
+        size: usize,
+        vv: [usize; size],
+    };
 
-    stdin.read_line(&mut s).unwrap();
-    let vv = s
-        .split_ascii_whitespace()
-        .skip(1)
-        .map(|s| s.parse::<usize>().unwrap())
-        .collect_vec();
-    s.clear();
     let mut crr = 1;
-
     let mut g = vec![vec![]; n + 1];
     g[crr] = vv;
     let mut ff = vec![!0; n + 1];
@@ -49,13 +42,10 @@ fn main() {
         }
         crr = next;
 
-        stdin.read_line(&mut s).unwrap();
-        let vv = s
-            .split_ascii_whitespace()
-            .skip(1)
-            .map(|s| s.parse::<usize>().unwrap())
-            .collect_vec();
-        s.clear();
+        input! {
+            size: usize,
+            vv: [usize; size],
+        };
         g[crr] = vv;
     }
 
