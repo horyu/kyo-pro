@@ -12,27 +12,19 @@ fn main() {
     input! {
         n: usize,
         t: usize,
-        mut aabb: [(usize, usize); n],
+        mut aabb: [(usize, isize); n],
     };
     aabb.sort_unstable();
 
-    let mut hm = HashMap::new();
-    hm.insert(0usize, 0usize);
-
-    let mut rs = 0;
-    for (a, b) in aabb {
-        let mut new_hm = hm.clone();
-        for (k, v) in hm {
-            let kk = k + a;
-            let vv = v + b;
-            rs = rs.max(vv);
-
-            if kk < t {
-                let e = new_hm.entry(kk).or_insert(0);
-                *e = (*e).max(vv);
-            }
+    let mut dp = vec![isize::MIN; 6001];
+    dp[0] = 0;
+    for (a, b) in aabb.iter().copied() {
+        let mut new_dp = dp.clone();
+        for i in 0..t {
+            new_dp[i + a] = new_dp[i + a].max(dp[i] + b);
         }
-        hm = new_hm;
+        dp = new_dp;
     }
+    let rs = dp.iter().max().unwrap();
     println!("{rs}");
 }
