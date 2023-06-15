@@ -18,7 +18,7 @@ fn main() {
     // 12: 1 : 21
     // 21: 1 : 12
     // 11: 0 : 22
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     for (x, y, z) in xxyyzz.iter().copied() {
         dsu.merge(x, y);
     }

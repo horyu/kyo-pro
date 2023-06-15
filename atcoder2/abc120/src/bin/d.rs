@@ -14,7 +14,7 @@ fn main() {
         m: usize,
         aabb: [(Usize1, Usize1); m],
     };
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     let mut rs = vec![n * (n - 1) / 2; m];
     for (i, (a, b)) in aabb[1..].iter().copied().enumerate().rev() {
         rs[i] = rs[i + 1];

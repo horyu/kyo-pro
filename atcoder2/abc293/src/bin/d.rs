@@ -14,7 +14,7 @@ fn main() {
         m: usize,
         aabbccdd: [(Usize1, char, Usize1, char); m],
     };
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     let mut circle = 0;
     for (a, _b, c, _d) in aabbccdd {
         if dsu.same(a, c) {

@@ -8,7 +8,7 @@ use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
-use ac_library_rs::{LazySegtree, MapMonoid, Max};
+use ac_library::{LazySegtree, MapMonoid, Max};
 struct MaxMonoid;
 impl MapMonoid for MaxMonoid {
     type M = Max<isize>;
@@ -35,7 +35,7 @@ fn main() {
     };
     let mut vv = vec![-1isize; w + 1];
     vv[0] = 0;
-    let mut ls = ac_library_rs::LazySegtree::<MaxMonoid>::from(vv);
+    let mut ls = ac_library::LazySegtree::<MaxMonoid>::from(vv);
     for (l, r, v) in llrrvv {
         for i in (0..=w).rev() {
             let x = ls.prod(i.saturating_sub(r), (i + 1).saturating_sub(l));

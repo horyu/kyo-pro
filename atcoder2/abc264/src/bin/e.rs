@@ -22,7 +22,7 @@ fn main() {
         .map(|(u, v)| (u.min(n), v.min(n)))
         .collect_vec();
 
-    let mut dsu = ac_library_rs::Dsu::new(n + 1);
+    let mut dsu = ac_library::Dsu::new(n + 1);
     let xx_hs: HashSet<usize> = xx.clone().into_iter().collect();
     for (i, &(u, v)) in uuvv.iter().enumerate() {
         if xx_hs.contains(&i) {

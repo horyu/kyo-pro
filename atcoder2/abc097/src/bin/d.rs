@@ -15,7 +15,7 @@ fn main() {
         pp: [Usize1; n],
         xxyy: [(Usize1, Usize1); m],
     };
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     for &(x, y) in &xxyy {
         dsu.merge(x, y);
     }

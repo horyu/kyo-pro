@@ -14,7 +14,7 @@ fn main() {
         m: usize,
         llrrdd: [(Usize1, Usize1, isize); m],
     };
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     let mut xxdd = vec![vec![]; n];
     for &(l, r, d) in &llrrdd {
         dsu.merge(l, r);

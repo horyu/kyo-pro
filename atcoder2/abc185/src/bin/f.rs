@@ -1,7 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-use ac_library_rs::{LazySegtree, MapMonoid, Monoid};
+use ac_library::{LazySegtree, MapMonoid, Monoid};
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -34,8 +34,8 @@ impl MapMonoid for MapMonoidXor {
 
     fn mapping(
         f: &Self::F,
-        x: &<Self::M as ac_library_rs::Monoid>::S,
-    ) -> <Self::M as ac_library_rs::Monoid>::S {
+        x: &<Self::M as ac_library::Monoid>::S,
+    ) -> <Self::M as ac_library::Monoid>::S {
         f ^ x
     }
 

@@ -14,7 +14,7 @@ fn main() {
         m: usize,
         uuvv: [(Usize1, Usize1); m],
     };
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     let mut hm = HashMap::new();
     for (u, v) in uuvv.iter().copied() {
         dsu.merge(u, v);

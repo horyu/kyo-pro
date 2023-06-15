@@ -33,7 +33,7 @@ fn main() {
         return;
     };
     // dbg!(one_key);
-    let mut dsu = ac_library_rs::Dsu::new(ab_to_i.len());
+    let mut dsu = ac_library::Dsu::new(ab_to_i.len());
     for &(a, b) in &aabb {
         let aa = *ab_to_i.get(&a).unwrap();
         let bb = *ab_to_i.get(&b).unwrap();

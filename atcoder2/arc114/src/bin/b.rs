@@ -1,7 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-use ac_library_rs::ModInt998244353;
+use ac_library::ModInt998244353;
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -14,7 +14,7 @@ fn main() {
         n: usize,
         ff: [Usize1; n],
     };
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     for (i, f) in ff.into_iter().enumerate() {
         dsu.merge(i, f);
     }

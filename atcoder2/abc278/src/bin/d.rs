@@ -8,7 +8,7 @@ use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
-use ac_library_rs::{Additive, LazySegtree, MapMonoid};
+use ac_library::{Additive, LazySegtree, MapMonoid};
 struct AddMonoid;
 impl MapMonoid for AddMonoid {
     type M = Additive<usize>;

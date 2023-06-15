@@ -16,7 +16,7 @@ fn main() {
         aabb: [(Usize1, Usize1); m],
         ccdd: [(Usize1, Usize1); k],
     };
-    let mut dsu = ac_library_rs::Dsu::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     for (a, b) in aabb.iter().copied() {
         dsu.merge(a, b);
     }
