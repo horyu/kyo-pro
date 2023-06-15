@@ -11,7 +11,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
+        s: Bytes,
     };
-    // println!("{rs}");
+    let mut b_to_ii = vec![BTreeSet::new(); 256];
+    for (i, b) in s.iter().copied().enumerate() {
+        b_to_ii[b as usize].insert(i);
+    }
+    let mut rs = String::new();
+    let mut l = 0;
+    for j in 0..k {
+        for b in b'a'..=b'z' {
+            if let Some(i) = b_to_ii[b as usize].range(l..=(n - k + j)).next().copied() {
+                rs.push(b as char);
+                l = i + 1;
+                break;
+            }
+        }
+    }
+    println!("{rs}");
 }
