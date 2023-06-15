@@ -38,7 +38,7 @@ fn main() {
     let mut ls = ac_library::LazySegtree::<MaxMonoid>::from(vv);
     for (l, r, v) in llrrvv {
         for i in (0..=w).rev() {
-            let x = ls.prod(i.saturating_sub(r), (i + 1).saturating_sub(l));
+            let x = ls.prod(i.saturating_sub(r)..(i + 1).saturating_sub(l));
             if x != -1 {
                 let y = ls.get(i);
                 ls.set(i, (x + v).max(y));
