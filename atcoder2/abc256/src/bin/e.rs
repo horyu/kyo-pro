@@ -21,18 +21,14 @@ fn main() {
     }
 
     let mut checked = vec![false; n];
-    let mut leaves = ff.iter().positions(|f| f.is_empty()).collect_vec();
-    while !leaves.is_empty() {
-        let mut new_leaves = vec![];
-        for leaf in leaves {
-            checked[leaf] = true;
-            let x = xx[leaf];
-            ff[x].remove(&leaf);
-            if ff[x].is_empty() {
-                new_leaves.push(x);
-            }
+    let mut leaves: VecDeque<_> = ff.iter().positions(|f| f.is_empty()).collect();
+    while let Some(leaf) = leaves.pop_front() {
+        checked[leaf] = true;
+        let x = xx[leaf];
+        ff[x].remove(&leaf);
+        if ff[x].is_empty() {
+            leaves.push_back(x);
         }
-        leaves = new_leaves;
     }
 
     let mut rs = 0usize;
