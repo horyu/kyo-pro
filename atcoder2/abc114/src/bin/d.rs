@@ -1,7 +1,6 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-#![feature(hash_drain_filter)]
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -13,46 +12,37 @@ fn main() {
     input! {
         n: usize,
     };
-    // 32400 = 2^4 * 3^4 * 5^2
-    // 75 = 3^1 * 5^2
-    // 3,5,15,25,75
-    let mut hm = HashMap::new();
-    for i in 1..=n {
-        for (k, v) in factors(i) {
-            let e = hm.entry(k).or_insert(0usize);
-            *e += v;
+    // 75 = 3*5*5
+    let mut counter = counter::Counter::<usize, usize>::new();
+    for i in 2..=n {
+        for (k, c) in factors(i) {
+            counter[&k] += c;
         }
     }
-    let vv = hm
-        .into_values()
-        .filter(|&v| 1 < v)
+    let cc = counter
+        .into_map()
+        .values()
+        .copied()
+        .filter(|&c| 2 <= c)
         .sorted_unstable()
-        .rev()
         .collect_vec();
-    let len = vv.len();
     let mut rs = 0usize;
-    for i in 0..len {
-        if 74 <= vv[i] {
-            rs += 1;
-        }
-        for j in 0..len {
-            if i != j {
-                if 24 <= vv[i] && 2 <= vv[j] {
-                    rs += 1;
-                }
-                if 14 <= vv[i] && 4 <= vv[j] {
-                    rs += 1;
-                }
-
-                for k in (j + 1)..len {
-                    if i != k && 2 <= vv[i] && 4 <= vv[j] && 4 <= vv[k] {
-                        rs += 1;
-                    }
-                }
+    for dd in [vec![75], vec![3, 25], vec![5, 15], vec![3, 5, 5]] {
+        let mut tmp = 0;
+        for cc in cc.iter().copied().permutations(dd.len()) {
+            if izip!(&dd, &cc).all(|(&d, &c)| d <= c + 1) {
+                tmp += 1;
             }
         }
+        rs += tmp
+            / dd.iter()
+                .copied()
+                .counts()
+                .values()
+                .copied()
+                .map(|i| (1..=i).product::<usize>())
+                .product::<usize>();
     }
-
     println!("{rs}");
 }
 
