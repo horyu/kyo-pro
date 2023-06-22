@@ -11,23 +11,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        mut aabb: [(isize, isize); n],
-        mut ccdd: [(isize, isize); n],
+        aabb: [(usize, usize); n],
+        mut ccdd: [(usize, usize); n],
     };
-    ccdd.sort_unstable_by(|x, y| x.0.cmp(&y.0).then(x.1.cmp(&y.1)));
-    let mut rs = 0;
-    for (c, d) in ccdd {
-        if let Some(i) = (0..aabb.len())
-            .filter(|&i| {
-                let (a, b) = aabb[i];
-                a < c && b < d
-            })
-            .max_by_key(|&i| aabb[i].1)
+    let mut rs = 0usize;
+    for (a, b) in aabb.into_iter().sorted_unstable().rev() {
+        if let Some(j) = (0..ccdd.len())
+            .filter(|&j| a < ccdd[j].0 && b < ccdd[j].1)
+            .min_by_key(|&j| ccdd[j].1)
         {
+            ccdd.swap_remove(j);
             rs += 1;
-            aabb.swap_remove(i);
-        };
+        }
     }
-
     println!("{rs}");
 }
