@@ -20,16 +20,13 @@ fn main() {
     let aabb = izip!(aa, bb).sorted_unstable().collect_vec();
     let ccdd = izip!(cc, dd).collect_vec();
 
-    let mut mm = btreemultimap::BTreeMultiMap::new();
-    for (c, d) in ccdd {
-        mm.insert(c, d);
-    }
+    let mm = btreemultimap::BTreeMultiMap::from_iter(ccdd);
 
     let mut bts = BTreeSet::new();
     let mut pre_a = usize::MAX;
     let mut tmp = 0;
     for (a, b) in aabb.into_iter().rev() {
-        // 大きいaから見ていき、a以上のcのペアであるdを全部bts追加し、そこから最小のdを取り出す
+        // 大きいaから見ていき、a以上のcのペアであるdを全部btsに追加し、そこから最小のdを取り出す
         for (_, &d) in mm.range(a..pre_a) {
             bts.insert((d, tmp));
             tmp += 1;
