@@ -10,17 +10,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        ha: usize,
-        wa: usize,
+        ha: isize,
+        wa: isize,
         aa: [Chars; ha],
-        hb: usize,
-        wb: usize,
+        hb: isize,
+        wb: isize,
         bb: [Chars; hb],
-        hx: usize,
-        wx: usize,
+        hx: isize,
+        wx: isize,
         xx: [Chars; hx],
     };
-    fn to_hs(vvv: &[Vec<char>]) -> HashSet<(isize, isize)> {
+    fn to_iijj(vvv: &[Vec<char>]) -> Vec<(isize, isize)> {
         let mut rs = vec![];
         for (i, vv) in vvv.iter().enumerate() {
             for (j, &v) in vv.iter().enumerate() {
@@ -29,24 +29,21 @@ fn main() {
                 }
             }
         }
-        let imin = rs.iter().copied().map(|ij| ij.0).min().unwrap();
-        let jmin = rs.iter().copied().map(|ij| ij.1).min().unwrap();
-        rs.into_iter().map(|(i, j)| (i - imin, j - jmin)).collect()
+        rs
     }
-    let hsa = to_hs(&aa);
-    let hsb = to_hs(&bb);
-    let vvx = to_hs(&xx).into_iter().sorted_unstable().collect_vec();
+    let wwa = to_iijj(&aa);
+    let wwb = to_iijj(&bb);
+    let wwx = to_iijj(&xx);
 
-    let base: HashSet<(isize, isize)> =
-        hsa.iter().copied().map(|(i, j)| (i + 10, j + 10)).collect();
-    for x in 0..30 {
-        for y in 0..30 {
+    let base: HashSet<(isize, isize)> = wwa.iter().copied().collect();
+    for x in -20..=20 {
+        for y in -20..=20 {
             let mut hs = base.clone();
-            for (i, j) in hsb.iter().copied() {
+            for (i, j) in wwb.iter().copied() {
                 hs.insert((i + x, j + y));
             }
-            if hs.len() == vvx.len()
-                && izip!(hs.iter().copied().sorted_unstable(), vvx.iter().copied())
+            if hs.len() == wwx.len()
+                && izip!(hs.into_iter().sorted_unstable(), wwx.iter().copied())
                     .map(|(p, q)| (p.0 - q.0, p.1 - q.1))
                     .all_equal()
             {
