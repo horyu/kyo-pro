@@ -18,19 +18,20 @@ fn main() {
     let mut ok = 1;
     let mut ng = l + 1;
     while 1 < ng - ok {
-        let m = (ng + ok) / 2;
+        let m = (ok + ng) / 2;
         let mut cnt = 0;
-        let mut pre = 0;
+        let mut pre_a = 0;
         for a in aa.iter().copied() {
-            if m <= (a - pre).min(l - a) {
+            if m <= a - pre_a && m <= l - a {
                 cnt += 1;
-                pre = a;
+                pre_a = a;
             }
         }
-        if cnt < k {
-            ng = m;
-        } else {
+        // eprintln!("{cnt} {pre_a} {ok} {m} {ng}");
+        if k <= cnt {
             ok = m;
+        } else {
+            ng = m;
         }
     }
     let rs = ok;
