@@ -25,34 +25,29 @@ fn main() {
     for vv in xxyy.iter().copied().into_group_map_by(|xy| xy.1).values() {
         rs += (k <= vv.len()) as usize;
     }
-    let kk = xxyy
-        .iter()
-        .copied()
-        .tuple_combinations()
-        .filter_map(|((px, py), (qx, qy))| {
-            let dx = px - qx;
-            let dy = py - qy;
-            (dx != 0 && dy != 0).then_some({
-                let sign = dy.signum();
-                let gcd = dx.gcd(&dy);
-                (sign * dx / gcd, sign * dy / gcd)
-            })
-        })
-        .unique()
-        .collect_vec();
-    for (kx, ky) in kk.iter().copied() {
-        let mut counter = counter::Counter::<i128, usize>::new();
-        for (x, y) in xxyy.iter().copied() {
+    // 2点 1
+    // 3点 3
+    // 4点 6
+    // n点 n*(n-1)/2
+    let mut counter = counter::Counter::<(i128, i128, i128)>::new();
+    for ((px, py), (qx, qy)) in xxyy.iter().copied().tuple_combinations() {
+        let dx = px - qx;
+        let dy = py - qy;
+        if dx != 0 && dy != 0 {
+            let sign = dy.signum();
+            let gcd = dx.gcd(&dy);
+            let kx = sign * dx / gcd;
+            let ky = sign * dy / gcd;
             // X - x = k(Y - y)
             // Y=0のとき X0 = -k*y + x
             // X0 = (-kx * y + ky * x) / ky
-            let tmp = -kx * y + ky * x;
-            counter[&tmp] += 1;
+            counter[&(kx, ky, -kx * py + ky * px)] += 1;
+            // eprintln!("{px} {py} {qx} {qy} {}", -kx * py + ky * px);
         }
-        for c in counter.values().copied() {
-            if k <= c {
-                rs += 1;
-            }
+    }
+    for c in counter.values().copied() {
+        if k * (k - 1) / 2 <= c {
+            rs += 1;
         }
     }
 
