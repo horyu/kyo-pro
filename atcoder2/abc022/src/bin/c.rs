@@ -14,30 +14,53 @@ fn main() {
         m: usize,
         uuvvll: [(Usize1, Usize1, usize); m],
     };
-    let mut g = petgraph::Graph::new_undirected();
-    let nodes = (0..n).map(|_| g.add_node(())).collect_vec();
-    let edges = uuvvll
-        .iter()
-        .map(|&(u, v, l)| g.add_edge(nodes[u], nodes[v], l))
-        .collect_vec();
-    let mut ii = vec![];
-    for (i, &(u, v, l)) in uuvvll.iter().enumerate() {
+    let mut rs = usize::MAX;
+    let mut g = vec![vec![]; n];
+    let mut ww = vec![];
+    for (u, v, l) in uuvvll.iter().copied() {
         if u == 0 {
-            ii.push(i);
+            ww.push((v, l));
+        } else {
+            g[u].push((v, l));
+            g[v].push((u, l));
         }
     }
-    let mut rs = std::usize::MAX;
-    for i in ii.into_iter().rev() {
-        let (a, b, l) = uuvvll[i];
-        g.remove_edge(edges[i]);
-        // dbg!(i,a,b, petgraph::algo::dijkstra(&g, nodes[0], Some(nodes[b]), |e| *e.weight()));
-        let hm = petgraph::algo::dijkstra(&g, nodes[0], Some(nodes[b]), |e| *e.weight());
-        if let Some(&w) = hm.get(&nodes[b]) {
-            rs = rs.min(l + w);
+    for (i, (s, sl)) in ww.iter().copied().enumerate() {
+        let hm = pathfinding::prelude::dijkstra_all(&s, |&f| g[f].clone());
+        for (t, tl) in ww[(i + 1)..].iter().copied() {
+            if let Some((_, l)) = hm.get(&t).copied() {
+                rs = rs.min(sl + l + tl);
+            }
         }
-        g.add_edge(nodes[a], nodes[b], l);
     }
-    if rs == std::usize::MAX {
+    // for (i, i_l) in g[0].iter().copied() {
+    //     // https://theory-and-me.hatenablog.com/entry/2019/09/08/182442
+    //     let mut dist = vec![usize::MAX; n];
+    //     let mut bh = BinaryHeap::new();
+    //     dist[i] = 0;
+    //     bh.push((std::cmp::Reverse(0), i));
+    //     while let Some((std::cmp::Reverse(p_l), p)) = bh.pop() {
+    //         if dist[p] < p_l {
+    //             continue;
+    //         }
+    //         for (q, q_l) in g[p].iter().copied() {
+    //             if p == i && q == 0 {
+    //                 continue;
+    //             }
+    //             let q_ll = p_l + q_l;
+    //             if q_ll < dist[q] {
+    //                 dist[q] = q_ll;
+    //                 bh.push((std::cmp::Reverse(q_ll), q));
+    //             }
+    //         }
+    //     }
+    //     for (j, j_l) in g[0].iter().copied() {
+    //         if i < j {
+    //             rs = rs.min(dist[j].saturating_add(i_l + j_l));
+    //         }
+    //     }
+    // }
+    if rs == usize::MAX {
         println!("-1");
     } else {
         println!("{rs}");
