@@ -11,7 +11,12 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        ss: [String; n],
     };
-    // println!("{rs}");
+    let mut hs = HashSet::new();
+    for (i, s) in ss.into_iter().enumerate() {
+        if hs.insert(s) {
+            println!("{}", i + 1);
+        }
+    }
 }
