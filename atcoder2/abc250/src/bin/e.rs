@@ -15,6 +15,46 @@ fn main() {
         aa: [usize; n],
         bb: [usize; n],
         q: usize,
+        xxyy: [(usize, usize); q],
+    };
+    // https://atcoder.jp/contests/abc250/submissions/33595407
+    let mut ahm = HashMap::new();
+    for (i, a) in aa.iter().copied().enumerate() {
+        let _ = ahm.try_insert(a, i);
+    }
+    let mut bhm = HashMap::new();
+    for (i, b) in bb.iter().copied().enumerate() {
+        let _ = bhm.try_insert(b, i);
+    }
+    let mut a2b = vec![0; n + 1];
+    let mut b2a = vec![0; n + 1];
+    for i in 0..n {
+        a2b[i + 1] = a2b[i];
+        if let Some(j) = bhm.get(&aa[i]).copied() {
+            a2b[i + 1] = a2b[i + 1].max(j);
+        } else {
+            a2b[i + 1] = n;
+        }
+        b2a[i + 1] = b2a[i];
+        if let Some(j) = ahm.get(&bb[i]).copied() {
+            b2a[i + 1] = b2a[i + 1].max(j);
+        } else {
+            b2a[i + 1] = n;
+        }
+    }
+    for (x, y) in xxyy {
+        let rs = ["No", "Yes"][(a2b[x] < y && b2a[y] < x) as usize];
+        println!("{rs}");
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        aa: [usize; n],
+        bb: [usize; n],
+        q: usize,
         xxyy: [(Usize1, Usize1); q],
     };
     let mut bhm = HashMap::new();
