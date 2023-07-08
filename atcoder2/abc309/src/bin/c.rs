@@ -11,36 +11,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        k: isize,
-        aabb: [(usize, isize); n],
+        k: usize,
+        mut aabb: [(usize, usize); n],
     };
-    let mut hs = HashSet::new();
-    hs.insert(0);
-    for (a, b) in aabb.iter().copied() {
-        hs.insert(a);
-    }
-    let a2i = HashMap::<usize, usize>::from_iter(
-        hs.into_iter()
-            .sorted_unstable()
-            .enumerate()
-            .map(|(i, a)| (a, i)),
-    );
-    let mut ww = vec![0; a2i.len() + 1];
-    for (a, b) in aabb.iter().copied() {
-        let i = a2i.get(&a).copied().unwrap();
-        ww[0] += b;
-        ww[i] -= b;
-    }
+    aabb.sort_unstable();
     let mut tmp = 0;
-    for (i, w) in ww.into_iter().enumerate() {
-        tmp += w;
+    for (a, b) in aabb.iter().copied() {
+        tmp += b;
+    }
+
+    if tmp <= k {
+        println!("1");
+        return;
+    }
+    for (a, b) in aabb.iter().copied() {
+        tmp -= b;
         if tmp <= k {
-            let rs = a2i
-                .into_iter()
-                .find_map(|(a, ori_i)| (i == ori_i).then_some(a))
-                .unwrap()
-                + 1;
-            println!("{rs}");
+            println!("{}", a + 1);
             return;
         }
     }

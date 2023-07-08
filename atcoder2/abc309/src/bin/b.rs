@@ -16,22 +16,14 @@ fn main() {
     let mut rs = aaa.clone();
     for (i, aa) in aaa.iter().enumerate() {
         for (j, a) in aa.iter().copied().enumerate() {
-            if i == 0 {
-                if j < n - 1 {
-                    rs[i][j + 1] = a;
-                } else {
-                    rs[i + 1][n - 1] = a;
-                }
-            } else if i == n - 1 {
-                if j == 0 {
-                    rs[i - 1][j] = a;
-                } else {
-                    rs[i][j - 1] = a;
-                }
-            } else if j == 0 {
-                rs[i - 1][j] = a;
-            } else if j == n - 1 {
+            if i == 0 && j < n - 1 {
+                rs[i][j + 1] = a;
+            } else if j == n - 1 && i < n - 1 {
                 rs[i + 1][j] = a;
+            } else if i == n - 1 && 0 < j {
+                rs[i][j - 1] = a;
+            } else if j == 0 && 0 < i {
+                rs[i - 1][j] = a;
             }
         }
     }
