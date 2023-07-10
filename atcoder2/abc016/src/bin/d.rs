@@ -16,9 +16,7 @@ fn main() {
         xxyy: [(isize, isize); n]
     };
     let mut cnt = 0;
-    for i in 0..n {
-        let c = xxyy[i];
-        let d = xxyy[(i + 1) % n];
+    for (c, d) in xxyy.iter().copied().cycle().tuple_windows().take(n) {
         if judge(a, b, c, d) {
             cnt += 1;
         }
