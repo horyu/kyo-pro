@@ -15,21 +15,20 @@ fn main() {
         b: usize,
         c: usize,
     };
-    let mut rs = std::usize::MAX;
+    let mut rs = !0usize;
     let max = 9999;
-    for i in 0..max {
+    for i in 0..=max {
         let ai = a * i;
         if n < ai {
             break;
         }
-        for j in 0..(max - i) {
-            let bj = b * j;
-            if n < ai + bj {
+        for j in 0..=(max - i) {
+            let aibj = ai + b * j;
+            if n < aibj {
                 break;
             }
-            let d = n - (ai + bj);
-            let k = d / c;
-            if c * k == d && i + j + k <= max {
+            let k = (n - aibj) / c;
+            if i + j + k <= max && aibj + c * k == n {
                 rs = rs.min(i + j + k);
             }
         }
