@@ -15,14 +15,16 @@ fn main() {
         aa: [usize; n],
     };
     let mut rs = ModInt1000000007::new(1);
-    let mut vv = [0; 3];
+    let mut arr = [0usize; 3];
     for a in aa {
-        let ww = vv.iter().positions(|v| *v == a).collect_vec();
-        rs *= ww.len();
-        if let Some(w) = ww.first().copied() {
-            vv[w] += 1;
+        if let Some(l) = arr.iter().copied().position(|x| x == a) {
+            let r = arr.iter().copied().rposition(|x| x == a).unwrap();
+            rs *= 1 + r - l;
+            arr[l] += 1;
+        } else {
+            println!("0");
+            return;
         }
     }
-    // dbg!(rs);
     println!("{rs}");
 }
