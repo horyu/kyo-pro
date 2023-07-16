@@ -40,10 +40,8 @@ fn dfs(ngs: &[Vec<bool>], n: usize, t: usize, crr: usize, ttt: &mut Vec<Vec<usiz
             .count();
     }
     let mut ans = 0;
-    let mut ok = false;
     for ti in 0..t {
         if ttt[ti].iter().copied().all(|t| !ngs[t][crr]) {
-            ok = true;
             ttt[ti].push(crr);
             ans += dfs(ngs, n, t, crr + 1, ttt);
             ttt[ti].pop();
@@ -51,9 +49,6 @@ fn dfs(ngs: &[Vec<bool>], n: usize, t: usize, crr: usize, ttt: &mut Vec<Vec<usiz
         if ttt[ti].is_empty() {
             break;
         }
-    }
-    if !ok {
-        return 0;
     }
     ans
 }

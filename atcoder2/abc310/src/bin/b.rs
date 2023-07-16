@@ -27,7 +27,7 @@ fn main() {
     for i in 0..n {
         for j in 0..n {
             if pp[j] <= pp[i]
-                && hhss[i].iter().copied().all(|f| hhss[j].contains(&f))
+                && hhss[i].is_subset(&hhss[j])
                 && (pp[j] < pp[i] || hhss[i].len() < hhss[j].len())
             {
                 println!("Yes");

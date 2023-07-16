@@ -11,7 +11,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut rs = 0usize;
+    let mut cc = [0; 2];
+    for c in s {
+        if c == '0' {
+            cc = [1, cc[0] + cc[1]];
+        } else {
+            cc = [cc[1], cc[0] + 1];
+        }
+        rs += cc[1];
+    }
+    println!("{rs}");
 }
