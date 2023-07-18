@@ -15,30 +15,30 @@ fn main() {
         m: usize,
         xxyy: [(Usize1, Usize1); m]
     };
-    let mut ng = vec![vec![false; n]; n];
+    let mut rs = usize::MAX;
+    let mut ngs = vec![vec![false; n]; n];
     for (x, y) in xxyy {
-        ng[x][y] = true;
-        ng[y][x] = true;
+        ngs[x][y] = true;
+        ngs[y][x] = true;
     }
-    let min_opt = (0..n)
-        .permutations(n)
-        .filter_map(|ii| {
-            for (&ix, &iy) in ii.iter().tuple_windows() {
-                if ng[ix][iy] {
-                    return None;
-                }
-            }
-            // eprintln!("[{}] {}", ii.iter().join(","), ii.iter().enumerate().map(|(j, &i)| aaa[j][i]).join(" "));
-            Some(
-                ii.into_iter()
-                    .enumerate()
-                    .fold(0usize, |acc, (j, i)| acc + aaa[i][j]),
-            )
-        })
-        .min();
-    if let Some(rs) = min_opt {
-        println!("{rs}");
-    } else {
+    for ii in (0..n).permutations(n) {
+        if ii
+            .iter()
+            .copied()
+            .tuple_windows()
+            .any(|(ai, aj)| ngs[ai][aj])
+        {
+            continue;
+        }
+        let mut tmp = 0;
+        for (j, ai) in ii.iter().copied().enumerate() {
+            tmp += aaa[ai][j];
+        }
+        rs = rs.min(tmp);
+    }
+    if rs == usize::MAX {
         println!("-1");
+    } else {
+        println!("{rs}");
     }
 }
