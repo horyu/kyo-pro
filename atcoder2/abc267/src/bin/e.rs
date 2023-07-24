@@ -45,3 +45,47 @@ fn main() {
     }
     println!("{rs}");
 }
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        aa: [usize; n],
+        uuvv: [(Usize1, Usize1); m],
+    };
+    let mut g = vec![HashSet::new(); n];
+    let mut cc = vec![0usize; n];
+    for (u, v) in uuvv.iter().copied() {
+        g[u].insert(v);
+        g[v].insert(u);
+        cc[u] += aa[v];
+        cc[v] += aa[u];
+    }
+    let mut btm = BTreeMap::new();
+    for (i, c) in cc.iter().copied().enumerate() {
+        btm.entry(c).or_insert_with(HashSet::new).insert(i);
+    }
+    let mut rs = 0usize;
+    while let Some(c) = btm.keys().next().copied() {
+        rs = rs.max(c);
+        if let Some(removed) = btm.remove(&c) {
+            for i in removed {
+                let a = aa[i];
+                let jj = std::mem::take(&mut g[i]);
+                for j in jj {
+                    if let Some(hs) = btm.get_mut(&cc[j]) {
+                        hs.remove(&j);
+                        if hs.is_empty() {
+                            btm.remove(&cc[j]);
+                        }
+                        cc[j] -= a;
+                        btm.entry(cc[j]).or_insert_with(HashSet::new).insert(j);
+                    }
+                    g[j].remove(&i);
+                }
+            }
+        }
+    }
+    println!("{rs}");
+}
