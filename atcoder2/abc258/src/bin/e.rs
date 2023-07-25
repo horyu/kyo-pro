@@ -16,39 +16,42 @@ fn main() {
         ww: [usize; n],
         kk: [Usize1; q],
     };
-    let ww = ww.repeat(2);
-    let all = ww[..n].iter().sum::<usize>();
-    let mut count = vec![(x / all) * n; n];
-    let x = x % all;
+    let ww_sum = ww.iter().sum::<usize>();
 
-    let mut j = 0;
-    let mut s = 0;
-    for i in 0..n {
-        if j < i {
-            j = i;
-            s = 0;
+    // i番目のじゃがいもから入れ始めた箱の中身の個数
+    let mut count = vec![(x / ww_sum) * n; n];
+    {
+        let xx = x % ww_sum;
+        let ww = ww.repeat(2);
+        let mut r = 0;
+        let mut sum = 0;
+        for l in 0..n {
+            if r < l {
+                r = l;
+                sum = 0;
+            }
+            while sum < xx {
+                sum += ww[r];
+                r += 1;
+            }
+            count[l] += r - l;
+            sum -= ww[l];
         }
-        while s < x {
-            s += ww[j];
-            j += 1;
-        }
-        count[i] += j - i;
-        s = s.saturating_sub(ww[i]);
     }
 
-    let mut order = vec![None; n];
     let mut path = vec![];
-    let mut loop_size = 0;
-    let mut u = 0;
-    for k in 0usize.. {
-        if let Some(o) = order[u] {
-            loop_size = k - o;
-            break;
+    let loop_size = {
+        let mut order = vec![usize::MAX; n];
+        let mut i = 0;
+        let mut u = 0;
+        while order[u] == usize::MAX {
+            order[u] = i;
+            path.push(u);
+            u = (u + count[u]) % n;
+            i += 1;
         }
-        order[u] = Some(k);
-        path.push(u);
-        u = (u + count[u]) % n;
-    }
+        i - order[u]
+    };
 
     let non_loop = path.len() - loop_size;
     for k in kk {
