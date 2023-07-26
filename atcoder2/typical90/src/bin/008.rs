@@ -28,12 +28,12 @@ fn main() {
             _ => None,
         })
         .collect_vec();
-    let mut dp = vec![ModInt1000000007::default(); 9];
+    let mut dp = [ModInt1000000007::default(); 9];
     for v in vv {
         if v == 0 {
             dp[v] += 1;
         } else {
-            dp[v] = dp[v] + dp[v - 1];
+            dp[v] += dp[v - 1];
         }
     }
     let rs = dp[6];
