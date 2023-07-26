@@ -53,3 +53,37 @@ fn main() {
     let rs = rs.iter().join("\n");
     println!("{rs}");
 }
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+    };
+    let mut rrr = vec![];
+    for _ in 0..m {
+        input! {
+            k: usize,
+            rr: [Usize1; k],
+        };
+        rrr.push(rr);
+    }
+    let mut g = vec![vec![]; n + m];
+    for (ri, rr) in rrr.into_iter().enumerate() {
+        let j = n + ri;
+        for i in rr {
+            g[i].push((j, 1));
+            g[j].push((i, 1));
+        }
+    }
+
+    let hm = pathfinding::prelude::dijkstra_all(&0usize, |&i| g[i].iter().copied());
+    let mut rs = vec![-1; n];
+    rs[0] = 0;
+    for i in 1..n {
+        if let Some(d) = hm.get(&i).map(|d| d.1 / 2) {
+            rs[i] = d;
+        }
+    }
+    println!("{}", rs.into_iter().join("\n"));
+}
