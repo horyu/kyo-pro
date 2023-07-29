@@ -12,10 +12,11 @@ fn main() {
     input! {
         s: String
     };
-    let tf = matches!(
-        s.as_ref(),
-        "ACE" | "BDF" | "CEG" | "DFA" | "EGB" | "FAC" | "GBD"
-    );
+    let tf = "が ACE、BDF、CEG、DFA、EGB、FAC、GBD のいずれかと等しいとき".contains(s.as_str());
+    // let tf = matches!(
+    //     s.as_ref(),
+    //     "ACE" | "BDF" | "CEG" | "DFA" | "EGB" | "FAC" | "GBD"
+    // );
     let rs = ["No", "Yes"][tf as usize];
     println!("{rs}");
 }

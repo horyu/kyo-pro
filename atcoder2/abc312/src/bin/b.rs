@@ -14,23 +14,25 @@ fn main() {
         m: usize,
         sss: [Chars; n],
     };
-    let s = sss
-        .into_iter()
-        .map(|ss| ss.into_iter().map(|s| s == '#').collect_vec())
-        .collect_vec();
+    let ttt = [
+        "###.?????".chars().collect_vec(),
+        "###.?????".chars().collect_vec(),
+        "###.?????".chars().collect_vec(),
+        "....?????".chars().collect_vec(),
+        "?????????".chars().collect_vec(),
+        "?????....".chars().collect_vec(),
+        "?????.###".chars().collect_vec(),
+        "?????.###".chars().collect_vec(),
+        "?????.###".chars().collect_vec(),
+    ];
     for i in 0..(n - 8) {
         for j in 0..(m - 8) {
-            if (0..3).all(|d| {
-                s[i][j + d]
-                    && s[i + 1][j + d]
-                    && s[i + 2][j + d]
-                    && !s[i + 3][j + d]
-                    && !s[i + 5][j + 6 + d]
-                    && s[i + 6][j + 6 + d]
-                    && s[i + 7][j + 6 + d]
-                    && s[i + 8][j + 6 + d]
-            }) && (0..4).all(|d| !s[i + d][j + 3] && !s[i + 5 + d][j + 5])
-            {
+            if ttt.iter().enumerate().all(|(ti, tt)| {
+                tt.iter()
+                    .copied()
+                    .enumerate()
+                    .all(|(tj, t)| t == '?' || t == sss[i + ti][j + tj])
+            }) {
                 println!("{} {}", i + 1, j + 1);
             }
         }

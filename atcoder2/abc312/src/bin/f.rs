@@ -14,82 +14,35 @@ fn main() {
         mut m: usize,
         ttxx: [(usize, usize); n],
     };
-    let mut aa = vec![];
-    let mut bb = vec![];
-    let mut cc = vec![];
+    let mut tmp = [vec![], vec![], vec![]];
     for (t, x) in ttxx {
-        match t {
-            0 => {
-                aa.push(x);
-            }
-            1 => {
-                bb.push(x);
-            }
-            _ => {
-                cc.push(x);
-            }
-        }
+        tmp[t].push(x);
     }
-    if cc.is_empty() {
-        println!(
-            "{}",
-            aa.into_iter()
-                .sorted_unstable()
-                .rev()
-                .take(m)
-                .sum::<usize>()
-        );
-        return;
+    let [aa, mut bb, mut cc] = tmp;
+    use std::cmp::Reverse as R;
+    let mut bh = BinaryHeap::new();
+    let mut sum = 0;
+    for a in aa.into_iter().sorted_unstable().rev().take(m) {
+        bh.push(R(a));
+        sum += a;
     }
 
     bb.sort_unstable();
     cc.sort_unstable();
-    while aa.len() < m && !bb.is_empty() && !cc.is_empty() {
-        m -= 1;
-        for _ in 0..cc.pop().unwrap() {
-            if let Some(b) = bb.pop() {
-                aa.push(b);
-            } else {
-                break;
-            }
-        }
-    }
-    aa.sort_unstable();
-    aa.reverse();
-    aa.truncate(m);
-    let mut sum = aa.iter().copied().sum::<usize>();
     let mut rs = sum;
-    let mut bts = BTreeSet::new();
-    for (ai, a) in aa.iter().copied().enumerate() {
-        bts.insert((a, ai, 0));
-    }
-    bb.reverse();
-    cc.reverse();
-    let mut bi = 0;
-    for c in cc {
-        // c を開けるため1回消費
-        if let Some((p, pi, pt)) = bts.pop_first() {
-            // eprintln!("{sum} -> {}", sum - p);
-            sum -= p;
-        } else {
-            break;
-        }
+    for (ci, c) in cc.into_iter().rev().enumerate() {
         for _ in 0..c {
-            if let Some(b) = bb.get(bi).copied() {
-                if let Some((a, ai, 0)) = bts.first().copied() {
-                    if a < b {
-                        // eprintln!("swap {a} {b}");
-                        bts.pop_first();
-                        bts.insert((b, bi, 1));
-                        sum += b - a;
-                    } else {
-                        bi = n;
-                    }
-                }
+            if let Some(b) = bb.pop() {
+                bh.push(R(b));
+                sum += b;
             } else {
                 break;
             }
-            bi += 1;
+        }
+        while m - ci - 1 < bh.len() {
+            if let Some(R(x)) = bh.pop() {
+                sum -= x;
+            }
         }
         rs = rs.max(sum);
     }

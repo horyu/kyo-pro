@@ -19,7 +19,7 @@ fn main() {
     bb.sort_unstable();
     bb.reverse();
     let xx = chain!(aa.iter().copied(), bb.iter().copied())
-        .flat_map(|x| [x - 1, x, x + 1])
+        .flat_map(|x| [x, x + 1])
         .sorted_unstable()
         .dedup()
         .collect_vec();
