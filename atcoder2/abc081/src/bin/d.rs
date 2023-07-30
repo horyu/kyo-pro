@@ -25,18 +25,16 @@ fn main() {
         if min.abs() <= max.abs() {
             if let Some(i) = (0..(n - 1)).position(|i| aa[i + 1] < aa[i]) {
                 aa[i + 1] += max;
-                rs.push([max_pos + 1, i + 2]);
+                rs.push(format!("{} {}", max_pos + 1, i + 2));
             }
         } else {
             if let Some(i) = (0..(n - 1)).rposition(|i| aa[i + 1] < aa[i]) {
                 aa[i] += min;
-                rs.push([min_pos + 1, i + 1]);
+                rs.push(format!("{} {}", min_pos + 1, i + 1));
             }
         }
         // eprintln!("{}", aa.iter().join(" "));
     }
     println!("{}", rs.len());
-    for rs in rs {
-        println!("{}", rs.iter().join(" "));
-    }
+    println!("{}", rs.iter().join("\n"));
 }
