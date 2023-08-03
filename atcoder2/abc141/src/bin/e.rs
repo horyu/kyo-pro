@@ -16,37 +16,11 @@ fn main() {
     // https://drken1215.hatenablog.com/entry/2019/09/16/014600
     let mut rs = 0;
     for i in 0..n {
-        let lcp = zalgo(&s[i..]);
+        let lcp = ac_library::z_algorithm_arbitrary(&s[i..]);
         for j in 0..lcp.len() {
             let l = lcp[j].min(j);
             rs = rs.max(l);
         }
     }
     println!("{rs}");
-}
-
-fn zalgo(s: &[char]) -> Vec<usize> {
-    let n = s.len();
-    let mut res = vec![0; n];
-    res[0] = n;
-    let mut i = 1;
-    let mut j = 0;
-    while i < n {
-        while i + j < n && s[j] == s[i + j] {
-            j += 1;
-        }
-        res[i] = j;
-        if j == 0 {
-            i += 1;
-            continue;
-        }
-        let mut k = 1;
-        while i + k < n && k + res[k] < j {
-            res[i + k] = res[k];
-            k += 1;
-        }
-        i += k;
-        j -= k;
-    }
-    res
 }
