@@ -14,6 +14,25 @@ fn main() {
         m: usize,
         aabb: [(Usize1, Usize1); m],
     };
+    let mut loser = vec![false; n];
+    for (a, b) in aabb {
+        loser[b] = true;
+    }
+    let ii = loser.into_iter().positions(|tf| !tf).collect_vec();
+    if ii.len() == 1 {
+        println!("{}", ii[0] + 1);
+    } else {
+        println!("-1");
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
+    };
     let mut g = vec![vec![]; n];
     for (u, v) in aabb.iter().copied() {
         g[u].push(v);

@@ -11,6 +11,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        mut aa: [usize; n],
+    };
+    aa.sort_unstable();
+    let sum = aa.iter().copied().sum::<usize>();
+    let bb = chain!(vec![sum / n; n - sum % n], vec![sum / n + 1; sum % n],).collect_vec();
+    let rs = izip!(aa, bb).fold(0, |acc, (a, b)| acc + a.abs_diff(b)) / 2;
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
         mut aa: [isize; n],
     };
     if n == 1 {
