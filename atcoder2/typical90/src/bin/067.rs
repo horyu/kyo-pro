@@ -10,8 +10,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        n: String,
+        k: usize,
     };
-    // println!("{rs}");
+    let mut rs = usize::from_str_radix(&n, 8).unwrap_or_default();
+    for _ in 0..k {
+        let mut vv = vec![];
+        let mut tmp = rs;
+        while 0 < tmp {
+            vv.push(tmp % 9);
+            tmp /= 9;
+        }
+        rs = vv
+            .into_iter()
+            .rev()
+            .fold(0, |acc, v| acc * 8 + if v == 8 { 5 } else { v });
+    }
+    println!("{rs:0o}");
 }
