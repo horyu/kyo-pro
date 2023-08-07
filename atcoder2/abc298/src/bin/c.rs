@@ -27,12 +27,11 @@ fn main() {
             let rs = hako[i]
                 .iter()
                 .map(|(&k, &v)| vec![k + 1; v].into_iter().join(" "))
-                .into_iter()
                 .join(" ");
             println!("{rs}");
         } else {
             input! {i: Usize1};
-            let rs = card[i].iter().map(|v| v + 1).into_iter().join(" ");
+            let rs = card[i].iter().map(|v| v + 1).join(" ");
             println!("{rs}");
         }
     }
