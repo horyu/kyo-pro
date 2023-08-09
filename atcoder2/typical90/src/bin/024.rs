@@ -11,7 +11,11 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        k: usize,
         aa: [usize; n],
+        bb: [usize; n],
     };
-    // println!("{rs}");
+    let cnt = izip!(aa, bb).fold(0, |acc, (a, b)| acc + a.abs_diff(b));
+    let rs = ["No", "Yes"][((cnt <= k) && cnt.abs_diff(k).is_even()) as usize];
+    println!("{rs}");
 }
