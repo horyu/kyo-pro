@@ -11,7 +11,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        mut llrr: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    llrr.sort_unstable_by_key(|&(l, r)| (l, std::cmp::Reverse(r)));
+    let mut ft = ac_library::FenwickTree::new(n, 0usize);
+    let mut rs = 0usize;
+    for (l, r) in llrr {
+        rs += ft.sum((l + 1)..r);
+        ft.add(r, 1);
+    }
+    println!("{rs}");
 }
