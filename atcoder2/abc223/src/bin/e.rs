@@ -10,29 +10,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        // x: usize,
-        // y: usize,
-        // a: usize,
-        // b: usize,
-        // c: usize,
         xy: [usize; 2],
         abc: [usize; 3],
     };
-    if xy.iter().product::<usize>() < abc.iter().sum::<usize>() {
-        println!("No");
-        return;
-    }
-    let [x, y] = xy[..] else {return;};
+    // ABC | AB
+    // ABC | AC
     for abc in abc.into_iter().permutations(3) {
-        let [a,b,c] = abc[..] else {return;};
-        for (x0, y0) in [(x, y), (y, x)] {
-            let x1 = x0.saturating_sub(a.div_ceil(y0));
-            if x1 == 0 {
+        let (a, b, c) = (abc[0], abc[1], abc[2]);
+        for xy in xy.iter().copied().permutations(2) {
+            let (x, y) = (xy[0], xy[1]);
+            let yy = y.saturating_sub(a.div_ceil(x));
+            if yy == 0 {
                 continue;
             }
-            for (x1, y1) in [(x1, y0), (y0, x1)] {
-                let x2 = x1.saturating_sub(b.div_ceil(y1));
-                if c <= x2 * y1 {
+            for pq in [x, yy].into_iter().permutations(2) {
+                let (p, q) = (pq[0], pq[1]);
+                if b.div_ceil(p) + c.div_ceil(p) <= q {
+                    // dbg!([x, y], [p, q], [a, b, c]);
                     println!("Yes");
                     return;
                 }
