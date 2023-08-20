@@ -17,6 +17,7 @@ fn main() {
     // true: 羊、false: 狼
     for mut vv in (0..2).map(|_| [false, true]).multi_cartesian_product() {
         for i in 0..(n - 2) {
+            // 羊?, 同じ?
             let next = match (vv[i + 1], s[i + 1]) {
                 (true, true) => vv[i],
                 (true, false) => !vv[i],
@@ -35,7 +36,7 @@ fn main() {
                 (false, false) => pre == next,
             }
         }) {
-            let rs = vv.into_iter().map(|v| if v { 'S' } else { 'W' }).join("");
+            let rs = vv.into_iter().map(|v| ['W', 'S'][v as usize]).join("");
             println!("{rs}");
             return;
         }
