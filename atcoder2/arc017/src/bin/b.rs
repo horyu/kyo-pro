@@ -14,19 +14,19 @@ fn main() {
         k: usize,
         aa: [usize; n],
     };
-    if k == 1 {
-        println!("{n}");
-        return;
-    }
-    let mut rs = 0usize;
-    let mut cnt = 0;
-    for r in 0..(n - 1) {
-        if aa[r] < aa[r + 1] {
-            cnt += 1;
-        } else {
-            cnt = 0;
+    let mut rs = 0;
+    let mut vv = VecDeque::new();
+    for a in aa {
+        if vv.len() == k {
+            vv.pop_front();
         }
-        if k - 1 <= cnt {
+        if let Some(last) = vv.back().copied() {
+            if a <= last {
+                vv.clear();
+            }
+        }
+        vv.push_back(a);
+        if vv.len() == k {
             rs += 1;
         }
     }
