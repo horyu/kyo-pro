@@ -11,7 +11,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut cc = s.clone();
+    let mut is_inner = true;
+    for (i, c) in s.into_iter().enumerate() {
+        match c {
+            '"' => {
+                is_inner = !is_inner;
+            }
+            ',' => {
+                if is_inner {
+                    cc[i] = '.';
+                }
+            }
+            _ => {}
+        }
+    }
+    let rs = cc.iter().join("");
+    println!("{rs}");
 }
