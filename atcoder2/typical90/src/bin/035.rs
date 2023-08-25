@@ -20,16 +20,13 @@ fn main() {
         g[a].push(b);
         g[b].push(a);
     }
-    let mut bits = 0;
-    while (1 << bits) < n {
-        bits += 1;
-    }
-    let mut par = vec![vec![0; n]; bits];
+    const BITS: usize = 100000usize.ilog2() as usize + 1;
+    let mut par = vec![vec![0; n]; BITS];
     let mut depth = vec![0; n];
     let mut id = vec![0; n];
     let mut vert_id = 0;
     build_tree(0, 0, &mut par, &mut id, &mut depth, &mut vert_id, &g);
-    for i in 1..bits {
+    for i in 1..BITS {
         for j in 0..n {
             par[i][j] = par[i - 1][par[i - 1][j]];
         }
@@ -40,7 +37,7 @@ fn main() {
         } else {
             (va, vb)
         };
-        for i in (0..bits).rev() {
+        for i in (0..BITS).rev() {
             if (1 << i) <= depth[va] - depth[vb] {
                 va = par[i][va];
             }
@@ -48,7 +45,7 @@ fn main() {
         if va == vb {
             return va;
         }
-        for i in (0..bits).rev() {
+        for i in (0..BITS).rev() {
             if par[i][va] != par[i][vb] {
                 va = par[i][va];
                 vb = par[i][vb];
