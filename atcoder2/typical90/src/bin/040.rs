@@ -11,7 +11,25 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        w: isize,
+        aa: [isize; n],
     };
-    // println!("{rs}");
+    let mut g = ac_library::maxflow::MfGraph::new(n + 2);
+    let mut sum = 0;
+    for (i, a) in aa.iter().copied().enumerate() {
+        g.add_edge(0, i + 1, a);
+        g.add_edge(i + 1, n + 1, w);
+        sum += a;
+    }
+    for i in 0..n {
+        input! {
+            k: usize,
+            cc: [Usize1; k],
+        }
+        for c in cc {
+            g.add_edge(c + 1, i + 1, 1e15 as isize);
+        }
+    }
+    let rs = sum - g.flow(0, n + 1);
+    println!("{rs}");
 }
