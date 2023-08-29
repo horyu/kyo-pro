@@ -14,6 +14,7 @@ fn main() {
         w: isize,
         aa: [isize; n],
     };
+    // https://qiita.com/tanaka-a/items/fb8d84c44190c7098047#%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B31%E5%85%AC%E5%BC%8F%E8%A7%A3%E8%AA%AC%E6%96%B9%E5%BC%8F
     let mut g = ac_library::maxflow::MfGraph::new(n + 2);
     let mut sum = 0;
     for (i, a) in aa.iter().copied().enumerate() {
