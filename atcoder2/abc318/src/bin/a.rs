@@ -14,6 +14,6 @@ fn main() {
         m: usize,
         p: usize,
     };
-    let rs = (m <= n).then(|| (n - m) / p + 1).unwrap_or_default();
+    let rs = if m <= n { (n - m) / p + 1 } else { 0 };
     println!("{rs}");
 }
