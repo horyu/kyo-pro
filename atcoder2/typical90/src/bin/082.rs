@@ -14,30 +14,24 @@ fn main() {
         l: u128,
         r: u128,
     };
-    let llog = l.ilog10();
-    let rlog = r.ilog10();
-    let mut rs = ModInt1000000007::new(0);
-    if llog == rlog {
-        let n = r - l + 1;
-        // dbg!(n);
-        rs += ModInt1000000007::new(l + r) * n / 2 * (llog + 1);
-    } else {
-        // l:92(1) 92~99=8=100-91-1
-        let n = 10u128.pow(llog + 1) - l;
-        // dbg!(n);
-        rs += ModInt1000000007::new(2 * l + n - 1) * n / 2 * (llog + 1);
-        // dbg!(rs);
-        // r:1016(3) 1000~1016=17=r-1000+1
-        let n = r - 10u128.pow(rlog) + 1;
-        rs += ModInt1000000007::new(2 * 10u128.pow(rlog) + n - 1) * n / 2 * (rlog + 1);
-        // dbg!(rs);
-        for log in (llog + 1)..rlog {
-            // 100~999=900=1000-100
-            let n = 10u128.pow(log + 1) - 10u128.pow(log);
-            // dbg!(n);
-            rs += ModInt1000000007::new(2 * 10u128.pow(log) + n - 1) * n / 2 * (log + 1);
-            // dbg!(rs);
+    // 1からnまでのiに対して、iをi回繰り返した文字列長の総和を求める
+    fn f(n: u128) -> ModInt1000000007 {
+        if n == 0 {
+            return Default::default();
         }
+        let mut sum = ModInt1000000007::default();
+        for digit in 1..=(n.ilog10() + 1) {
+            let upper = if digit == n.ilog10() + 1 {
+                n
+            } else {
+                10u128.pow(digit) - 1
+            };
+            let lower = 10u128.pow(digit - 1);
+            sum += digit as u128 * (upper + lower) * (upper - lower + 1) / 2;
+            // eprintln!("{digit} {upper} {lower} {sum}");
+        }
+        sum
     }
+    let rs = f(r) - f(l - 1);
     println!("{rs}");
 }
