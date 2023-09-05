@@ -11,7 +11,46 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Chars,
+        t: Chars,
     };
-    // println!("{rs}");
+    let m = 699999953;
+    let to_i = |c: char| match c {
+        'R' => 0,
+        'G' => 1,
+        'B' => 2,
+        _ => unreachable!(),
+    };
+    let seq1 = s.into_iter().map(to_i).collect_vec();
+    let seq3 = t.into_iter().map(to_i).collect_vec();
+    let mut rs = 0;
+    for i in 0..3 {
+        let mut seq2 = vec![0; n];
+        for j in 0..n {
+            seq2[j] = (i - seq3[j] + 3) % 3;
+        }
+        let mut power3 = 1;
+        let mut hash1 = 0;
+        let mut hash2 = 0;
+        for j in 0..n {
+            hash1 = (hash1 * 3 + seq1[j]) % m;
+            hash2 = (hash2 + power3 * seq2[n - j - 1]) % m;
+            if hash1 == hash2 {
+                rs += 1;
+            }
+            power3 = power3 * 3 % m;
+        }
+        let mut power3 = 1;
+        let mut hash1 = 0;
+        let mut hash2 = 0;
+        for j in 0..(n - 1) {
+            hash1 = (hash1 + power3 * seq1[n - j - 1]) % m;
+            hash2 = (hash2 * 3 + seq2[j]) % m;
+            if hash1 == hash2 {
+                rs += 1;
+            }
+            power3 = power3 * 3 % m;
+        }
+    }
+    println!("{rs}");
 }
