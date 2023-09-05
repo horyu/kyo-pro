@@ -44,8 +44,8 @@ fn main() {
         let mut hash1 = 0;
         let mut hash2 = 0;
         for j in 0..(n - 1) {
-            hash1 = (hash1 + power3 * seq1[n - j - 1]) % m;
-            hash2 = (hash2 * 3 + seq2[j]) % m;
+            hash1 = (hash1 * 3 + seq1[n - j - 1]) % m;
+            hash2 = (hash2 + power3 * seq2[j]) % m;
             if hash1 == hash2 {
                 rs += 1;
             }
