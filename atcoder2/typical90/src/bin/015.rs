@@ -13,8 +13,7 @@ fn main() {
     input! {
         n: usize,
     };
-    const MOD: usize = 1000000007;
-    let comb = Combination::new(n, MOD);
+    let comb = Combination::new(n, ModInt1000000007::modulus() as usize);
     for k in 1..=n {
         let mut rs = ModInt1000000007::default();
         for i in 1..=(n / k + 1) {
