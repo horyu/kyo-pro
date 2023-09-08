@@ -12,30 +12,26 @@ fn main() {
     input! {
         t: usize,
     };
-    // https://atcoder.jp/contests/abc240/editorial/3425
-    fn sum(l: isize, r: isize, cnt: isize) -> isize {
-        (l + r) * cnt / 2
-    }
     for _ in 0..t {
         input! {
             n: usize,
             m: usize,
             xxyy: [(isize, isize); n],
         };
-        let mut cv = 0isize;
-        let mut cx = 0isize;
-        let mut rs = isize::MIN / 4;
+        let mut v = 0;
+        let mut pos = 0;
+        let mut rs: isize = xxyy[0].0;
         for (x, y) in xxyy {
-            let vl = cv + x;
-            let vr = cv + x * y;
-            if x != 0 && vr <= 0 && 0 <= vl {
-                let pt = (-cv) / x;
-                rs = rs.max(cx + sum(vl, cv + x * pt, pt));
+            let nv = v + x * y;
+            // eprintln!("v: {v}->{nv}");
+            if nv < 0 && 0 < v {
+                let t = (v / x).abs();
+                rs = rs.max(pos + v * t + x * t * (t + 1) / 2);
             }
-            rs = rs.max(cx + vl);
-            cv = vr;
-            cx += sum(vl, vr, y);
-            rs = rs.max(cx);
+            pos += v * y + x * y * (y + 1) / 2;
+            // dbg!(pos);
+            v = nv;
+            rs = rs.max(pos);
         }
         println!("{rs}");
     }
