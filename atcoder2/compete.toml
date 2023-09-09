@@ -134,4 +134,4 @@ path = "./{{ contest }}"
 [submit.transpile]
 kind = "command"
 args = ["cargo", "executable-payload", "--bin", "{{ bin_name }}"]
-#language_id = ""
+language_id = "5054"
