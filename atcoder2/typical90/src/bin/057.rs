@@ -14,6 +14,7 @@ fn main() {
         n: usize,
         m: usize,
     };
+    // https://github.com/E869120/kyopro_educational_90/blob/main/sol/057.cpp
     let mut mat = vec![vec![0u8; m]; n];
     for i in 0..n {
         input! {
@@ -48,8 +49,8 @@ fn main() {
                 }
             }
             if ss[i] == 1 {
-                for j in i..m {
-                    ss[j] ^= mat[pos][j];
+                for k in i..m {
+                    ss[k] ^= mat[pos][k];
                 }
             }
             pos += 1;
