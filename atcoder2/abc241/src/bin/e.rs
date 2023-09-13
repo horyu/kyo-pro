@@ -15,24 +15,28 @@ fn main() {
         aa: [usize; n],
     };
     let mut x_to_i = vec![std::usize::MAX; n];
-    let mut x = 0usize;
-    x_to_i[x] = 0;
-    let mut ss = vec![0usize];
-    for r in 1..=k {
-        let new_s = ss.last().unwrap() + aa[x];
-        ss.push(new_s);
-        x = new_s % n;
+    let mut xx = vec![0];
+    let mut ss = vec![0];
+    x_to_i[0] = 0;
+    for i in 0..k {
+        let s = ss[i] + aa[xx[i] % n];
+        let x = s % n;
+        xx.push(x);
+        ss.push(s);
+        eprint!("{x} ");
         if x_to_i[x] != std::usize::MAX {
             // ループ
             let l = x_to_i[x];
+            let r = i + 1;
             let loop_size = r - l;
-            let mut rs = ss[l];
-            rs += (ss[r] - ss[l]) * ((k - l) / loop_size);
-            rs += ss[l + (k - l) % loop_size] - ss[l];
+            let loop_count = (k - l) / loop_size;
+            let loop_sum = ss[r] - ss[l];
+            let rs = ss[l + (k - l) % loop_size] + loop_sum * loop_count;
             println!("{rs}");
             return;
         }
-        x_to_i[x] = r;
+        x_to_i[x] = i + 1;
     }
-    println!("{}", ss.last().unwrap());
+    let rs = ss.last().unwrap();
+    println!("{rs}");
 }
