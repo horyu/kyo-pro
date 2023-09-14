@@ -10,8 +10,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    let n = s.len();
+    let mut rs = 0;
+    let mut i = 0;
+    while i < n {
+        rs += 1;
+        if let ('0', Some(&'0')) = (s[i], s.get(i + 1)) {
+            i += 2;
+        } else {
+            i += 1;
+        }
+    }
+    println!("{rs}");
 }
