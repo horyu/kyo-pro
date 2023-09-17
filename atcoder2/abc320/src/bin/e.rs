@@ -12,6 +12,29 @@ fn main() {
     input! {
         n: usize,
         m: usize,
+        ttwwss: [(usize, (usize, usize)); m],
+    };
+    let mut btm = BTreeMap::from_iter(ttwwss);
+    let rs = (0..n)
+        .map(|_| {
+            let mut tmp = 0;
+            let mut now = 0;
+            while let Some((&t, &(w, s))) = btm.range(now..).next() {
+                tmp += w;
+                now = t + s;
+                btm.remove(&t);
+            }
+            tmp
+        })
+        .join("\n");
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
         ttwwss: [(usize, usize, usize); m],
     };
     let mut mm = btreemultimap::BTreeMultiMap::new();

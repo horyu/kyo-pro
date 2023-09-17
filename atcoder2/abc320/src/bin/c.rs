@@ -17,6 +17,39 @@ fn main() {
         ss: [Chars; 3],
     };
     let mut rs = !0;
+    let max = 3 * m;
+    for i in 0..max {
+        for j in 0..max {
+            for k in 0..max {
+                // if i != j and i != k and j != k and S[0][i % M] == S[1][j % M] == S[2][k % M]:
+                if i != j
+                    && i != k
+                    && j != k
+                    && ss[0][i % m] == ss[1][j % m]
+                    && ss[1][j % m] == ss[2][k % m]
+                {
+                    rs = rs.min(i.max(j).max(k));
+                }
+            }
+        }
+    }
+    if rs == !0 {
+        println!("-1");
+    } else {
+        println!("{rs}");
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        m: usize,
+        // s1: Chars,
+        // s2: Chars,
+        // s3: Chars,
+        ss: [Chars; 3],
+    };
+    let mut rs = !0;
     for target in '0'..='9' {
         let iii = ss
             .iter()
