@@ -1,6 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
+#![feature(map_try_insert)]
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -14,36 +15,32 @@ fn main() {
         uuvv: [(Usize1, Usize1); m],
         pp: [Usize1; 8],
     };
-    let mut arr: [usize; 9] = [8; 9];
-    for (i, p) in pp.iter().copied().enumerate() {
-        arr[p] = i;
-    }
-    // eprintln!("{arr:?}");
     let mut g = vec![vec![]; 9];
     for (u, v) in uuvv.iter().copied() {
         g[u].push(v);
         g[v].push(u);
     }
-    // for (i, vv) in g.iter().enumerate() {
-    //     eprintln!("{i} {vv:?}");
-    // }
+    // 駒0~7, 空白8
+    let mut arr = [8; 9];
+    for (i, &p) in pp.iter().enumerate() {
+        arr[p] = i;
+    }
     let mut qq = VecDeque::new();
     qq.push_back((arr, 0));
     let mut pushed = HashSet::new();
     pushed.insert(arr);
-    while let Some((qarr, qc)) = qq.pop_front() {
-        if qarr.iter().enumerate().all(|(i, &p)| i == p) {
-            println!("{qc}");
+    while let Some((mut arr, cnt)) = qq.pop_front() {
+        if arr.iter().enumerate().all(|(i, &p)| p == i) {
+            println!("{cnt}");
             return;
         }
-        let i = qarr.iter().position(|&p| p == 8).unwrap();
-        for j in g[i].iter().copied() {
-            let mut arr = qarr;
-            arr.swap(i, j);
+        let empty_pos = arr.iter().position(|&p| p == 8).unwrap();
+        for swap_pos in g[empty_pos].iter().copied() {
+            arr.swap(empty_pos, swap_pos);
             if pushed.insert(arr) {
-                // eprintln!("{qc}({i}:{j}) {qarr:?}->{arr:?}");
-                qq.push_back((arr, qc + 1));
+                qq.push_back((arr, cnt + 1));
             }
+            arr.swap(empty_pos, swap_pos);
         }
     }
     println!("-1");
