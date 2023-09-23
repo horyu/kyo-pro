@@ -25,7 +25,7 @@ fn main() {
         let ma = ModInt998244353::new(a);
         let d = ma * ft1.sum(0..=a) + ft2.sum((a + 1)..);
         sum += d * 2 + ma;
-        let rs = sum / (i + 1).pow(2u32);
+        let rs = sum / (i + 1).pow(2);
         println!("{rs}");
 
         ft1.add(a, 1);
