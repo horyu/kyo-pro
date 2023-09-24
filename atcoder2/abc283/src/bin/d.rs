@@ -10,8 +10,32 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Bytes,
     };
-    // println!("{rs}");
+    let mut qq = vec![];
+    let mut ttff = [false; 256];
+    let mut btm = BTreeMap::new();
+    for (i, c) in s.iter().copied().enumerate() {
+        match c {
+            b'(' => {
+                qq.push(i);
+            }
+            b')' => {
+                let j = qq.pop().unwrap();
+                while let Some((&k, &v)) = btm.range(j..i).next() {
+                    ttff[v as usize] = false;
+                    btm.remove(&k);
+                }
+            }
+            c => {
+                if ttff[c as usize] {
+                    println!("No");
+                    return;
+                }
+                ttff[c as usize] = true;
+                btm.insert(i, c);
+            }
+        }
+    }
+    println!("Yes");
 }
