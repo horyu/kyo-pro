@@ -20,7 +20,7 @@ fn main() {
         .enumerate()
         .map(|(i, ab)| (ab.1, i, true))
         .collect();
-    let mut rs = 0;
+    let mut rs = 0usize;
     for _ in 0..k {
         let (score, i, is_bubun) = bh.pop().unwrap();
         rs += score;
