@@ -11,7 +11,71 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        k: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    // トポロジカルソート
+    let mut g = vec![vec![]; n];
+    let mut deg = vec![0; n];
+    for (a, b) in aabb.iter().copied() {
+        g[a].push(b);
+        deg[b] += 1;
+    }
+    let mut perm = vec![-1; n];
+    let mut rrss = vec![];
+    let mut st = deg.iter().copied().positions(|d| d == 0).collect_vec();
+    dfs(0, n, k, &mut rrss, &g, &mut deg, &mut st, &mut perm);
+    if rrss.len() == k {
+        for rs in rrss {
+            println!("{}", rs.iter().map(|&r| r + 1).join(" "));
+        }
+        return;
+    }
+    println!("-1");
+}
+
+#[allow(clippy::too_many_arguments)]
+fn dfs(
+    depth: usize,
+    n: usize,
+    k: usize,
+    rrss: &mut Vec<Vec<isize>>,
+    g: &[Vec<usize>],
+    deg: &mut Vec<usize>,
+    st: &mut Vec<usize>,
+    perm: &mut Vec<isize>,
+) -> bool {
+    if depth == n {
+        rrss.push(perm.clone());
+        return true;
+    }
+    if st.is_empty() {
+        return false;
+    }
+    for i in (0..st.len()).rev() {
+        if rrss.len() == k {
+            break;
+        }
+        let x = st.remove(i);
+        for &j in &g[x] {
+            deg[j] -= 1;
+            if deg[j] == 0 {
+                st.push(j);
+            }
+        }
+        perm[depth] = x as isize;
+        let tf = dfs(depth + 1, n, k, rrss, g, deg, st, perm);
+        if !tf {
+            return false;
+        }
+        for &j in &g[x] {
+            if deg[j] == 0 {
+                st.pop();
+            }
+            deg[j] += 1;
+        }
+        st.insert(i, x);
+    }
+    true
 }
