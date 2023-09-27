@@ -22,7 +22,7 @@ fn main() {
         g[a].push(b);
         deg[b] += 1;
     }
-    let mut perm = vec![-1; n];
+    let mut perm = vec![!0; n];
     let mut rrss = vec![];
     let mut st = deg.iter().copied().positions(|d| d == 0).collect_vec();
     dfs(0, n, k, &mut rrss, &g, &mut deg, &mut st, &mut perm);
@@ -40,11 +40,11 @@ fn dfs(
     depth: usize,
     n: usize,
     k: usize,
-    rrss: &mut Vec<Vec<isize>>,
+    rrss: &mut Vec<Vec<usize>>,
     g: &[Vec<usize>],
     deg: &mut Vec<usize>,
     st: &mut Vec<usize>,
-    perm: &mut Vec<isize>,
+    perm: &mut Vec<usize>,
 ) -> bool {
     if depth == n {
         rrss.push(perm.clone());
@@ -64,9 +64,8 @@ fn dfs(
                 st.push(j);
             }
         }
-        perm[depth] = x as isize;
-        let tf = dfs(depth + 1, n, k, rrss, g, deg, st, perm);
-        if !tf {
+        perm[depth] = x;
+        if !dfs(depth + 1, n, k, rrss, g, deg, st, perm) {
             return false;
         }
         for &j in &g[x] {
