@@ -8,7 +8,50 @@ use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
+// ダイクストラ
 fn main() {
+    input! {
+        n: usize,
+        m: usize,
+        aabbcc: [(Usize1, Usize1, usize); m],
+    };
+    let mut g = vec![vec![]; n];
+    for (i, (a, b, c)) in aabbcc.iter().copied().enumerate() {
+        g[a].push((i, b, c));
+        g[b].push((i, a, c));
+    }
+    let mut ttff = vec![false; m];
+    for start in 0..n {
+        let mut bh = BinaryHeap::new();
+        use std::cmp::Reverse as R;
+        bh.push((R(0), !0, start));
+        let mut cc = vec![!0; n];
+        cc[start] = 0;
+        while let Some((R(c), i, from)) = bh.pop() {
+            if cc[from] < c {
+                continue;
+            }
+            if i <= m {
+                ttff[i] = true;
+            }
+            for &(j, next, next_c) in &g[from] {
+                if next == from {
+                    continue;
+                }
+                if c + next_c <= cc[next] {
+                    cc[next] = c + next_c;
+                    bh.push((R(c + next_c), j, next));
+                }
+            }
+        }
+    }
+    let rs = ttff.iter().filter(|&&b| !b).count();
+    println!("{rs}");
+}
+
+// ワーシャルフロイド
+#[allow(dead_code)]
+fn main2() {
     input! {
         n: usize,
         m: usize,
