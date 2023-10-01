@@ -64,27 +64,21 @@ fn main() {
             let mut base0 = [[false; 12]; 12];
             for (i, qq) in qqq[0].iter().enumerate() {
                 for (j, &tf) in qq.iter().enumerate() {
-                    if tf {
-                        base0[i + dx0][j + dy0] = true;
-                    }
+                    base0[i + dx0][j + dy0] |= tf;
                 }
             }
             for (dx1, dy1) in dxdy.iter() {
                 let mut base1 = base0;
                 for (i, qq) in qqq[1].iter().enumerate() {
                     for (j, &tf) in qq.iter().enumerate() {
-                        if tf {
-                            base1[i + dx1][j + dy1] = true;
-                        }
+                        base1[i + dx1][j + dy1] |= tf;
                     }
                 }
                 for (dx2, dy2) in dxdy.iter() {
                     let mut base2 = base1;
                     for (i, qq) in qqq[2].iter().enumerate() {
                         for (j, &tf) in qq.iter().enumerate() {
-                            if tf {
-                                base2[i + dx2][j + dy2] = true;
-                            }
+                            base2[i + dx2][j + dy2] |= tf;
                         }
                     }
                     if (4..8).all(|i| (4..8).all(|j| base2[i][j])) {
