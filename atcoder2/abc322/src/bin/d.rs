@@ -12,23 +12,35 @@ fn main() {
     input! {
         pppp: [[Chars; 4]; 3]
     };
-    let iter = pppp
-        .into_iter()
-        .map(|ppp| {
-            let mut tmp = [[false; 4]; 4];
-            for (i, pp) in ppp.into_iter().enumerate() {
-                for (j, p) in pp.into_iter().enumerate() {
-                    tmp[i][j] = p == '#';
+    // [[[bool; 4]; 4]; 3] に変換する
+    let mut qqqq = [[[false; 4]; 4]; 3];
+    let mut cnt = 0;
+    for (k, ppp) in pppp.iter().enumerate() {
+        for (i, pp) in ppp.iter().enumerate() {
+            for (j, &p) in pp.iter().enumerate() {
+                if p == '#' {
+                    qqqq[k][i][j] = true;
+                    cnt += 1;
                 }
             }
-            tmp
-        })
-        .map(|ppp| {
-            let mut rotates = vec![ppp];
+        }
+    }
+    if cnt != 16 {
+        println!("No");
+        return;
+    }
+    let iter = qqqq
+        .into_iter()
+        .enumerate()
+        .map(|(qi, qqq)| {
+            let mut rotates = vec![qqq];
+            if qi == 0 {
+                return rotates;
+            }
             for k in 0..3 {
                 let mut rotated = [[false; 4]; 4];
-                for (i, pp) in ppp.iter().enumerate() {
-                    for (j, p) in pp.iter().enumerate() {
+                for (i, qq) in qqq.iter().enumerate() {
+                    for (j, q) in qq.iter().enumerate() {
                         rotated[i][j] = rotates[k][3 - j][i];
                     }
                 }
@@ -48,58 +60,34 @@ fn main() {
     let dxdy = iproduct!(1usize..=7, 1usize..=7).collect_vec();
     for qqq in iter {
         // 3つのパターンを平行移動だけして4x4の範囲が全てtrueになるかを確認する
-        'd0: for (dx0, dy0) in dxdy.iter() {
+        for (dx0, dy0) in dxdy.iter() {
             let mut base0 = [[false; 12]; 12];
-            let mut cnt0 = 0;
             for (i, qq) in qqq[0].iter().enumerate() {
                 for (j, &tf) in qq.iter().enumerate() {
                     if tf {
-                        let ii = i + dx0;
-                        let jj = j + dy0;
-                        if (4..8).contains(&ii) && (4..8).contains(&jj) {
-                            base0[ii][jj] = true;
-                            cnt0 += 1;
-                        } else {
-                            continue 'd0;
-                        }
+                        base0[i + dx0][j + dy0] = true;
                     }
                 }
             }
-            'd1: for (dx1, dy1) in dxdy.iter() {
+            for (dx1, dy1) in dxdy.iter() {
                 let mut base1 = base0;
-                let mut cnt1 = cnt0;
                 for (i, qq) in qqq[1].iter().enumerate() {
                     for (j, &tf) in qq.iter().enumerate() {
                         if tf {
-                            let ii = i + dx1;
-                            let jj = j + dy1;
-                            if !base1[ii][jj] && (4..8).contains(&ii) && (4..8).contains(&jj) {
-                                base1[ii][jj] = true;
-                                cnt1 += 1;
-                            } else {
-                                continue 'd1;
-                            }
+                            base1[i + dx1][j + dy1] = true;
                         }
                     }
                 }
-                'd2: for (dx2, dy2) in dxdy.iter() {
+                for (dx2, dy2) in dxdy.iter() {
                     let mut base2 = base1;
-                    let mut cnt2 = cnt1;
                     for (i, qq) in qqq[2].iter().enumerate() {
                         for (j, &tf) in qq.iter().enumerate() {
                             if tf {
-                                let ii = i + dx2;
-                                let jj = j + dy2;
-                                if !base2[ii][jj] && (4..8).contains(&ii) && (4..8).contains(&jj) {
-                                    base2[ii][jj] = true;
-                                    cnt2 += 1;
-                                } else {
-                                    continue 'd2;
-                                }
+                                base2[i + dx2][j + dy2] = true;
                             }
                         }
                     }
-                    if cnt2 == 16 {
+                    if (4..8).all(|i| (4..8).all(|j| base2[i][j])) {
                         println!("Yes");
                         return;
                     }
