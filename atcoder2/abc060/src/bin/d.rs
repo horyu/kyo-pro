@@ -11,17 +11,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        k: usize,
+        w: usize,
         wwvv: [(usize, usize); n],
     };
     let mut hm = HashMap::new();
     hm.insert(0, 0);
-    for (w, v) in wwvv {
+    for (wi, vi) in wwvv {
         let mut new_hm = hm.clone();
         for (a, b) in hm {
-            if a + w <= k {
-                let e = new_hm.entry(a + w).or_insert(0);
-                *e = (*e).max(b + v);
+            let ww = a + wi;
+            if ww <= w {
+                let e = new_hm.entry(ww).or_insert(0);
+                *e = (*e).max(b + vi);
             }
         }
         hm = new_hm;
