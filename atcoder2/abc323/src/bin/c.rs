@@ -16,7 +16,7 @@ fn main() {
         ss: [Chars; n],
     };
     let mut cc = (1..=n).collect_vec();
-    let mut bbb = vec![vec![]; n];
+    let mut bbb = vec![BinaryHeap::new(); n];
     for (si, s) in ss.into_iter().enumerate() {
         for (i, c) in s.into_iter().enumerate() {
             let a = aa[i];
@@ -27,20 +27,18 @@ fn main() {
             }
         }
     }
-    for bb in bbb.iter_mut() {
-        bb.sort_unstable();
-        bb.reverse();
-        bb.insert(0, 0);
-        *bb = bb.iter().copied().cumsum::<usize>().collect_vec();
-    }
-    for (i, c) in cc.iter().copied().enumerate() {
+    for (i, mut c) in cc.iter().copied().enumerate() {
         let mut max_c = 0;
         for (j, cj) in cc.iter().copied().enumerate() {
             if i != j {
                 max_c = max_c.max(cj);
             }
         }
-        let rs = bbb[i].iter().position(|&bb| max_c < bb + c).unwrap();
+        let mut rs = 0;
+        while c < max_c {
+            c += bbb[i].pop().unwrap();
+            rs += 1;
+        }
         println!("{rs}");
     }
 }

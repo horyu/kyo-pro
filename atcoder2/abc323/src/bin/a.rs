@@ -13,6 +13,6 @@ fn main() {
         s: Chars,
     };
     let tf = s.into_iter().tuples().all(|(_a, b)| b == '0');
-    println!("{}", if tf { "Yes" } else { "No" });
-    // println!("{rs}");
+    let rs = ["No", "Yes"][tf as usize];
+    println!("{rs}");
 }
