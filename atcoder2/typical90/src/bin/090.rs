@@ -2,6 +2,7 @@
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
 #![allow(dead_code)]
+use ac_library::ModInt998244353;
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -15,8 +16,38 @@ fn main() {
     if k == 1 {
         main12(n, k);
     } else {
-        main3(n, k);
+        // main3(n, k);
+        main4(n, k);
     }
+}
+
+fn main4(n: usize, k: usize) {
+    assert!(n <= 100 && k <= 100);
+    // do[h][l][r]: 条件を満たす部分列 al,..,ar の値が全てh以上であるものの個数
+    let mut dp = vec![vec![vec![ModInt998244353::default(); n + 1]; n]; k + 1];
+    for h in 0..=k {
+        for i in 0..n {
+            dp[h][i][i] += 1;
+        }
+    }
+    for h in (0..=k).rev() {
+        for l in 0..n {
+            for r in (l + 1)..=n {
+                if k < h * (r - l) {
+                    continue;
+                }
+                dp[h][l][r] = dp[h][l][r - 1];
+                if h != k {
+                    for i in l..r {
+                        dp[h][l][r] = dp[h][l][r]
+                            + dp[h + 1][i][r] * dp[h][l][if i != l { i - 1 } else { l }];
+                    }
+                }
+            }
+        }
+    }
+    let rs = dp[0][0][n];
+    println!("{rs}");
 }
 
 fn main3(n: usize, k: usize) {
