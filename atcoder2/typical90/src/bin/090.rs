@@ -17,8 +17,32 @@ fn main() {
         main12(n, k);
     } else {
         // main3(n, k);
-        main4(n, k);
+        // main4(n, k);
+        main5(n, k);
     }
+}
+
+fn main5(n: usize, k: usize) {
+    assert!(n <= 10000 && k <= 10000);
+    // do[h][m]: 条件を満たす長さmの数列で値が全てh以上であるものの個数
+    let mut dp = vec![vec![]; k + 2];
+    dp[k] = vec![0, 1];
+    for i in (0..k).rev() {
+        let limit = if i == 0 { n } else { n.min(k / i) };
+        dp[i].resize(limit + 1, 0);
+        for j in 1..=limit {
+            dp[i][j] = if j != 1 { dp[i][j - 1] } else { 1 };
+            for k in 2.. {
+                if !(k <= j + 1 && k <= dp[i + 1].len()) {
+                    break;
+                }
+                dp[i][j] =
+                    (dp[i][j] + dp[i + 1][k - 1] * if k < j { dp[i][j - k] } else { 1 }) % MOD;
+            }
+        }
+    }
+    let rs = dp[0][n];
+    println!("{rs}");
 }
 
 fn main4(n: usize, k: usize) {
