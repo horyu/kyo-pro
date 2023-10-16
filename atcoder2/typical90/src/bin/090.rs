@@ -13,13 +13,52 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 const MOD: usize = 998244353;
 fn main() {
     input! {n: usize, k: usize};
-    if k == 1 {
-        main12(n, k);
-    } else {
-        // main3(n, k);
-        // main4(n, k);
-        main5(n, k);
+    // if k == 1 {
+    //     main12(n, k);
+    // } else {
+    //     // main3(n, k);
+    //     // main4(n, k);
+    //     // main5(n, k);
+    // }
+    main6(n, k);
+}
+
+fn main6(n: usize, k: usize) {
+    assert!(n <= 1e5 as usize);
+    let mut dp = vec![vec![]; k + 1];
+    dp[k] = vec![ModInt998244353::new(1); 3];
+    for i in (0..k).rev() {
+        let limit = if i == 0 { n } else { n.min(k / i) };
+        let mut cc = vec![ModInt998244353::default(); dp[i + 1].len()];
+        cc[0] += 1;
+        for j in 1..dp[i + 1].len() {
+            cc[j] = -dp[i + 1][j];
+        }
+        dp[i] = polynomial_inverse(&cc, limit + 2);
     }
+    let rs = dp[0][n + 1];
+    println!("{rs}");
+}
+
+fn polynomial_inverse(cc: &[ModInt998244353], l: usize) -> Vec<ModInt998244353> {
+    let n = cc.len();
+    let mut aa = vec![ModInt998244353::default(); 2];
+    aa[0] += 1;
+    let mut level = 0;
+    while (1 << level) < l {
+        let cs = (2 << level).min(n);
+        let pp = ac_library::convolution(&aa, &cc[..cs]);
+        let mut qq = vec![ModInt998244353::default(); 2 << level];
+        qq[0] += 1;
+        for j in (1 << level)..(2 << level) {
+            qq[j] = -pp[j];
+        }
+        aa = ac_library::convolution(&aa, &qq);
+        aa.resize(4 << level, Default::default());
+        level += 1;
+    }
+    aa.resize(l, Default::default());
+    aa
 }
 
 fn main5(n: usize, k: usize) {
