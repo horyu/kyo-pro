@@ -13,16 +13,14 @@ fn main() {
         n: usize,
         ttdd: [(usize, usize); n],
     };
-    let mut mm = btreemultimap::BTreeMultiMap::new();
+    let mut mm = multimap::MultiMap::new();
     let mut kk = BTreeSet::new();
     for (t, d) in ttdd.iter().copied() {
         mm.insert(t, t + d);
         kk.insert(t);
     }
-    for k in kk.iter() {
-        if let Some(vv) = mm.get_vec_mut(k) {
-            vv.sort_unstable();
-        }
+    for kvv in mm.iter_all_mut() {
+        kvv.1.sort_unstable();
     }
     let mut rs = 0usize;
     let mut now = 1;
