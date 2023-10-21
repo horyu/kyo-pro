@@ -14,11 +14,9 @@ fn main() {
         n: usize,
         ttdd: [(usize, usize); n],
     };
-    let mut mm = multimap::MultiMap::new();
-    let mut kk = BTreeSet::new();
+    let mut mm = btreemultimap::BTreeMultiMap::new();
     for (t, d) in ttdd.iter().copied() {
         mm.insert(t, R(t + d));
-        kk.insert(t);
     }
     let mut rs = 0usize;
     let mut now = 1;
@@ -36,7 +34,7 @@ fn main() {
             break;
         }
         if bh.is_empty() {
-            if let Some(next) = kk.range(now..).next().copied() {
+            if let Some((&next, _)) = mm.range(now..).next() {
                 now = next;
             } else {
                 break;
