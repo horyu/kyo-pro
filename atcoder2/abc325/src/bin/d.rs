@@ -17,22 +17,17 @@ fn main() {
     let mut mm = multimap::MultiMap::new();
     let mut kk = BTreeSet::new();
     for (t, d) in ttdd.iter().copied() {
-        mm.insert(t, t + d);
+        mm.insert(t, R(t + d));
         kk.insert(t);
-    }
-    for kvv in mm.iter_all_mut() {
-        kvv.1.sort_unstable();
     }
     let mut rs = 0usize;
     let mut now = 1;
     let mut bh = BinaryHeap::new();
     loop {
-        if let Some(vv) = mm.get_vec_mut(&now) {
-            for v in vv.iter().copied() {
-                bh.push(std::cmp::Reverse(v));
-            }
+        if let Some(vv) = mm.remove(&now) {
+            bh.extend(vv);
         }
-        while let Some(std::cmp::Reverse(v)) = bh.pop() {
+        while let Some(R(v)) = bh.pop() {
             if v < now {
                 continue;
             }
@@ -41,8 +36,8 @@ fn main() {
             break;
         }
         if bh.is_empty() {
-            if let Some(next) = kk.range(now..).next() {
-                now = *next;
+            if let Some(next) = kk.range(now..).next().copied() {
+                now = next;
             } else {
                 break;
             }
