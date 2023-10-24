@@ -14,7 +14,7 @@ fn main() {
         h: usize,
         w: usize,
         c: isize,
-        aaa: [[isize; w]; h],
+        mut aaa: [[isize; w]; h],
     };
     // https://kanpurin.hatenablog.com/entry/2021/07/17/232213
     let solve = |aaa: &[Vec<isize>]| -> isize {
@@ -33,16 +33,15 @@ fn main() {
     };
     let mut rs = isize::MAX;
     for i in 0..4 {
-        let mut bbb = aaa.clone();
         if 0 < i & 1 {
-            bbb.reverse();
+            aaa.reverse();
         }
         if 0 < i & 2 {
-            for bb in bbb.iter_mut() {
-                bb.reverse();
+            for aa in aaa.iter_mut() {
+                aa.reverse();
             }
         }
-        rs = rs.min(solve(&bbb));
+        rs = rs.min(solve(&aaa));
     }
     println!("{rs}");
 }
