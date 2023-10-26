@@ -11,31 +11,31 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-            n: usize,
-            m: usize,
-            aabb: [(Usize1, Usize1); m],
-            q: usize,
-            xxkk: [(Usize1, usize); q],
+        n: usize,
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
+        q: usize,
+        xxkk: [(Usize1, usize); q],
     };
     let mut g = vec![vec![]; n];
-    for (u, v) in aabb.iter().copied() {
-        g[u].push(v);
-        g[v].push(u);
+    for (a, b) in aabb.iter().copied() {
+        g[a].push(b);
+        g[b].push(a);
     }
     for (x, k) in xxkk {
-        let mut hs = HashSet::new();
         let mut qq = VecDeque::new();
-        hs.insert(x);
-        qq.push_back((x, 0));
+        let mut pushed = HashSet::new();
+        qq.push_back((x, k));
+        pushed.insert(x);
         let mut rs = 0;
-        while let Some((qi, qd)) = qq.pop_front() {
+        while let Some((qi, qk)) = qq.pop_front() {
             rs += qi + 1;
-            if k == qd {
+            if 0 == qk {
                 continue;
             }
             for i in g[qi].iter().copied() {
-                if hs.insert(i) {
-                    qq.push_back((i, qd + 1));
+                if pushed.insert(i) {
+                    qq.push_back((i, qk - 1));
                 }
             }
         }
