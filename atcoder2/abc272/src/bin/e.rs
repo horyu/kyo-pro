@@ -16,39 +16,39 @@ fn main() {
         aa: [isize; n],
     };
     let mut hs = HashSet::new();
-    let mut add = vec![vec![]; m as usize];
-    let mut remove = vec![vec![]; m as usize];
-    for (i, &a) in aa.iter().enumerate() {
+    let mut insert = multimap::MultiMap::new();
+    let mut remove = multimap::MultiMap::new();
+    for (i, a) in aa.iter().copied().enumerate() {
         if n < a {
             // 最初から無視
             continue;
         }
         if a < 0 {
             // 途中から見る
-            let add_i = (-a).div_ceil(i as isize + 1) - 1;
-            if add_i < m {
-                add[add_i as usize].push(i);
-            }
-        } else if a < n as isize {
+            let insert_i = (-a).div_ceil(i as isize + 1) - 1;
+            insert.insert(insert_i as usize, i)
+        } else if a < n {
             // 最初から見る
             hs.insert(i);
         }
         let remove_i = (n - a).div_ceil(i as isize + 1) - 1;
-        if remove_i < m {
-            // そこから無視
-            remove[remove_i as usize].push(i);
-        }
+        // そこから無視
+        remove.insert(remove_i as usize, i);
     }
     // eprintln!("ii:{}", ii.iter().join(" "));
     // for i in 0..(m as usize) {
     //     eprintln!("[{i}]: {} | {}", add[i].iter().join(","), remove[i].iter().join(","));
     // }
     for k in 0..(m as usize) {
-        for &r in &remove[k] {
-            hs.remove(&r);
+        if let Some(xx) = remove.get_vec(&k) {
+            for x in xx {
+                hs.remove(x);
+            }
         }
-        for &a in &add[k] {
-            hs.insert(a);
+        if let Some(xx) = insert.get_vec(&k) {
+            for x in xx {
+                hs.insert(*x);
+            }
         }
         let values: HashSet<isize> = hs
             .iter()

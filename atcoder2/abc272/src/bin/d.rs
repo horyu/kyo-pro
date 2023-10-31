@@ -43,7 +43,7 @@ fn main() {
             if dy <= qj {
                 jj.push(qj - dy);
             }
-            for (i, j) in ii.into_iter().cartesian_product(jj.into_iter()) {
+            for (i, j) in ii.into_iter().cartesian_product(jj) {
                 if lll[i][j] == -1 {
                     lll[i][j] = lll[qi][qj] + 1;
                     qq.push_back((i, j));
