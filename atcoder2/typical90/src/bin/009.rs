@@ -15,11 +15,10 @@ fn main() {
         xxyy: [(f64, f64); n],
     };
     let mut rs = 0.0f64;
-    for i in 0..n {
-        let (ox, oy) = xxyy[i];
-        let qq = chain!(0..i, (i + 1)..n)
-            .map(|j| {
-                let (x, y) = xxyy[j];
+    for (i, (ox, oy)) in xxyy.iter().copied().enumerate() {
+        let qq = chain!(&xxyy[..i], &xxyy[(i + 1)..])
+            .copied()
+            .map(|(x, y)| {
                 let xx = x - ox;
                 let yy = y - oy;
                 // (1, 0)-(0, 0)-(x - ox, y - oy) のなす角度
@@ -35,7 +34,7 @@ fn main() {
         for j in 0..(n - 1) {
             let qj = qq[j];
             let k = qq.partition_point(|&q| q <= qj + 180.0);
-            for kk in [k.saturating_sub(1), k, k + 1] {
+            for kk in [k.saturating_sub(1), k] {
                 if let Some(qk) = qq.get(kk) {
                     let abs = (qj - qk).abs();
                     let tmp = abs.min(360.0 - abs);
