@@ -7,10 +7,7 @@ use num_integer::*;
 use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
-use std::{
-    collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque},
-    f64::consts::PI,
-};
+use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
 fn main() {
     input! {
@@ -21,18 +18,11 @@ fn main() {
         q: usize,
         ee: [f64; q],
     };
-    let z = 0.0;
-    let xx = 0.0;
     for e in ee {
-        // e 0 t/2 t
-        //   0 PI  2PI
-        let theta = 2.0 * PI * e / t;
-        let yy = -(l / 2.0) * theta.sin();
-        let zz = (l / 2.0) * (1.0 - theta.cos());
-
-        let xy = ((x - xx).powi(2) + (y - yy).powi(2)).sqrt();
-        let tan = zz / xy;
-        let rs = tan.atan() * 180.0 / PI;
+        let theta = e / t * std::f64::consts::TAU;
+        let pos = (0, -l / 2.0 * theta.sin(), (l - l * theta.cos()) / 2.0);
+        let dr = (x.powi(2) + (y - pos.1).powi(2)).sqrt();
+        let rs = (pos.2 / dr).atan() * std::f64::consts::FRAC_1_PI * 180.0;
         println!("{rs}");
     }
 }
