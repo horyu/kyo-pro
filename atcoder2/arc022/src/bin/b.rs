@@ -12,7 +12,7 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        mut aa: [Usize1; n],
+        aa: [Usize1; n],
     };
     let mut cc = vec![0; 1e5 as usize + 1];
     // 尺取り方
