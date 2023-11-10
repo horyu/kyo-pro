@@ -15,10 +15,10 @@ fn main() {
         m: usize,
         aabb: [(Usize1, Usize1); m],
     };
-    let mut uf = UnionFind::new(n);
+    let mut dsu = ac_library::Dsu::new(n);
     for (a, b) in aabb {
-        uf.union(a, b);
+        dsu.merge(a, b);
     }
-    let rs = uf.into_labeling().into_iter().unique().count() - 1;
+    let rs = dsu.groups().len() - 1;
     println!("{rs}");
 }
