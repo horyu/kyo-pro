@@ -16,16 +16,13 @@ fn main() {
         ppp: [[usize; w]; h],
     };
     let mut rs = 0;
-    for hsize in 1..=h {
-        for ii in (0..h).combinations(hsize) {
-            let mut hm = HashMap::new();
-            for j in 0..w {
-                if ii.iter().map(|&i| ppp[i][j]).all_equal() {
-                    *hm.entry(ppp[ii[0]][j]).or_insert(0) += 1usize;
-                }
-            }
-            if let Some(m) = hm.into_values().max() {
-                rs = rs.max(m * hsize);
+    for bits in 1u32..(1 << h) {
+        let mut counter = counter::Counter::<usize>::new();
+        let ii = (0..h).filter(|&i| 0 < bits & (1 << i)).collect_vec();
+        for j in 0..w {
+            if ii.iter().copied().map(|i| ppp[i][j]).all_equal() {
+                counter[&ppp[ii[0]][j]] += 1;
+                rs = rs.max(counter[&ppp[ii[0]][j]] * ii.len());
             }
         }
     }
