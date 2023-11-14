@@ -38,8 +38,5 @@ fn dfs(g: &[Vec<usize>], hh: &[usize], from: usize, to: usize) -> (bool, usize) 
             tmp += nd + 2;
         }
     }
-    (
-        should_check_children,
-        [0, tmp][should_check_children as usize],
-    )
+    (should_check_children, tmp)
 }
