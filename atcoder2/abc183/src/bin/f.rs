@@ -14,36 +14,37 @@ fn main() {
         n: usize,
         q: usize,
         cc: [Usize1; n],
-        qq: [(usize, Usize1, Usize1); q],
     };
-    let mut uf = UnionFind::new(n);
-    let mut hhmm = vec![HashMap::new(); n];
-    for (i, c) in cc.iter().copied().enumerate() {
-        hhmm[i].insert(c, 1usize);
+    let mut dsu = ac_library::Dsu::new(n);
+    let mut counters = vec![counter::Counter::<usize, usize>::new(); n];
+    for (i, &c) in cc.iter().enumerate() {
+        counters[dsu.leader(i)][&c] += 1;
     }
-    for (q_type, a, b) in qq {
-        if q_type == 1 {
-            let ia = uf.find(a);
-            let ib = uf.find(b);
-            if ia == ib {
+    for _ in 0..q {
+        input! { t: usize }
+        if t == 1 {
+            input! { a: Usize1, b: Usize1 }
+            if dsu.same(a, b) {
                 continue;
             }
-            let (sml_i, big_i) = if hhmm[ia].len() < hhmm[ib].len() {
-                (ia, ib)
+            let la = dsu.leader(a);
+            let lb = dsu.leader(b);
+            dsu.merge(a, b);
+            // 大きい方にマージする
+            let (sml, big) = if counters[la].len() < counters[lb].len() {
+                (la, lb)
             } else {
-                (ib, ia)
+                (lb, la)
             };
-            let sml_hm = std::mem::take(&mut hhmm[sml_i]);
-            for (k, v) in sml_hm {
-                *hhmm[big_i].entry(k).or_insert(0) += v;
+            for (k, v) in std::mem::take(&mut counters[sml]) {
+                counters[big][&k] += v;
             }
-
-            uf.union(a, b);
-            if sml_i == uf.find(a) {
-                hhmm.swap(sml_i, big_i);
+            if counters[dsu.leader(a)].is_empty() {
+                counters.swap(la, lb);
             }
         } else {
-            let rs = hhmm[uf.find(a)].get(&b).copied().unwrap_or_default();
+            input! { x: Usize1, y: Usize1 }
+            let rs = counters[dsu.leader(x)][&y];
             println!("{rs}");
         }
     }
