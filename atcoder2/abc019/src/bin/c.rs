@@ -15,7 +15,7 @@ fn main() {
         aa: [usize; n],
     };
     let mut hs = HashSet::new();
-    for mut a in aa {
+    for mut a in aa.iter().copied() {
         while a % 2 == 0 {
             a /= 2;
         }
