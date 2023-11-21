@@ -15,6 +15,32 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
+    let mut rs = ModInt998244353::default();
+    for size in 1..=n {
+        let mut hm = HashMap::<_, _>::from_iter([((0, 0), ModInt998244353::new(1))]);
+        for a in aa.iter().copied() {
+            let mut new_hm = hm.clone();
+            for ((m, s), v) in hm {
+                if s + 1 == size {
+                    if (m + a) % size == 0 {
+                        rs += v;
+                    }
+                } else {
+                    *new_hm.entry(((m + a) % size, s + 1)).or_default() += v;
+                }
+            }
+            hm = new_hm;
+        }
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        aa: [usize; n],
+    };
     // https://blog.hamayanhamayan.com/entry/2016/08/29/141910
     let mut rs = ModInt998244353::new(n);
     for num in 2..=n {
