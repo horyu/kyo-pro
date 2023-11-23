@@ -17,6 +17,7 @@ fn main() {
     let len = n.len();
     let nn = n.into_iter().map(|n| (n - b'0') as usize).collect_vec();
     // https://blog.hamayanhamayan.com/entry/2020/02/09/225141
+    // dp[dgt][isless][k] = dgt桁目まで確定していて、現時点でN以下であるかがislessであって、0でない数字がk個ある数の個数
     let mut dp = vec![vec![vec![0; k + 2]; 2]; len + 1];
     dp[0][0][0] = 1;
     for dgt in 0..len {
@@ -28,8 +29,7 @@ fn main() {
                         continue;
                     }
                     let is_less2 = is_less | (nxt < n) as usize;
-                    let k2 = kk + (0 < nxt) as usize;
-
+                    let k2 = kk + (0 != nxt) as usize;
                     dp[dgt + 1][is_less2][k2] += dp[dgt][is_less][kk];
                 }
             }
