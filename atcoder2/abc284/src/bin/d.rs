@@ -11,8 +11,20 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
+        nn: [usize; t],
     };
-    // println!("{rs}");
+    for n in nn {
+        for i in 2..=n {
+            if n % i == 0 {
+                let (p, q) = if n / i % i == 0 {
+                    (i, n / i / i)
+                } else {
+                    ((n / i).sqrt(), i)
+                };
+                println!("{p} {q}");
+                break;
+            }
+        }
+    }
 }
