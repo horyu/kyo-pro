@@ -12,7 +12,14 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    for i in 1..n {
+        let mut j = 1;
+        while j + i <= n && s[j - 1] != s[i + j - 1] {
+            j += 1;
+        }
+        let rs = j - 1;
+        println!("{rs}");
+    }
 }
