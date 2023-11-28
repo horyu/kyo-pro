@@ -11,8 +11,12 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Bytes,
     };
-    // println!("{rs}");
+    let mut rs = 0usize;
+    for b in s.iter().copied() {
+        rs *= 26;
+        rs += (b + 1 - b'A') as usize;
+    }
+    println!("{rs}");
 }
