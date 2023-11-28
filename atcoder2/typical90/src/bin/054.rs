@@ -61,30 +61,24 @@ fn main2() {
         n: usize,
         m: usize,
     };
-    let mut rrr = vec![];
-    for _ in 0..m {
+    let mut g = vec![vec![]; n + m];
+    for j in 0..m {
         input! {
             k: usize,
             rr: [Usize1; k],
         };
-        rrr.push(rr);
-    }
-    let mut g = vec![vec![]; n + m];
-    for (ri, rr) in rrr.into_iter().enumerate() {
-        let j = n + ri;
-        for i in rr {
-            g[i].push((j, 1));
-            g[j].push((i, 1));
+        for r in rr.iter().copied() {
+            g[r].push((n + j, 1usize));
+            g[n + j].push((r, 1));
         }
     }
-
-    let hm = pathfinding::prelude::dijkstra_all(&0usize, |&i| g[i].iter().copied());
-    let mut rs = vec![-1; n];
-    rs[0] = 0;
+    let hm = pathfinding::directed::dijkstra::dijkstra_all(&0, |&i| g[i].iter().copied());
+    println!("0");
     for i in 1..n {
-        if let Some(d) = hm.get(&i).map(|d| d.1 / 2) {
-            rs[i] = d;
+        if let Some((_, d)) = hm.get(&i) {
+            println!("{}", d / 2);
+        } else {
+            println!("-1");
         }
     }
-    println!("{}", rs.into_iter().join("\n"));
 }
