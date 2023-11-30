@@ -12,7 +12,25 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        sstt: [(String, String); n],
     };
-    // println!("{rs}");
+    let mut hs = HashSet::new();
+    for (s, t) in &sstt {
+        hs.insert(s);
+        hs.insert(t);
+    }
+    let s2i = hs
+        .iter()
+        .copied()
+        .enumerate()
+        .map(|(i, x)| (x, i))
+        .collect::<HashMap<_, _>>();
+    let mut uf = UnionFind::new(s2i.len());
+    for (s, t) in &sstt {
+        if !uf.union(s2i[s], s2i[t]) {
+            println!("No");
+            return;
+        }
+    }
+    println!("Yes");
 }
