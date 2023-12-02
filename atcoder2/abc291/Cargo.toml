@@ -1,0 +1,81 @@
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+strip = true
+
+[package]
+name = "abc291"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.cargo-compete.bin]
+abc291-a = { alias = "a", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_a" }
+abc291-b = { alias = "b", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_b" }
+abc291-c = { alias = "c", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_c" }
+abc291-d = { alias = "d", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_d" }
+abc291-e = { alias = "e", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_e" }
+abc291-ex = { alias = "ex", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_h" }
+abc291-f = { alias = "f", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_f" }
+abc291-g = { alias = "g", problem = "https://atcoder.jp/contests/abc291/tasks/abc291_g" }
+
+[[bin]]
+name = "abc291-a"
+path = "src/bin/a.rs"
+
+[[bin]]
+name = "abc291-b"
+path = "src/bin/b.rs"
+
+[[bin]]
+name = "abc291-c"
+path = "src/bin/c.rs"
+
+[[bin]]
+name = "abc291-d"
+path = "src/bin/d.rs"
+
+[[bin]]
+name = "abc291-e"
+path = "src/bin/e.rs"
+
+[[bin]]
+name = "abc291-ex"
+path = "src/bin/ex.rs"
+
+[[bin]]
+name = "abc291-f"
+path = "src/bin/f.rs"
+
+[[bin]]
+name = "abc291-g"
+path = "src/bin/g.rs"
+
+[dependencies]
+memoise="0.3.2"
+counter="0.5.7"
+hashbag="0.1.11"
+pathfinding="4.2.1"
+multimap="0.9.0"
+btreemultimap="0.1.1"
+num-bigint="0.4.3"
+num-complex="0.4.3"
+num-integer="0.1.45"
+num-traits="0.2.15"
+num-derive="0.3.3"
+ndarray="0.15.6"
+nalgebra="0.32.2"
+rand="0.8.5"
+petgraph="0.6.3"
+indexmap="1.9.3"
+regex="1.7.3"
+lazy_static="1.4.0"
+ordered-float="3.6.0"
+itertools="0.10.5"
+itertools-num="0.1.3"
+proconio="0.4.3"
+text_io="0.1.12"
+
+ac-library-rs = { git = "https://github.com/rust-lang-ja/ac-library-rs" }
+
+[dev-dependencies]
