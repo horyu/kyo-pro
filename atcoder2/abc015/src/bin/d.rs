@@ -18,17 +18,16 @@ fn main() {
     };
     let mut rs = 0;
     let mut dp = vec![vec![0usize; 10001]; k + 1];
-    for &(a, b) in &aabb {
+    for (a, b) in aabb.iter().copied() {
         for i in (0..k).rev() {
             for j in 0..10000 {
                 let v = dp[i][j];
                 let new_width = j + a;
-                if (i != 0 && v == 0) || w < new_width{
-                    continue;
+                if (i == 0 || v != 0) && new_width <= w {
+                    let new_worth = v + b;
+                    rs = rs.max(new_worth);
+                    dp[i + 1][new_width] = new_worth.max(dp[i + 1][new_width]);
                 }
-                let new_worth = v + b;
-                rs = rs.max(new_worth);
-                dp[i + 1][new_width] = new_worth.max(dp[i + 1][new_width]);
             }
         }
     }
