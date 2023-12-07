@@ -20,20 +20,16 @@ fn main() {
         g[v].insert(u);
     }
     let mut rs = vec![];
-    let mut ll = g
-        .iter()
-        .enumerate()
-        .filter_map(|(i, vv)| (vv.len() == 1).then_some(i))
-        .collect_vec();
+    let mut ll = g.iter().positions(|vv| vv.len() == 1).collect_vec();
     let mut removed = vec![false; n];
     while let Some(l) = ll.pop() {
         if removed[l] {
             continue;
         }
-        let p = g[l].iter().next().copied().unwrap();
-        rs.push(g[p].len());
+        let center = g[l].iter().next().copied().unwrap();
+        rs.push(g[center].len());
         let mut jj = vec![];
-        for &i in &g[p] {
+        for i in g[center].iter().copied() {
             removed[i] = true;
             if 1 < g[i].len() {
                 jj.push(i);
@@ -43,7 +39,7 @@ fn main() {
             let kk = g[j].iter().copied().collect_vec();
             for k in kk {
                 g[k].remove(&j);
-                if k != p && g[k].len() == 1 {
+                if k != center && g[k].len() == 1 {
                     ll.push(k);
                 }
             }
