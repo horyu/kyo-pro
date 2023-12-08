@@ -12,7 +12,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut x = 0;
+    let mut y = 0;
+    let mut hs = HashSet::new();
+    hs.insert((x, y));
+    for c in s {
+        match c {
+            'L' => x -= 1,
+            'R' => x += 1,
+            'U' => y += 1,
+            'D' => y -= 1,
+            _ => unreachable!(),
+        }
+        if !hs.insert((x, y)) {
+            println!("Yes");
+            return;
+        }
+    }
+    println!("No");
 }
