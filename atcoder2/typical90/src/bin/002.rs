@@ -12,7 +12,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
     };
-    // println!("{rs}");
+    // https://drken1215.hatenablog.com/entry/2021/06/12/151200
+    for cc in (0..n).map(|_| ['(', ')']).multi_cartesian_product() {
+        let mut score = 0;
+        for c in cc.iter().copied() {
+            if c == '(' {
+                score += 1;
+            } else {
+                score -= 1;
+            }
+            if score < 0 {
+                break;
+            }
+        }
+        if score == 0 {
+            println!("{}", cc.iter().join(""));
+        }
+    }
 }
