@@ -11,8 +11,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        aaa: [[u8; w]; h],
     };
-    // println!("{rs}");
+    for aa in aaa {
+        let s = aa
+            .into_iter()
+            .map(|a| if a == 0 { '.' } else { (b'A' + a - 1) as char })
+            .join("");
+        println!("{s}");
+    }
 }
