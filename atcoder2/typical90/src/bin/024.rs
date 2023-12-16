@@ -16,7 +16,8 @@ fn main() {
         aa: [usize; n],
         bb: [usize; n],
     };
-    let cnt = izip!(aa, bb).fold(0, |acc, (a, b)| acc + a.abs_diff(b));
-    let rs = ["No", "Yes"][((cnt <= k) && cnt.abs_diff(k).is_even()) as usize];
+    let diff = izip!(aa, bb).map(|(a, b)| a.abs_diff(b)).sum::<usize>();
+    let tf = diff <= k && (k - diff) % 2 == 0;
+    let rs = ["No", "Yes"][tf as usize];
     println!("{rs}");
 }
