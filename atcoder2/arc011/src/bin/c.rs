@@ -23,13 +23,7 @@ fn main() {
     let mut g = vec![vec![]; len];
     for i in 0..(len - 1) {
         for j in (i + 1)..len {
-            let mut diff = 0;
-            for (ci, cj) in izip!(&ss[i], &ss[j]) {
-                if ci != cj {
-                    diff += 1;
-                }
-            }
-            if diff <= 1 {
+            if izip!(&ss[i], &ss[j]).filter(|(ci, cj)| ci != cj).count() <= 1 {
                 g[i].push(j);
                 g[j].push(i);
             }
