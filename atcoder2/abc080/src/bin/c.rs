@@ -12,18 +12,20 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        f: [[usize; 10]; n],
-        p: [[isize; 11]; n],
+        fff: [[usize; 10]; n],
+        ppp: [[isize; 11]; n],
     };
     let mut rs = isize::MIN;
-    for vv in (0..10).map(|_| [0usize, 1]).multi_cartesian_product() {
-        if vv.iter().all(|&v| v == 0) {
-            continue;
-        }
+    for bit in 1usize..(1 << 10) {
         let mut tmp = 0;
-        for (ff, pp) in izip!(&f, &p) {
-            let i = izip!(ff, &vv).filter(|(f, v)| **f == 1 && **v == 1).count();
-            tmp += pp[i];
+        for i in 0..n {
+            let mut cnt = 0;
+            for j in 0..10 {
+                if bit & (1 << j) != 0 && fff[i][j] == 1 {
+                    cnt += 1;
+                }
+            }
+            tmp += ppp[i][cnt];
         }
         rs = rs.max(tmp);
     }
