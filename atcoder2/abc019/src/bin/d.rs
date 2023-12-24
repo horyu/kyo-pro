@@ -13,40 +13,32 @@ use std::{
 };
 
 fn main() {
-    use std::io;
-    let stdin = io::stdin();
-    let mut stdout = io::stdout();
-    let mut s = String::new();
-
-    stdin.read_line(&mut s).unwrap();
-    let n = s.trim_end().parse::<usize>().unwrap();
-
-    let mut rs = 0usize;
-    let mut node = 0;
+    let mut stdin =
+        proconio::source::line::LineSource::new(std::io::BufReader::new(std::io::stdin()));
+    macro_rules! input(($($tt:tt)*) => (proconio::input!(from &mut stdin, $($tt)*)));
+    input! {
+        n: usize
+    };
+    // ある頂点から一番遠い頂点を求め、その頂点から一番遠い頂点までの距離が直径
+    let mut hm = HashMap::new();
     for i in 2..=n {
         println!("? 1 {i}");
-        stdout.flush().unwrap();
-        s.clear();
-        stdin.read_line(&mut s).unwrap();
-        let distance = s.trim_end().parse::<usize>().unwrap();
-        if rs < distance {
-            rs = distance;
-            node = i;
-        }
+        input!(
+            d: usize
+        );
+        hm.insert(i, d);
     }
+    let i = hm.into_iter().max_by_key(|(_, d)| *d).unwrap().0;
+    let mut rs = 0;
     for j in 1..=n {
-        if j == node {
+        if i == j {
             continue;
         }
-        println!("? {node} {j}");
-        stdout.flush().unwrap();
-        s.clear();
-        stdin.read_line(&mut s).unwrap();
-        let distance = s.trim_end().parse::<usize>().unwrap();
-        if rs < distance {
-            rs = distance;
-        }
+        println!("? {i} {j}");
+        input!(
+            d: usize
+        );
+        rs = rs.max(d);
     }
     println!("! {rs}");
-    stdout.flush().unwrap();
 }
