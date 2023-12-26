@@ -11,8 +11,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut a: u128,
+        mut b: u128,
+        mut c: u128,
     };
-    // println!("{rs}");
+    loop {
+        let gcd = a.gcd(&b).gcd(&c);
+        if gcd == 1 {
+            break;
+        }
+        a /= gcd;
+        b /= gcd;
+        c /= gcd;
+    }
+    let rs = a + b + c - 3;
+    println!("{rs}");
 }
