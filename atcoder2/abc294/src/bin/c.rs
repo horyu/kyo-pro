@@ -12,7 +12,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        m: usize,
         aa: [usize; n],
+        bb: [usize; m],
     };
-    // println!("{rs}");
+    let cc = chain(&aa, &bb)
+        .copied()
+        .sorted_unstable()
+        .enumerate()
+        .map(|(i, c)| (c, i))
+        .collect::<HashMap<_, _>>();
+    let rs = aa.into_iter().map(|a| cc[&a] + 1).join(" ");
+    println!("{rs}");
+    let rs = bb.into_iter().map(|b| cc[&b] + 1).join(" ");
+    println!("{rs}");
 }
