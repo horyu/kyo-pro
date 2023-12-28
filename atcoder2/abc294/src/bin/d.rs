@@ -12,7 +12,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
     };
-    // println!("{rs}");
+    let mut mada = (1..=n).collect::<BTreeSet<_>>();
+    let mut taiki = BTreeSet::new();
+    for _ in 0..q {
+        input! {qt: usize};
+        match qt {
+            1 => {
+                if let Some(next) = mada.pop_first() {
+                    taiki.insert(next);
+                }
+            }
+            2 => {
+                input! {x: usize}
+                taiki.remove(&x);
+            }
+            _ => {
+                if let Some(next) = taiki.first() {
+                    println!("{next}");
+                }
+            }
+        }
+    }
 }
