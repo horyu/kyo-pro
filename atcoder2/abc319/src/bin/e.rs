@@ -19,7 +19,8 @@ fn main() {
         qq: [usize; q],
     };
     let mut ww = vec![];
-    for mut i in 0..840 {
+    let lcm = (1..=8).fold(1, |acc, x| acc.lcm(&x));
+    for mut i in 0..lcm {
         for (p, t) in pptt.iter().copied() {
             i = i.next_multiple_of(&p) + t;
         }
