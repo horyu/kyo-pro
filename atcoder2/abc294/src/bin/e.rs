@@ -11,8 +11,35 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        l: Usize1,
+        n1: usize,
+        n2: usize,
+        mut aabb: [(usize, usize); n1],
+        mut ccdd: [(usize, usize); n2],
     };
-    // println!("{rs}");
+    let mut rs = 0usize;
+    let mut i = 0;
+    let mut j = 0;
+    while i < n1 && j < n2 {
+        let (a, b) = aabb[i];
+        let (c, d) = ccdd[j];
+        if a == c {
+            rs += b.min(d);
+        }
+        match b.cmp(&d) {
+            Ordering::Less => {
+                i += 1;
+                ccdd[j].1 -= b;
+            }
+            Ordering::Equal => {
+                i += 1;
+                j += 1;
+            }
+            Ordering::Greater => {
+                aabb[i].1 -= d;
+                j += 1;
+            }
+        }
+    }
+    println!("{rs}");
 }
