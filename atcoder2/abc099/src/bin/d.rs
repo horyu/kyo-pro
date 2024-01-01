@@ -17,17 +17,17 @@ fn main() {
         ccc: [[Usize1; n]; n],
     };
     let size = 3usize;
-    let mut hhmm = vec![HashMap::new(); size];
+    let mut counters = vec![counter::Counter::<usize>::new(); size];
     for (i, cc) in ccc.into_iter().enumerate() {
         for (j, c) in cc.into_iter().enumerate() {
-            *hhmm[(i + j) % 3].entry(c).or_insert(0) += 1usize;
+            counters[(i + j) % 3][&c] += 1usize;
         }
     }
-    let mut rs = std::usize::MAX;
+    let mut rs = usize::MAX;
     for cc in (0..c).permutations(3) {
         let mut tmp = 0;
-        for (hm, c) in izip!(&hhmm, cc) {
-            for (&k, &v) in hm {
+        for (counter, c) in izip!(&counters, cc) {
+            for (&k, &v) in counter {
                 tmp += ddd[k][c] * v;
             }
         }
