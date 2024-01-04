@@ -11,8 +11,12 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        ss: [String; h],
     };
-    // println!("{rs}");
+    for s in ss {
+        let rs = s.replace("TT", "PC");
+        println!("{rs}");
+    }
 }
