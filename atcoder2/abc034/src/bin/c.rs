@@ -15,7 +15,7 @@ fn main() {
         w: usize,
         h: usize,
     };
-    // 横にw-1回 縦にh-1回移動の並び替え
+    // 横に w-1 回 縦に h-1 回移動の並び替え
     let mut rs = ModInt1000000007::new(1);
     let ww = w - 1;
     let hh = h - 1;
