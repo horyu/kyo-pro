@@ -11,8 +11,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut a: usize,
+        mut b: usize,
     };
-    // println!("{rs}");
+    let mut rs = 0;
+    while a != b {
+        if b < a {
+            std::mem::swap(&mut a, &mut b);
+        }
+        // 引けるだけ引く
+        let diff = b - a;
+        if 0 < diff {
+            let cnt = diff.div_ceil(a);
+            rs += cnt;
+            b -= cnt * a;
+        }
+    }
+    println!("{rs}");
 }
