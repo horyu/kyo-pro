@@ -15,30 +15,24 @@ fn main() {
         s: Chars,
     };
     let s = s.into_iter().map(|c| c == 'o').collect_vec();
-    // true: 羊、false: 狼
-    for mut vv in (0..2).map(|_| [false, true]).multi_cartesian_product() {
-        for i in 0..(n - 2) {
-            // 羊?, 同じ?
-            let next = match (vv[i + 1], s[i + 1]) {
-                (true, true) => vv[i],
-                (true, false) => !vv[i],
-                (false, true) => !vv[i],
-                (false, false) => vv[i],
-            };
-            vv.push(next);
+    for ww in (0..2).map(|_| [false, true]).multi_cartesian_product() {
+        let mut tmp = vec![false; n];
+        tmp[0] = ww[0];
+        tmp[1] = ww[1];
+        for i in 1..(n - 1) {
+            tmp[i + 1] = tmp[i - 1] ^ tmp[i] ^ s[i];
         }
-        if (0..n).all(|i| {
-            let pre = vv[(n + i - 1) % n];
-            let next = vv[(n + i + 1) % n];
-            match (vv[i], s[i]) {
-                (true, true) => pre == next,
-                (true, false) => pre != next,
-                (false, true) => pre != next,
-                (false, false) => pre == next,
-            }
-        }) {
-            let rs = vv.into_iter().map(|v| ['W', 'S'][v as usize]).join("");
-            println!("{rs}");
+        if tmp[n - 2] ^ tmp[n - 1] ^ tmp[0] == s[n - 1] && tmp[n - 1] ^ tmp[0] ^ tmp[1] == s[0] {
+            println!(
+                "{}",
+                tmp.iter()
+                    .copied()
+                    .map(|b| if b { 'S' } else { 'W' })
+                    .join("")
+            );
+            // for i in 0..n {
+            //     eprintln!("{i} ({}){} {}-{}", tmp[i],s[i],  tmp[(n + i - 1) % n], tmp[(i + 1) % n]);
+            // }
             return;
         }
     }
