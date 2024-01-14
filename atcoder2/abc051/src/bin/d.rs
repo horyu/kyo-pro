@@ -24,7 +24,6 @@ fn main() {
     let mut ttff = vec![false; m];
     for start in 0..n {
         let mut bh = BinaryHeap::new();
-        use std::cmp::Reverse as R;
         bh.push((R(0), !0, start));
         let mut cc = vec![!0; n];
         cc[start] = 0;
