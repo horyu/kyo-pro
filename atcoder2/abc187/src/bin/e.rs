@@ -16,51 +16,50 @@ fn main() {
         q: usize,
         tteexx: [(usize, Usize1, isize); q],
     };
-    // 頂点0を根として ab のどちらが根側か区別する
-    // a側なら sum[0] += c, sum[b] -= c
-    // sum を使ってDFS
     let mut g = vec![vec![]; n];
     for (a, b) in aabb.iter().copied() {
         g[a].push(b);
         g[b].push(a);
     }
-    let mut dd = vec![0; n];
+    // 根0からの距離
+    let mut dd = vec![!0; n];
     let mut qq = VecDeque::new();
-    qq.push_back((0, 0, 0));
-    while let Some((qi, qd, qf)) = qq.pop_front() {
-        dd[qi] = qd;
-        for i in g[qi].iter().copied() {
-            if i != qf {
-                qq.push_back((i, qd + 1, qi));
+    qq.push_back(0);
+    dd[0] = 0;
+    while let Some(q) = qq.pop_front() {
+        for c in g[q].iter().copied() {
+            if dd[c] == !0 {
+                dd[c] = dd[q] + 1;
+                qq.push_back(c);
             }
         }
     }
-    let mut ss: Vec<isize> = vec![0isize; n];
-    for (t, e, x) in tteexx {
-        let (i, j) = if t == 1 {
-            aabb[e]
+    // iから葉に向かう和
+    let mut ww = vec![0; n];
+    let mut rrss = vec![0; n];
+    for (t, e, x) in tteexx.iter().copied() {
+        let (a, b) = aabb[e];
+        let (ok, ng) = if t == 1 { (a, b) } else { (b, a) };
+        if dd[ok] < dd[ng] {
+            ww[0] += x;
+            ww[ng] -= x;
         } else {
-            (aabb[e].1, aabb[e].0)
-        };
-        if dd[i] < dd[j] {
-            ss[0] += x;
-            ss[j] -= x;
-        } else {
-            ss[i] += x;
+            ww[ok] += x;
         }
     }
-    let mut rs = vec![0; n];
+    // eprintln!("{dd:?}");
+    // eprintln!("{ww:?}");
     let mut qq = VecDeque::new();
-    qq.push_back((0, 0, 0));
-    while let Some((qi, qs, qf)) = qq.pop_front() {
-        let s = qs + ss[qi];
-        rs[qi] = s;
-        for i in g[qi].iter().copied() {
-            if i != qf {
-                qq.push_back((i, s, qi));
+    qq.push_back((0, !0));
+    while let Some((q, from)) = qq.pop_front() {
+        rrss[q] += ww[q];
+        for c in g[q].iter().copied() {
+            if c != from {
+                ww[c] += ww[q];
+                qq.push_back((c, q));
             }
         }
     }
-    let rs = rs.iter().join("\n");
+    let rs = rrss.iter().join("\n");
     println!("{rs}");
 }
