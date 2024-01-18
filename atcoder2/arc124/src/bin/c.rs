@@ -12,6 +12,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        mut aabb: [(usize, usize); n],
+    };
+    // https://atcoder.jp/contests/arc124/submissions/26240607
+    let mut rs = 1;
+    let mut hs = HashSet::new();
+    hs.insert(aabb.pop().unwrap());
+    for (a, b) in aabb {
+        let mut new_hs = HashSet::new();
+        for (c, d) in hs {
+            new_hs.insert((c.gcd(&a), d.gcd(&b)));
+            new_hs.insert((c.gcd(&b), d.gcd(&a)));
+        }
+        hs = new_hs;
+    }
+    for (c, d) in hs {
+        rs = rs.max(c.lcm(&d));
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
         aabb: [(usize, usize); n],
     };
     let cc = divisors(aabb[0].0);
