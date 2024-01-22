@@ -14,6 +14,22 @@ fn main() {
     input! {
         n: u128,
     };
+    // https://atcoder.jp/contests/arc125/editorial/2498
+    // xx - y = zz <=> y = xx - zz = (x + z)(x - z)
+    // p = x + z, q = x - z とおくと x = (p + q) / 2, y = pq
+    // q <= p <= ≤N/q かつ pとqの偶数奇数が一致
+    let mut rs = ModInt998244353::default();
+    for q in 1..=(n.sqrt()) {
+        rs += (n / q - q) / 2 + 1;
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: u128,
+    };
     // https://ichinoseac.hatenablog.com/entry/2021/08/24/101902
     let mut rs = ModInt998244353::default();
     for k in 1..=(n.sqrt()) {
