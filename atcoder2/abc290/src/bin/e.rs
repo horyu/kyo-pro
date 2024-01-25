@@ -14,6 +14,7 @@ fn main() {
         n: usize,
         aa: [Usize1; n],
     };
+    // https://atcoder.jp/contests/abc290/editorial/5757
     let mut mm = multimap::MultiMap::new();
     for (i, a) in aa.iter().copied().enumerate() {
         mm.insert(a, i);
