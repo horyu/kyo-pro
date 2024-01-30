@@ -33,3 +33,40 @@ fn main() {
         println!("{rs}");
     }
 }
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        a: usize,
+        b: usize,
+        q: usize,
+        ss: [usize; a],
+        tt: [usize; b],
+        xx: [usize; q],
+    };
+    let sbts = BTreeSet::from_iter(ss.iter().copied());
+    let tbts = BTreeSet::from_iter(tt.iter().copied());
+    for x in xx {
+        let mut rs = std::usize::MAX;
+        for [bts0, bts1] in [[&sbts, &tbts], [&tbts, &sbts]] {
+            for y in [
+                bts0.range(..x).next_back().copied(),
+                bts0.range(x..).next().copied(),
+            ]
+            .into_iter()
+            .flatten()
+            {
+                for z in [
+                    bts1.range(..y).next_back().copied(),
+                    bts1.range(y..).next().copied(),
+                ]
+                .into_iter()
+                .flatten()
+                {
+                    rs = rs.min(x.abs_diff(y) + y.abs_diff(z));
+                }
+            }
+        }
+        println!("{rs}");
+    }
+}
