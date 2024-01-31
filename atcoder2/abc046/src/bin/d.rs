@@ -13,15 +13,7 @@ fn main() {
     input! {
         s: Chars,
     };
-    // gとpが打ち消し、余ったgの個数 / 2
-    let mut cnt = 0;
-    for c in s {
-        if c == 'g' {
-            cnt += 1;
-        } else {
-            cnt -= 1;
-        }
-    }
-    let rs = cnt / 2;
+    // 余剰gの数 / 2 だけ p を出せる
+    let rs = (s.len() - s.iter().copied().filter(|&c| c == 'p').count() * 2) / 2;
     println!("{rs}");
 }
