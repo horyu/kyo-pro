@@ -12,7 +12,16 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        xxyyzz: [(usize, usize, usize); n],
     };
-    // println!("{rs}");
+    let sum_z = xxyyzz.iter().map(|(_, _, z)| z).sum::<usize>();
+    let mut vv = vec![1usize << 60; sum_z + 1];
+    vv[0] = 0;
+    for (x, y, z) in xxyyzz {
+        for i in (0..=(sum_z - z)).rev() {
+            vv[i + z] = vv[i + z].min(vv[i] + y.saturating_sub(x).div_ceil(2));
+        }
+    }
+    let rs = vv[sum_z.div_ceil(2)..].iter().min().unwrap();
+    println!("{rs}");
 }
