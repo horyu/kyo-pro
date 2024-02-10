@@ -12,7 +12,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        mut aa: [isize; n],
     };
-    // println!("{rs}");
+    // https://atcoder.jp/contests/arc135/editorial/3356
+    const SIZE: usize = 30;
+
+    aa.push(0);
+    let mut ss = vec![0; n + 1];
+
+    for k in 0..SIZE {
+        let ones = aa.iter().copied().map(|a| (a >> k) & 1).collect_vec();
+        let c1 = ones.iter().sum::<isize>();
+        let c0 = n as isize - c1;
+
+        for i in 0..=n {
+            ss[i] += (c1 - (c1 - c0) * ones[i]) << k;
+        }
+    }
+    let rs = ss.iter().max().copied().unwrap();
+    println!("{rs}");
 }
