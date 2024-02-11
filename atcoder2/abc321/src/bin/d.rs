@@ -12,7 +12,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        m: usize,
+        p: usize,
         aa: [usize; n],
+        mut bb: [usize; m],
     };
-    // println!("{rs}");
+    bb.sort_unstable();
+
+    let b_ss = chain!([0], bb.iter().copied())
+        .cumsum::<usize>()
+        .collect_vec();
+
+    let mut rs = 0usize;
+    for a in aa.iter().copied() {
+        let i = bb.partition_point(|&b| a + b <= p);
+        rs += i * a + b_ss[i] + (m - i) * p;
+    }
+    println!("{rs}");
 }
