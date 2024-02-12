@@ -13,6 +13,56 @@ fn main() {
     input! {
         n: usize,
     };
+    // https://blog.hamayanhamayan.com/entry/2018/12/02/233028
+    // 75 = 3*5*5
+    let mut counter = counter::Counter::<usize, usize>::new();
+    for i in 2..=n {
+        for (k, c) in factors(i) {
+            counter[&k] += c;
+        }
+    }
+    let mut rs = 0usize;
+    // 75
+    for a in 2..=n {
+        if 74 <= counter[&a] {
+            rs += 1;
+        }
+    }
+    // 3*25
+    for a in 2..=n {
+        for b in 2..=n {
+            if a != b && 2 <= counter[&a] && 24 <= counter[&b] {
+                rs += 1;
+            }
+        }
+    }
+    // 5*15
+    for a in 2..=n {
+        for b in 2..=n {
+            if a != b && 4 <= counter[&a] && 14 <= counter[&b] {
+                rs += 1;
+            }
+        }
+    }
+    // 3*5*5
+    for a in 2..=n {
+        for b in 2..=n {
+            for c in (b + 1)..=n {
+                if a != b && a != c && 2 <= counter[&a] && 4 <= counter[&b] && 4 <= counter[&c] {
+                    rs += 1;
+                }
+            }
+        }
+    }
+
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+    };
     // 75 = 3*5*5
     let mut counter = counter::Counter::<usize, usize>::new();
     for i in 2..=n {
