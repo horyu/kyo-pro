@@ -19,20 +19,19 @@ fn main() {
         println!("{n}");
         return;
     }
-    if aa.iter().all(|&a| k < a) {
-        println!("0");
-        return;
-    }
-    let mut rs = 1usize;
-    let mut crr = 1usize;
-    let mut l = 0;
-    for r in 0..n {
-        crr *= aa[r];
-        while l < r && k < crr {
-            crr /= aa[l];
-            l += 1;
+    // 尺取法
+    let mut rs = 0;
+    for bb in aa.split(|&a| k < a) {
+        let mut l = 0;
+        let mut crr = 1;
+        for r in 0..bb.len() {
+            crr *= bb[r];
+            while k < crr {
+                crr /= bb[l];
+                l += 1;
+            }
+            rs = rs.max(r - l + 1);
         }
-        rs = rs.max(r - l + 1);
     }
     println!("{rs}");
 }
