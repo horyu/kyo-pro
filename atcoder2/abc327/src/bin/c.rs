@@ -11,8 +11,14 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        aaa: [[usize; 9]; 9],
     };
-    // println!("{rs}");
+    let tf = (0..9).all(|k| {
+        aaa[k].iter().copied().all_unique() && aaa.iter().map(|a| a[k]).all_unique() && {
+            let (i, j) = (k / 3 * 3, k % 3 * 3);
+            (0..9).map(|kk| aaa[i + kk / 3][j + kk % 3]).all_unique()
+        }
+    });
+    let rs = ["No", "Yes"][tf as usize];
+    println!("{rs}");
 }
