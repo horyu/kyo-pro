@@ -14,22 +14,13 @@ fn main() {
         n: usize,
         xxyyhh: [(usize, usize, usize); n],
     };
-    let (h_min, h_max) = match xxyyhh.iter().map(|xyh| xyh.2).minmax() {
-        itertools::MinMaxResult::NoElements => unreachable!(),
-        itertools::MinMaxResult::OneElement(h) => (h, h),
-        itertools::MinMaxResult::MinMax(min, max) => (min, max),
-    };
-    for i in 0usize..=100 {
-        for j in 0usize..=100 {
-            for k in h_max..=(h_min + 200) {
-                if xxyyhh
-                    .iter()
-                    .copied()
-                    .all(|(x, y, h)| k.saturating_sub(i.abs_diff(x) + j.abs_diff(y)) == h)
-                {
-                    println!("{i} {j} {k}");
-                    return;
-                }
+    let (x1, y1, h1) = xxyyhh.iter().copied().find(|&(_, _, h)| 0 < h).unwrap();
+    for cx in 0usize..=100 {
+        for cy in 0usize..=100 {
+            let ch = h1 + cx.abs_diff(x1) + cy.abs_diff(y1);
+            if xxyyhh.iter().all(|&(x, y, h)| h == ch.saturating_sub(cx.abs_diff(x) + cy.abs_diff(y))) {
+                println!("{cx} {cy} {ch}");
+                return;
             }
         }
     }
