@@ -12,7 +12,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aa: [Usize1; m],
+        bb: [Usize1; m],
     };
-    // println!("{rs}");
+    let mut g = petgraph::graph::UnGraph::<(), ()>::with_capacity(n, m);
+    let nodes = (0..n).map(|i| g.add_node(())).collect_vec();
+    let mut dsu = ac_library::Dsu::new(n);
+    for (&a, &b) in izip!(&aa, &bb) {
+        dsu.merge(a, b);
+        g.add_edge(nodes[a], nodes[b], ());
+    }
+    let tf = dsu
+        .groups()
+        .into_iter()
+        .all(|ii| petgraph::algo::is_bipartite_undirected(&g, nodes[ii[0]]));
+    let rs = ["No", "Yes"][tf as usize];
+    println!("{rs}");
 }
