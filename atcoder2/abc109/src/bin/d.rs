@@ -16,17 +16,17 @@ fn main() {
         mut aaa: [[usize; w]; h],
     };
     let mut rs = vec![];
-    for (i, aa) in aaa.iter_mut().enumerate() {
+    for i in 0..h {
         for j in 0..(w - 1) {
-            if aa[j].is_odd() {
-                aa[j] -= 1;
-                aa[j + 1] += 1;
+            if aaa[i][j] % 2 == 1 {
+                aaa[i][j] -= 1;
+                aaa[i][j + 1] += 1;
                 rs.push(format!("{} {} {} {}", i + 1, j + 1, i + 1, j + 2));
             }
         }
     }
     for i in 0..(h - 1) {
-        if aaa[i][w - 1].is_odd() {
+        if aaa[i][w - 1] % 2 == 1 {
             aaa[i][w - 1] -= 1;
             aaa[i + 1][w - 1] += 1;
             rs.push(format!("{} {} {} {}", i + 1, w, i + 2, w));
