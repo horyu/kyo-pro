@@ -16,25 +16,23 @@ fn main() {
         b: f64,
         c: f64,
     };
-    use std::f64::consts::PI;
     let delta = 1e-7;
     // f(t) = At + Bsin(Ct*PI) = 100
-    let f = |t: f64| a * t + b * (c * t * PI).sin();
-    let bserach = |mut l: f64, mut r: f64| -> f64 {
-        assert!(f(l) <= f(r));
-        loop {
-            let m = (l + r) / 2.0;
-            let diff = f(m) - 100.0;
-            if diff.abs() < delta {
-                return m;
-            }
-            if 0.0 < diff {
-                r = m;
-            } else {
-                l = m;
-            }
+    let f = |t: f64| a * t + b * (c * t * std::f64::consts::PI).sin();
+    let mut l = 0.0;
+    let mut r = 200.0;
+    loop {
+        let m = (l + r) / 2.0;
+        let diff = f(m) - 100.0;
+        if diff.abs() < delta {
+            println!("{m}");
+            // dbg!(f(m));
+            return;
         }
-    };
-    let rs = bserach(0.0, 200.0);
-    println!("{rs}");
+        if 0.0 < diff {
+            r = m;
+        } else {
+            l = m;
+        }
+    }
 }
