@@ -12,7 +12,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut less_counts = vec![0; n];
+    for &(a, b) in &aabb {
+        let min = a.min(b);
+        let max = a.max(b);
+        less_counts[max] += 1;
+    }
+    let rs = less_counts.into_iter().filter(|&c| c == 1).count();
+    println!("{rs}");
 }
