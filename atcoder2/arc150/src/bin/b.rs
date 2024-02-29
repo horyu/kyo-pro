@@ -12,20 +12,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aabb: [(usize, usize); n],
+        aabb: [(isize, isize); n],
     };
+    let sqrt = 45000;
+    // https://atcoder.jp/contests/arc150/submissions/35551411
     for (a, b) in aabb {
-        if b <= a {
-            println!("{}", a - b);
-            continue;
+        let mut rs = std::isize::MAX;
+        for j in a..=sqrt {
+            let x = b.div_ceil(j) * j;
+            rs = rs.min((x - b) + (j - a));
         }
-        let mut rs = std::usize::MAX;
-        for x in 0usize..=2_000_000 {
-            let ax = a + x;
-            let by = b.div_ceil(ax) * ax;
-            let y = by - b;
-            rs = rs.min(x + y);
-
+        for j in 1..=sqrt {
+            let aa = if a * j < b { b.div_ceil(j) } else { a };
+            rs = rs.min(aa * j - b + aa - a);
         }
         println!("{rs}");
     }
