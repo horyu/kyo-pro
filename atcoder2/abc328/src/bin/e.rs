@@ -12,7 +12,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        k: usize,
+        uuvvww: [(Usize1, Usize1, usize); m],
     };
-    // println!("{rs}");
+    let mut rs = usize::MAX;
+    'outer: for jj in (0..m).combinations(n - 1) {
+        let mut uf = UnionFind::new(n);
+        let mut sum = 0;
+        for j in jj {
+            let (u, v, w) = uuvvww[j];
+            if !uf.union(u, v) {
+                continue 'outer;
+            }
+            sum += w;
+        }
+        rs = rs.min(sum % k);
+    }
+    println!("{rs}");
 }
