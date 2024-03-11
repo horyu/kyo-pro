@@ -15,12 +15,8 @@ fn main() {
         m: usize,
         xxyyzz: [(Usize1, Usize1, usize); m],
     };
-    // 121
-    // 12: 1 : 21
-    // 21: 1 : 12
-    // 11: 0 : 22
     let mut dsu = ac_library::Dsu::new(n);
-    for (x, y, z) in xxyyzz.iter().copied() {
+    for (x, y, _z) in xxyyzz {
         dsu.merge(x, y);
     }
     let rs = dsu.groups().len();
