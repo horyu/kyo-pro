@@ -11,8 +11,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        d: usize,
     };
-    // println!("{rs}");
+    let mut rs = usize::MAX;
+    for x in 0..=(d.sqrt() + 1) {
+        let xx = x.pow(2);
+        let y = (xx.abs_diff(d)).sqrt();
+        rs = rs
+            .min((xx + y.pow(2)).abs_diff(d))
+            .min((xx + (y + 1).pow(2)).abs_diff(d))
+    }
+    println!("{rs}");
 }
