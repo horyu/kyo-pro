@@ -12,7 +12,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        ss: [Chars; n],
     };
-    // println!("{rs}");
+    // i行目に含まれるoの数
+    let gyou = (0..n)
+        .map(|i| ss[i].iter().filter(|&&c| c == 'o').count())
+        .collect_vec();
+    // j列目に含まれるoの数
+    let retu = (0..n)
+        .map(|j| (0..n).map(|i| ss[i][j]).filter(|&c| c == 'o').count())
+        .collect_vec();
+    let mut rs = 0;
+    for i in 0..n {
+        for j in 0..n {
+            if ss[i][j] == 'o' {
+                rs += (gyou[i] - 1) * (retu[j] - 1);
+            }
+        }
+    }
+    println!("{rs}");
 }
