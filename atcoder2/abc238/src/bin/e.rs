@@ -16,7 +16,7 @@ fn main() {
         llrr: [(usize, usize); q],
     };
     let mut dsu = ac_library::Dsu::new(n + 1);
-    for (l, r) in llrr {
+    for (l, r) in llrr.iter().copied() {
         dsu.merge(l - 1, r);
     }
     let rs = ["No", "Yes"][dsu.same(0, n) as usize];
