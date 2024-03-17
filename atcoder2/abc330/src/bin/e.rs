@@ -12,7 +12,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
+        mut aa: [usize; n],
+        iikk: [(Usize1, usize); q],
     };
-    // println!("{rs}");
+    let mut counter = counter::Counter::<_>::new();
+    for a in aa.iter().copied() {
+        counter[&a] += 1;
+    }
+    let mut bts = BTreeSet::from_iter(0..(2e5 as usize + 10));
+    for k in counter.keys() {
+        bts.remove(k);
+    }
+    for (i, k) in iikk.iter().copied() {
+        let pre_a = aa[i];
+        counter[&pre_a] -= 1;
+        if counter[&pre_a] == 0 {
+            bts.insert(pre_a);
+        }
+        aa[i] = k;
+        counter[&k] += 1;
+        if counter[&k] == 1 {
+            bts.remove(&k);
+        }
+        let rs = bts.first().unwrap();
+        println!("{rs}");
+    }
 }
