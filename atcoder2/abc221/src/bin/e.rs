@@ -1,7 +1,6 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-use ac_library::ModInt998244353;
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -32,52 +31,19 @@ fn main() {
     // eprintln!("{bb:?}");
 
     let len = a2i.len();
-    let mut bit = Bit::new(len);
+    let mut ft = ac_library::FenwickTree::new(len, 0usize);
 
     let div = mod_pow(2, MOD - 2, MOD);
     let mut rs = 0;
     for (i, b) in bb.iter().copied().enumerate() {
-        rs += bit.sum(b) * mod_pow(2, i, MOD);
+        rs += ft.sum(..=b) * mod_pow(2, i, MOD);
         rs %= MOD;
-        bit.add(b, mod_pow(div, i + 1, MOD));
+        ft.add(b, mod_pow(div, i + 1, MOD));
     }
     println!("{rs}");
 }
 
 const MOD: usize = 998244353;
-
-struct Bit {
-    n: usize,
-    bit: Vec<usize>,
-}
-
-impl Bit {
-    fn new(n: usize) -> Self {
-        Self {
-            n,
-            bit: vec![0; n + 1],
-        }
-    }
-    fn addition(&self, x: usize, y: usize) -> usize {
-        (x + y) % MOD
-    }
-    fn add(&mut self, mut x: usize, a: usize) {
-        x += 1;
-        while x <= self.n {
-            self.bit[x] = self.addition(self.bit[x], a);
-            x += x & x.wrapping_neg();
-        }
-    }
-    fn sum(&self, mut x: usize) -> usize {
-        x += 1;
-        let mut ret = 0;
-        while 0 < x {
-            ret = self.addition(ret, self.bit[x]);
-            x -= x & x.wrapping_neg();
-        }
-        ret
-    }
-}
 
 // https://blog.spiralray.net/cp/modulo#i-8
 fn mod_pow(mut x: usize, mut n: usize, m: usize) -> usize {
