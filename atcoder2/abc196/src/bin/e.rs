@@ -12,7 +12,34 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aatt: [(isize, usize); n],
+        q: usize,
+        xx: [isize; q],
     };
-    // println!("{rs}");
+    // https://atcoder.jp/contests/abc196/editorial/948
+    let mut low = isize::MIN / 2;
+    let mut high = isize::MAX / 2;
+    let mut add = 0;
+    for (a, t) in aatt {
+        match t {
+            1 => {
+                low += a;
+                high += a;
+                add += a;
+            }
+            2 => {
+                low = low.max(a);
+                high = high.max(a);
+            }
+            3 => {
+                low = low.min(a);
+                high = high.min(a);
+            }
+            _ => unreachable!(),
+        }
+    }
+    for x in xx {
+        let rs = high.min(low.max(x + add));
+        println!("{rs}");
+    }
 }
