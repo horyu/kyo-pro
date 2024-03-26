@@ -12,7 +12,31 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        uuvv: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (u, v) in uuvv.iter().copied() {
+        g[u].push(v);
+        g[v].push(u);
+    }
+    let mut used = vec![false; n];
+    let mut rs = 0;
+    dfs(&g, &mut used, &mut rs, 0);
+    println!("{rs}");
+}
+
+fn dfs(g: &[Vec<usize>], used: &mut [bool], cnt: &mut usize, crr: usize) {
+    if 1e6 as usize <= *cnt {
+        return;
+    }
+    used[crr] = true;
+    *cnt += 1;
+    for &v in &g[crr] {
+        if used[v] {
+            continue;
+        }
+        dfs(g, used, cnt, v);
+    }
+    used[crr] = false;
 }
