@@ -34,7 +34,7 @@ fn main() {
         n: usize,
         llrr: [(Usize1, Usize1); n],
     };
-    let mut ls = ac_library::LazySegtree::<MaxMonoid>::from(vec![0; w]);
+    let mut ls = LazySegtree::<MaxMonoid>::new(5e5 as usize);
     for (l, r) in llrr {
         let rs = ls.prod(l..=r) + 1;
         ls.apply_range(l..=r, rs);
