@@ -12,7 +12,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut vv = vec![3];
+    for _ in 1..n {
+        if vv.iter().all_equal() {
+            let mut new_vv = vec![1; vv.len() + 1];
+            new_vv[0] = 3;
+            vv = new_vv;
+        } else {
+            if let Some(i) = vv.iter().position(|&x| x < 3) {
+                vv[i] += 1;
+                for j in 1..i {
+                    vv[j] = vv[i];
+                }
+            }
+        }
+        // eprintln!("{:?}", vv);
+    }
+    let rs = vv.into_iter().rev().join("");
+    println!("{rs}");
 }
