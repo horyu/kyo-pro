@@ -17,16 +17,13 @@ fn main() {
         xxyy: [(Usize1, Usize1); m],
     };
     let mut dsu = ac_library::Dsu::new(n);
-    for &(x, y) in &xxyy {
+    for (x, y) in xxyy {
         dsu.merge(x, y);
     }
-    let mut rs = 0usize;
-    for gg in dsu.groups() {
-        let hs: HashSet<usize> = gg.into_iter().collect();
-        for &i in &hs {
-            if hs.contains(&pp[i]) {
-                rs += 1;
-            }
+    let mut rs = 0;
+    for i in 0..n {
+        if dsu.same(i, pp[i]) {
+            rs += 1;
         }
     }
     println!("{rs}");
