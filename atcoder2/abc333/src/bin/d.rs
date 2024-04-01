@@ -12,7 +12,32 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        uuvv: [(Usize1, Usize1); n - 1],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (u, v) in uuvv.iter().copied() {
+        g[u].push(v);
+        g[v].push(u);
+    }
+    let rs = g[0]
+        .iter()
+        .copied()
+        .map(|to| dfs(&g, to, 0))
+        .sorted_unstable()
+        .rev()
+        .skip(1)
+        .sum::<usize>()
+        + 1;
+    println!("{rs}");
+}
+
+fn dfs(g: &[Vec<usize>], to: usize, from: usize) -> usize {
+    let mut rs = 1;
+    for &next in g[to].iter() {
+        if next == from {
+            continue;
+        }
+        rs += dfs(g, next, to);
+    }
+    rs
 }
