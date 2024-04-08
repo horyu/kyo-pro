@@ -12,7 +12,33 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabb: [(Usize1, Usize1); n - 1]
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (u, v) in aabb.iter().copied() {
+        g[u].push(v);
+        g[v].push(u);
+    }
+    // 木の直径を求める
+    let mut start = 0;
+    let mut dd = vec![!0; n];
+    for i in 0..2 {
+        if i == 1 {
+            dd = vec![!0; n];
+        }
+        let mut qq = VecDeque::new();
+        qq.push_back(start);
+        dd[start] = 0;
+        while let Some(u) = qq.pop_front() {
+            for &v in g[u].iter() {
+                if dd[v] == !0 {
+                    dd[v] = dd[u] + 1;
+                    qq.push_back(v);
+                }
+            }
+        }
+        start = dd.iter().position_max().unwrap();
+    }
+    let rs = dd[start] + 1;
+    println!("{rs}");
 }
