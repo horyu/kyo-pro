@@ -19,7 +19,7 @@ fn main() {
         ct: Usize1,
         sss: [Chars; h],
     };
-    let mut ddd = vec![vec![vec![std::usize::MAX; 4]; w]; h];
+    let mut ddd = vec![vec![vec![usize::MAX; 4]; w]; h];
     let mut qq = VecDeque::new();
     for dir in 0..4 {
         ddd[rs][cs][dir] = 0;

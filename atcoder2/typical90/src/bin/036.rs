@@ -16,10 +16,10 @@ fn main() {
         xxyy: [(isize, isize); n],
         qq: [Usize1; q],
     };
-    let mut min_a = std::isize::MAX;
-    let mut max_a = std::isize::MIN;
-    let mut min_b = std::isize::MAX;
-    let mut max_b = std::isize::MIN;
+    let mut min_a = isize::MAX;
+    let mut max_a = isize::MIN;
+    let mut min_b = isize::MAX;
+    let mut max_b = isize::MIN;
 
     let mut aabb = vec![];
     for (x, y) in xxyy {
