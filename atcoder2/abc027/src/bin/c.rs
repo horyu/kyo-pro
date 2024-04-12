@@ -13,6 +13,40 @@ fn main() {
     input! {
         n: usize,
     };
+    // https://namonakimichi.hatenablog.com/entry/2015/08/11/143312
+    let depth = n.ilog2() + 1;
+
+    let mut tmp = 1;
+    let mut turn = 0;
+    if depth.is_even() {
+        while tmp <= n {
+            if turn.is_even() {
+                tmp *= 2;
+            } else {
+                tmp = tmp * 2 + 1;
+            }
+            turn += 1;
+        }
+    } else {
+        while tmp <= n {
+            if turn.is_even() {
+                tmp = tmp * 2 + 1;
+            } else {
+                tmp *= 2;
+            }
+            turn += 1;
+        }
+    }
+
+    let rs = if turn.is_even() { "Takahashi" } else { "Aoki" };
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+    };
     // https://qiita.com/hamamu/items/55433210be3c47a4dd72
     let mut y = n + 1;
     loop {
