@@ -11,8 +11,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut l: usize,
+        r: usize,
     };
-    // println!("{rs}");
+    let mut rrss = vec![];
+    'outer: while l < r {
+        for d in (0..=60).rev() {
+            let dd = 1usize << d;
+            if l + dd <= r && l.is_multiple_of(&dd) {
+                rrss.push((l, l + dd));
+                l += dd;
+                continue 'outer;
+            }
+        }
+    }
+    println!("{}", rrss.len());
+    for (a, b) in rrss {
+        println!("{a} {b}");
+    }
 }
