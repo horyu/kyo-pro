@@ -29,33 +29,34 @@ fn dfs(mat: &mut Vec<Vec<u8>>, a: usize, b: usize) -> usize {
     let w = mat[0].len();
     for i in 0..h {
         for j in 0..w {
-            if mat[i][j] == 0 {
-                let mut cnt = 0;
-                if 0 < a {
-                    if i + 1 < h && mat[i + 1][j] == 0 {
-                        mat[i][j] = 1;
-                        mat[i + 1][j] = 1;
-                        // eprintln!("![{a},{b}] {} {}", mat[0].iter().join(" "), mat[1].iter().join(" "));
-                        cnt += dfs(mat, a - 1, b);
-                        mat[i][j] = 0;
-                        mat[i + 1][j] = 0;
-                    }
-                    if j + 1 < w && mat[i][j + 1] == 0 {
-                        mat[i][j] = 2;
-                        mat[i][j + 1] = 2;
-                        cnt += dfs(mat, a - 1, b);
-                        mat[i][j] = 0;
-                        mat[i][j + 1] = 0;
-                    }
-                }
-                if 0 < b {
-                    mat[i][j] = 3;
-                    // eprintln!("?[{a},{b}] {} {}", mat[0].iter().join(" "), mat[1].iter().join(" "));
-                    cnt += dfs(mat, a, b - 1);
-                    mat[i][j] = 0;
-                }
-                return cnt;
+            if mat[i][j] != 0 {
+                continue;
             }
+            let mut cnt = 0;
+            if 0 < a {
+                if i + 1 < h && mat[i + 1][j] == 0 {
+                    mat[i][j] = 1;
+                    mat[i + 1][j] = 1;
+                    // eprintln!("![{a},{b}] {} {}", mat[0].iter().join(" "), mat[1].iter().join(" "));
+                    cnt += dfs(mat, a - 1, b);
+                    mat[i][j] = 0;
+                    mat[i + 1][j] = 0;
+                }
+                if j + 1 < w && mat[i][j + 1] == 0 {
+                    mat[i][j] = 2;
+                    mat[i][j + 1] = 2;
+                    cnt += dfs(mat, a - 1, b);
+                    mat[i][j] = 0;
+                    mat[i][j + 1] = 0;
+                }
+            }
+            if 0 < b {
+                mat[i][j] = 3;
+                // eprintln!("?[{a},{b}] {} {}", mat[0].iter().join(" "), mat[1].iter().join(" "));
+                cnt += dfs(mat, a, b - 1);
+                mat[i][j] = 0;
+            }
+            return cnt;
         }
     }
     0
