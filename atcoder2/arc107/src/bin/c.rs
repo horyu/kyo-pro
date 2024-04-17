@@ -16,34 +16,31 @@ fn main() {
         k: usize,
         aaa: [[usize; n]; n],
     };
-    // 行
     let mut rs = ModInt998244353::new(1);
+
     let mut dsu = ac_library::Dsu::new(n);
-    for il in 0..n {
-        for ir in (il + 1)..n {
-            if (0..n).all(|j| aaa[il][j] + aaa[ir][j] <= k) {
-                dsu.merge(il, ir);
-            }
+    for (ix, iy) in (0..n).tuple_combinations() {
+        if (0..n).all(|j| aaa[j][ix] + aaa[j][iy] <= k) {
+            dsu.merge(ix, iy);
         }
     }
-    for g in dsu.groups() {
-        for w in 1..=g.len() {
-            rs *= w;
+    for vv in dsu.groups() {
+        for k in 1..=vv.len() {
+            rs *= k;
         }
     }
-    // 列
+
     let mut dsu = ac_library::Dsu::new(n);
-    for jl in 0..n {
-        for jr in (jl + 1)..n {
-            if (0..n).all(|i| aaa[i][jl] + aaa[i][jr] <= k) {
-                dsu.merge(jl, jr);
-            }
+    for (jx, jy) in (0..n).tuple_combinations() {
+        if (0..n).all(|i| aaa[jx][i] + aaa[jy][i] <= k) {
+            dsu.merge(jx, jy);
         }
     }
-    for g in dsu.groups() {
-        for w in 1..=g.len() {
-            rs *= w;
+    for vv in dsu.groups() {
+        for k in 1..=vv.len() {
+            rs *= k;
         }
     }
+
     println!("{rs}");
 }
