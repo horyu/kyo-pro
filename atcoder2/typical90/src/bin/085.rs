@@ -11,22 +11,33 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        k: usize,
+        k: u128,
     };
-    // 2 * 12=> 2 * [1*12,2*6,3*4]
-    // 4 * 6 => 4 * [1*6,2*3]
-    let mut rs = 0;
-    for a in 1..=(k.sqrt()) {
-        let bc = k / a;
-        if a * bc == k {
-            for b in a..=(bc.sqrt()) {
-                let c = bc / b;
-                if b * c == bc && b <= c {
-                    // eprintln!("{a} {b} {c}");
-                    rs += 1;
-                }
+    let mut vv = vec![];
+    for i in 1..=k.sqrt() {
+        if k % i == 0 {
+            vv.push(i);
+            if k / i != i {
+                vv.push(k / i);
             }
         }
     }
+    vv.sort_unstable();
+    let len = vv.len();
+    // dbg!(len);
+
+    let mut rs = 0usize;
+    for ai in 0..len {
+        let a = vv[ai];
+        for bi in ai..len {
+            let b = vv[bi];
+            let c = k / (a * b);
+            if b <= c && a * b * c == k {
+                // eprintln!("{} {} {}", a, b, c);
+                rs += 1;
+            }
+        }
+    }
+
     println!("{rs}");
 }
