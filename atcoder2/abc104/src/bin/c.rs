@@ -15,19 +15,54 @@ fn main() {
         g: usize,
         ppcc: [(usize, usize); d],
     };
-    let mut rs = std::usize::MAX;
+    const N: usize = 201010;
+
+    // https://blog.hamayanhamayan.com/entry/2018/08/05/232112
+    let g = g / 100;
+    let pp = ppcc.iter().copied().map(|(p, _)| p).collect_vec();
+    let cc = ppcc.iter().copied().map(|(_, c)| c / 100).collect_vec();
+
+    let mut dp = vec![vec![1 << 60; N * 2]; d + 1];
+    dp[0][0] = 0;
+
+    for i in 0..d {
+        for point in 0..N {
+            for j in 0..pp[i] {
+                dp[i + 1][point + (i + 1) * j] =
+                    dp[i + 1][point + (i + 1) * j].min(dp[i][point] + j);
+            }
+            dp[i + 1][point + (i + 1) * pp[i] + cc[i]] =
+                dp[i + 1][point + (i + 1) * pp[i] + cc[i]].min(dp[i][point] + pp[i]);
+        }
+    }
+
+    let mut rs = !0;
+    for point in g..N {
+        rs = rs.min(dp[d][point]);
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        d: usize,
+        g: usize,
+        ppcc: [(usize, usize); d],
+    };
+    let mut rs = usize::MAX;
     for ttff in (0..d).map(|_| [false, true]).multi_cartesian_product() {
-        let mut tmp = 0;
+        let mut cnt = 0;
         let mut score = 0;
         for (i, tf) in ttff.iter().copied().enumerate() {
             if tf {
                 let (p, c) = ppcc[i];
-                tmp += p;
+                cnt += p;
                 score += p * 100 * (i + 1) + c;
             }
         }
         if g <= score {
-            rs = rs.min(tmp);
+            rs = rs.min(cnt);
             continue;
         }
         for (i, tf) in ttff.iter().copied().enumerate().rev() {
@@ -36,14 +71,14 @@ fn main() {
                 let diff = g - score;
                 let pp = diff.div_ceil(100 * (i + 1));
                 if pp < p {
-                    tmp += pp;
+                    cnt += pp;
                     score += pp * 100 * (i + 1);
                 }
                 break;
             }
         }
         if g <= score {
-            rs = rs.min(tmp);
+            rs = rs.min(cnt);
         }
     }
     println!("{rs}");
