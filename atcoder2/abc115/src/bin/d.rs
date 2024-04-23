@@ -12,50 +12,49 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        x: usize,
+        mut x: usize,
     };
-    //   P
-    //  BPPPB
+    // B@P@B
+    let mut pp = vec![1usize];
+    for i in 0..n {
+        pp.push(pp[i] * 2 + 1);
+    }
+    let mut ss = vec![1usize];
+    for i in 0..n {
+        ss.push(ss[i] * 2 + 3);
+    }
+    // level 2
+    // 1234567890123
     // BBPPPBPBPPPBB
-    let rs = dfs(n, x);
-    println!("{rs}");
-}
-
-const SIZES: [usize; 51] = {
-    let mut arr = [1; 51];
-    let mut i = 1;
-    while i < 51 {
-        arr[i] = 2 * arr[i - 1] + 3;
-        i += 1;
-    }
-    arr
-};
-const PP: [usize; 51] = {
-    let mut arr = [1; 51];
-    let mut i = 1;
-    while i < 51 {
-        arr[i] = 2 * arr[i - 1] + 1;
-        i += 1;
-    }
-    arr
-};
-
-fn dfs(n: usize, x: usize) -> usize {
-    // eprintln!("{n} {x}");
-    if n == 0 {
-        assert!(x <= 1, "{x}<=1");
-        // x.min(1)
-        x
-    } else {
-        // eprintln!("{}:{} | {:?}", SIZES[n - 1] + 2, x, (SIZES[n - 1] + 2).cmp(&x));
-        // dbg!(SIZES[n - 1] + 2, x.cmp(&(SIZES[n - 1] + 2)));
-        match x.cmp(&(SIZES[n - 1] + 2)) {
-            std::cmp::Ordering::Less => dfs(n - 1, x.saturating_sub(1)),
-            std::cmp::Ordering::Equal => PP[n - 1] + 1,
-            std::cmp::Ordering::Greater => {
-                // dbg!(PP[n - 1] + 1, SIZES[n - 1], );
-                PP[n - 1] + 1 + dfs(n - 1, (x - (SIZES[n - 1] + 2)).min(SIZES[n - 1]))
+    // 0012334456777
+    let mut rs = 0usize;
+    for l in (1..=n).rev() {
+        // eprint!("{rs}: ");
+        match x.cmp(&(ss[l - 1] + 1)) {
+            Ordering::Less => {
+                // eprintln!("{l}< {x}->{}", x.saturating_sub(1));
+                x = x.saturating_sub(1);
+            }
+            Ordering::Equal => {
+                // eprintln!("{l}= {}", pp[l - 1]);
+                rs += pp[l - 1];
+                break;
+            }
+            Ordering::Greater => {
+                if x == ss[l] {
+                    // eprintln!("{l}> !+{}", pp[l]);
+                    rs += pp[l];
+                    break;
+                } else {
+                    // eprintln!("{l}> {x}->{}", x - (ss[l - 1] + 2));
+                    rs += pp[l - 1] + 1;
+                    x -= ss[l - 1] + 2;
+                }
             }
         }
     }
+    if x == 1 {
+        rs += 1;
+    }
+    println!("{rs}");
 }

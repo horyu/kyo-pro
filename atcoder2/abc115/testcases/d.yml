@@ -24,6 +24,19 @@ cases:
       50 4321098765432109
     out: |
       2160549382716056
+  - {name: sample1, in: 2 1, out: "0"}
+  - {name: sample1, in: 2 2, out: "0"}
+  - {name: sample1, in: 2 3, out: "1"}
+  - {name: sample1, in: 2 4, out: "2"}
+  - {name: sample1, in: 2 5, out: "3"}
+  - {name: sample1, in: 2 6, out: "3"}
+  - {name: sample1, in: 2 7, out: "4"}
+  - {name: sample1, in: 2 8, out: "4"}
+  - {name: sample1, in: 2 9, out: "5"}
+  - {name: sample1, in: 2 10, out: "6"}
+  - {name: sample1, in: 2 11, out: "7"}
+  - {name: sample1, in: 2 12, out: "7"}
+  - {name: sample1, in: 2 13, out: "7"}
 
 extend:
   - type: Text
