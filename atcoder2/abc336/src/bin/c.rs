@@ -11,8 +11,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut n: usize,
     };
-    // println!("{rs}");
+    if n == 1 {
+        println!("0");
+        return;
+    }
+    n -= 1;
+    let mut vv = vec![];
+    while 0 < n {
+        vv.push(n % 5 * 2);
+        n /= 5;
+    }
+    let rs = vv.into_iter().rev().join("");
+    println!("{rs}");
 }
