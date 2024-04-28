@@ -15,23 +15,16 @@ fn main() {
         k: usize,
         aa: [usize; n],
     };
-    // 優先度尽きキューを使ってk番目の値を取り出す
-    let mut bh = BinaryHeap::new();
-    let mut hs = HashSet::new();
-    bh.push(R(0));
-    hs.insert(0);
+    let mut bts = BTreeSet::from_iter([0]);
     let mut cnt = 0;
-    while let Some(R(v)) = bh.pop() {
+    while let Some(base) = bts.pop_first() {
         if cnt == k {
-            println!("{v}");
+            println!("{base}");
             return;
         }
         cnt += 1;
-        for i in 0..n {
-            let new_v = v + aa[i];
-            if hs.insert(new_v) {
-                bh.push(R(new_v));
-            }
+        for &a in &aa {
+            bts.insert(base + a);
         }
     }
 }
