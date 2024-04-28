@@ -25,59 +25,38 @@ fn main() {
         .into_iter()
         .flatten()
     };
-    let mut dsu = ac_library::Dsu::new(h * w);
-    let mut ppqq = vec![];
+    let mut rs = 1;
+    let mut vvv = vec![vec![0; w]; h];
     for i in 0..h {
         for j in 0..w {
-            if ss[i][j] != '.' {
+            if ss[i][j] != '.' || vvv[i][j] != 0 {
                 continue;
             }
-            // #に隣接していたら後から接続
-            if !udlr(i, j).all(|(x, y)| ss[x][y] == '.') {
-                ppqq.push((i, j));
-                continue;
+            let k = i * w + j + 1;
+            // BFS
+            let mut cnt = 0;
+            let mut qq = VecDeque::new();
+            qq.push_back((i, j));
+            vvv[i][j] = k;
+            while let Some((qi, qj)) = qq.pop_front() {
+                cnt += 1;
+                if !udlr(qi, qj).all(|(i, j)| ss[i][j] == '.') {
+                    continue;
+                }
+                for (i, j) in udlr(qi, qj) {
+                    if vvv[i][j] == k {
+                        continue;
+                    }
+                    vvv[i][j] = k;
+                    qq.push_back((i, j));
+                }
             }
-            // 右マスも#に隣接していなければ接続
-            if j < w - 1 && udlr(i, j + 1).all(|(x, y)| ss[x][y] == '.') {
-                dsu.merge(i * w + j, i * w + j + 1);
-            }
-            // 下マスも#に隣接していなければ接続
-            if i < h - 1 && udlr(i + 1, j).all(|(x, y)| ss[x][y] == '.') {
-                dsu.merge(i * w + j, (i + 1) * w + j);
-            }
+            // eprintln!("{i} {j} {k} {cnt}");
+            // for vv in &vvv {
+            //     eprintln!("{vv:?}");
+            // }
+            rs = rs.max(cnt);
         }
     }
-    let mut counter = counter::Counter::<_>::new();
-    // let mut rs = 1usize;
-    // let mut ccc = vec![vec![0; w]; h];
-    for aa in dsu.groups() {
-        let b = dsu.leader(aa[0]);
-        // eprintln!("{b} {aa:?}");
-        let (bi, bj) = (b / w, b % w);
-        if ss[bi][bj] == '#' {
-            continue;
-        }
-        counter[&b] += aa.len();
-    }
-    for (p, q) in ppqq {
-        // 隣接している.マスのleader
-        let mut targets = vec![];
-        for (x, y) in udlr(p, q) {
-            let l = dsu.leader(x * w + y);
-            if counter.contains_key(&l) {
-                targets.push(l);
-            }
-        }
-        targets.sort_unstable();
-        targets.dedup();
-        for t in targets {
-            let (ti, tj) = (t / w, t % w);
-            if !udlr(ti, tj).all(|(x, y)| ss[x][y] == '.') {
-                continue;
-            }
-            counter[&t] += 1;
-        }
-    }
-    let rs = counter.values().max().unwrap_or(&1);
     println!("{rs}");
 }

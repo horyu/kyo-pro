@@ -14,14 +14,14 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    let mut btm = BTreeMap::new();
+    let mut mm = btreemultimap::BTreeMultiMap::new();
     for (i, a) in aa.iter().copied().enumerate() {
-        btm.entry(a).or_insert_with(Vec::new).push(i);
+        mm.insert(a, i);
     }
     let mut rs = 0usize;
     let mut ft = ac_library::FenwickTree::new(n, 0usize);
     let mut cc = ac_library::FenwickTree::new(n, 0usize);
-    for (a, ii) in btm {
+    for (a, ii) in mm {
         // eprintln!("{a} {ii:?}");
         for &i in &ii {
             rs += a * cc.sum(..i) - ft.sum(..i);
