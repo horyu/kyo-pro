@@ -14,5 +14,27 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    // ll[i] = 0..=i までに作成できる競技単調増加列の最大長
+    let mut ll = vec![1; n];
+    // rr[i] = i..n までに作成できる競技単調増加列の最大長
+    let mut rr = vec![1; n];
+    for i in 1..n {
+        if ll[i - 1] < aa[i] {
+            ll[i] = ll[i - 1] + 1;
+        } else {
+            ll[i] = aa[i];
+        }
+    }
+    for i in (0..(n - 1)).rev() {
+        if rr[i + 1] < aa[i] {
+            rr[i] = rr[i + 1] + 1;
+        } else {
+            rr[i] = aa[i];
+        }
+    }
+    let mut rs = 1;
+    for (l, r) in izip!(ll, rr) {
+        rs = rs.max(l.min(r));
+    }
+    println!("{rs}");
 }
