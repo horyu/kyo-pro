@@ -11,10 +11,14 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        a: u128,
+        a: usize,
         b: u32,
-        c: u128,
+        c: usize,
     };
-    let rs = if a < c.pow(b) { "Yes" } else { "No" };
+    // log2 a < b * log2 c
+    // log2 a < log2 c^b
+    // a < c^b
+    let tf = a < c.saturating_pow(b);
+    let rs = ["No", "Yes"][tf as usize];
     println!("{rs}");
 }
