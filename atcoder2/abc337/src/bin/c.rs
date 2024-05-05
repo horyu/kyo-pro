@@ -12,7 +12,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aa: [isize; n],
     };
-    // println!("{rs}");
+    let mut cc = vec![!0; n];
+    let mut first = 0;
+    for (i, a) in aa.iter().copied().enumerate() {
+        if a == -1 {
+            first = i;
+            continue;
+        }
+        cc[a as usize - 1] = i;
+    }
+    let mut rrss = vec![first];
+    for _ in 1..n {
+        let last = *rrss.last().unwrap();
+        let next = cc[last];
+        rrss.push(next);
+    }
+    let rs = rrss.iter().map(|x| x + 1).join(" ");
+    println!("{rs}");
 }
