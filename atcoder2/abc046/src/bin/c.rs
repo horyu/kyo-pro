@@ -19,17 +19,8 @@ fn main() {
     for (t, a) in ttaa {
         let mul = x.div_ceil(t).max(y.div_ceil(a));
         // dbg!(mul);
-        let mut xx = t * mul;
-        let mut yy = a * mul;
-        for m in mul.. {
-            if x <= xx && y <= yy {
-                break;
-            }
-            xx = t * m;
-            yy = a * m;
-        }
-        x = xx;
-        y = yy;
+        x = t * mul;
+        y = a * mul;
         // eprintln!("{x} {y}");
     }
     let rs = x + y;
