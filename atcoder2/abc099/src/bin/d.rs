@@ -1,6 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
+use counter::Counter;
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -14,22 +15,32 @@ fn main() {
         n: usize,
         c: usize,
         ddd: [[usize; c]; c],
-        ccc: [[Usize1; n]; n],
+        aaa: [[Usize1; n]; n],
     };
-    let size = 3usize;
-    let mut counters = vec![counter::Counter::<usize>::new(); size];
-    for (i, cc) in ccc.into_iter().enumerate() {
-        for (j, c) in cc.into_iter().enumerate() {
-            counters[(i + j) % 3][&c] += 1usize;
+    let mut counts = vec![Counter::<usize>::new(); 3];
+    for (i, aa) in aaa.iter().enumerate() {
+        for (j, a) in aa.iter().copied().enumerate() {
+            counts[(i + j) % 3][&a] += 1;
         }
     }
-    let mut rs = usize::MAX;
-    for cc in (0..c).permutations(3) {
+    let costs = counts
+        .into_iter()
+        .map(|counter| {
+            (0..c)
+                .map(|aft| {
+                    counter
+                        .iter()
+                        .map(|(&bef, &cnt)| cnt * ddd[bef][aft])
+                        .sum::<usize>()
+                })
+                .collect_vec()
+        })
+        .collect_vec();
+    let mut rs = std::usize::MAX;
+    for ii in (0..c).permutations(3) {
         let mut tmp = 0;
-        for (counter, c) in izip!(&counters, cc) {
-            for (&k, &v) in counter {
-                tmp += ddd[k][c] * v;
-            }
+        for (i, a) in ii.iter().copied().enumerate() {
+            tmp += costs[i][a];
         }
         rs = rs.min(tmp);
     }
