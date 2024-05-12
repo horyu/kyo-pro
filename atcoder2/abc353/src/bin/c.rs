@@ -12,39 +12,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [isize; n],
+        mut aa: [usize; n],
     };
-    let mut ft = ac_library::FenwickTree::new(n, 0isize);
-    for (i, &a) in aa.iter().enumerate() {
-        ft.add(i, a);
-    }
-    let a2j = aa
-        .iter()
-        .copied()
-        .sorted_unstable()
-        .dedup()
-        .enumerate()
-        .map(|(i, a)| (a, i))
-        .collect::<BTreeMap<_, _>>();
-    let len = a2j.len();
-    let mut jj = ac_library::FenwickTree::new(len, 0isize);
-    for (i, &a) in aa.iter().enumerate() {
-        let j = a2j[&a];
-        jj.add(j, 1);
-    }
+    aa.sort_unstable();
+    let ss = aa.iter().cumsum::<usize>().collect_vec();
+    // eprintln!("{ss:?}");
+    // eprintln!("{aa:?}");
     let mut rs = 0;
-    for (i, a) in aa[..(n - 1)].iter().copied().enumerate() {
-        let j = a2j[&a];
-        jj.add(j, -1);
-        rs += (n - 1 - i) as isize * a + ft.sum((i + 1)..);
-        // eprintln!("{i} {a} +{}", ft.sum((i + 1)..));
-
-        // a + aj > 1e8 となる aj の個数
-        let min_aj = 100_000_000 - a;
-        if let Some((&k, &v)) = a2j.range(min_aj..).next() {
-            rs -= 100_000_000 * jj.sum(v..);
-            // eprintln!("{i} {a} -{}", 100_000_000 * jj.sum(v..));
-        }
+    for (i, ai) in aa.iter().copied().enumerate() {
+        rs += ss[n - 1] - ss[i] + ai * (n - 1 - i);
+        // 1e8 <= ai + aj となるj>iの個数 * 1e8 を引く
+        let j = aa.partition_point(|&aj| ai + aj < 100_000_000).max(i + 1);
+        // eprintln!("{ai} {i} {j}");
+        rs -= 100_000_000 * (n - j);
     }
     println!("{rs}");
 }
