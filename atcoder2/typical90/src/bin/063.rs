@@ -15,15 +15,17 @@ fn main() {
         w: usize,
         ppp: [[usize; w]; h],
     };
-    let mut rs = 0;
-    for bits in 1u32..(1 << h) {
-        let mut counter = counter::Counter::<usize>::new();
-        let ii = (0..h).filter(|&i| 0 < bits & (1 << i)).collect_vec();
+    let mut rs = 0usize;
+    for bb in 1u32..(1 << h) {
+        let ii = (0..h).filter(|&i| (bb >> i) & 1 == 1).collect_vec();
+        let mut counter = counter::Counter::<_>::new();
         for j in 0..w {
             if ii.iter().copied().map(|i| ppp[i][j]).all_equal() {
                 counter[&ppp[ii[0]][j]] += 1;
-                rs = rs.max(counter[&ppp[ii[0]][j]] * ii.len());
             }
+        }
+        if let Some(&max) = counter.values().max() {
+            rs = rs.max(max * ii.len());
         }
     }
     println!("{rs}");
