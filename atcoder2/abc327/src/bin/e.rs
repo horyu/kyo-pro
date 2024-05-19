@@ -15,6 +15,7 @@ fn main() {
         n: usize,
         pp: [f64; n],
     };
+    // Rate(k) = sum{i=1..k}{0.9^(k-i) * Qi} / sum{i=1..k}{0.9^(k-i)} - 1200 / sqrt(k)
     // 分子だけを考えて、最後に計算する
     let mut dp = vec![0.0f64; n + 1];
     for (i, p) in pp.iter().copied().enumerate() {
