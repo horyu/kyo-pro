@@ -15,6 +15,7 @@ fn main() {
         n: usize,
         m: usize,
     };
+    // dp = i人目が0人目と [同じ組み合わせ数, 異なる組み合わせ数]
     let mut dp = [ModInt998244353::new(0); 2];
     dp[0] += m;
     for i in 1..n {
