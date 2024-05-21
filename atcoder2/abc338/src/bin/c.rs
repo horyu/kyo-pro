@@ -12,7 +12,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        qq: [usize; n],
         aa: [usize; n],
+        bb: [usize; n],
     };
-    // println!("{rs}");
+    let mut rs = 0usize;
+    let cnt_max_a = izip!(&qq, &aa)
+        .filter_map(|(&q, &a)| q.checked_div(a))
+        .min()
+        .unwrap();
+    for cnt_a in 0..=cnt_max_a {
+        let cnt_b = izip!(&qq, &aa, &bb)
+            .filter_map(|(&q, &a, &b)| (q - cnt_a * a).checked_div(b))
+            .min()
+            .unwrap();
+        rs = rs.max(cnt_a + cnt_b);
+    }
+    println!("{rs}");
 }
