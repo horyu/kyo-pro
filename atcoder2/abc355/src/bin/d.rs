@@ -15,14 +15,18 @@ fn main() {
         llrr: [(usize, usize); n],
     };
     // 座標圧縮
-    let x2i = llrr.iter().copied()
+    let x2i = llrr
+        .iter()
+        .copied()
         .flat_map(|(l, r)| [l, r])
         .sorted_unstable()
         .dedup()
         .enumerate()
         .map(|(i, x)| (x, i))
         .collect::<HashMap<_, _>>();
-    let aabb = llrr.iter().copied()
+    let aabb = llrr
+        .iter()
+        .copied()
         .map(|(l, r)| (x2i[&l], x2i[&r]))
         .sorted_unstable_by_key(|&(a, b)| (b, R(a)))
         .collect_vec();

@@ -15,6 +15,37 @@ fn main() {
         t: usize,
         aa: [usize; t],
     };
+    let mut mat = vec![vec![!0usize; n]; n];
+    for (turn, a) in aa.into_iter().enumerate() {
+        let i = (a - 1) / n;
+        let j = (a - 1) % n;
+        mat[i][j] = turn + 1;
+    }
+    let mut rs = !0;
+    for a in 0..n {
+        let max = mat[a].iter().copied().max().unwrap();
+        rs = rs.min(max);
+        let max = (0..n).map(|b| mat[b][a]).max().unwrap();
+        rs = rs.min(max);
+    }
+    let max = (0..n).map(|a| mat[a][a]).max().unwrap();
+    rs = rs.min(max);
+    let max = (0..n).map(|a| mat[a][n - 1 - a]).max().unwrap();
+    rs = rs.min(max);
+    if rs == !0 {
+        println!("-1");
+    } else {
+        println!("{rs}");
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        t: usize,
+        aa: [usize; t],
+    };
     // マス(i, j) = N×(i−1)+j が描かれている
     // i行目のマスのビンゴ数
     let mut gyou = vec![0; n];
