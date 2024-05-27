@@ -14,14 +14,15 @@ fn main() {
     input! {
         n: usize,
     };
+    // https://x.com/e869120/status/1382827276673306624
     let comb = Combination::new(n, ModInt1000000007::modulus() as usize);
     for k in 1..=n {
         let mut rs = ModInt1000000007::default();
         for i in 1..=(n / k + 1) {
-            let s1 = n - (k - 1) * (i - 1);
-            let s2 = i;
-            if s2 <= s1 {
-                rs += comb.get(s1, s2);
+            let x = n - (k - 1) * (i - 1);
+            let y = i;
+            if y <= x {
+                rs += comb.get(x, y);
             }
         }
         println!("{rs}");
