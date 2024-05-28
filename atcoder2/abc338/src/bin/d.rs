@@ -30,14 +30,14 @@ fn main() {
             Ordering::Less => {
                 imos[xl] += d.abs();
                 imos[xr] -= d.abs();
-            },
+            }
             // どちら側の橋を落としても距離が変わらない
             Ordering::Equal => (),
             Ordering::Greater => {
                 imos[0] += d;
                 imos[xl] -= d;
                 imos[xr] += d;
-            },
+            }
         }
     }
     for i in 1..n {
