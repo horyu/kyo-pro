@@ -13,30 +13,24 @@ fn main() {
     input! {
         n: usize,
     };
-    let mut hm = HashMap::new();
-    let mut g = vec![];
-    for _ in 0..n {
-        input! {m: usize, ppee: [(usize, usize); m]};
-        for (p, e) in ppee.iter().copied() {
-            hm.entry(p).or_insert_with(Vec::new).push(e);
-        }
-        g.push(ppee);
-    }
-    for vv in hm.values_mut() {
-        vv.sort_unstable();
-        vv.reverse();
-    }
-    let mut rs = 1usize;
-    for ppee in g {
-        // eprintln!("{:?}", &ppee);
-        if ppee.into_iter().any(|(p, e)| {
-            let vv = hm.get(&p).unwrap();
-            vv[0] == e && vv.get(1).copied().unwrap_or_default() < e
-        }) {
-            // dbg!(1);
-            rs += 1;
+    let mut mm = btreemultimap::BTreeMultiMap::new();
+    for i in 0..n {
+        input! {
+            m: usize,
+            ppee: [(usize, usize); m],
+        };
+        for (p, e) in ppee {
+            mm.insert(p, (e, i));
         }
     }
-    rs = rs.min(n);
+    let mut hs = HashSet::new();
+    for (_, eeii) in mm {
+        let eeii = eeii.into_iter().max_set_by_key(|ei| ei.0);
+        if eeii.len() == 1 {
+            hs.insert(eeii[0].1);
+        }
+    }
+    // 素因数の最大値を持つ要素数 + 削除しても影響がない要素数
+    let rs = hs.len() + usize::from(n != hs.len());
     println!("{rs}");
 }
