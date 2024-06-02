@@ -12,7 +12,10 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aa: [isize; n],
     };
-    // println!("{rs}");
+    let cumsum = aa.iter().copied().cumsum::<isize>().collect_vec();
+    let min = cumsum.iter().copied().min().unwrap();
+    let rs = cumsum[n - 1] + min.is_negative().then(|| -min).unwrap_or_default();
+    println!("{rs}");
 }
