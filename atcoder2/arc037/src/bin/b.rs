@@ -15,6 +15,34 @@ fn main() {
         m: usize,
         uuvv: [(Usize1, Usize1); m],
     };
+    let mut dsu = ac_library::Dsu::new(n);
+    for (u, v) in uuvv.iter().copied() {
+        dsu.merge(u, v);
+    }
+    let mut mm = btreemultimap::BTreeMultiMap::new();
+    for (i, (u, _)) in uuvv.iter().copied().enumerate() {
+        mm.insert(dsu.leader(u), i);
+    }
+    let mut uf = UnionFind::new(n);
+    let mut rs = dsu.groups().len();
+    for (_, ii) in mm {
+        if ii.into_iter().any(|i| {
+            let (u, v) = uuvv[i];
+            !uf.union(u, v)
+        }) {
+            rs -= 1;
+        }
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        uuvv: [(Usize1, Usize1); m],
+    };
     let mut uf = UnionFind::new(n);
     let mut ng = HashSet::new();
     for (u, v) in uuvv {
