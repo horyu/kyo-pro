@@ -18,26 +18,25 @@ fn main() {
         q: usize,
         xx: [Usize1; q],
     };
+    // 全ての都市 n + 集約した発電所 1 で考える
     let uuvv = uuvv
         .into_iter()
         .map(|(u, v)| (u.min(n), v.min(n)))
         .collect_vec();
+    let xhs = xx.iter().copied().collect::<HashSet<_>>();
 
     let mut dsu = ac_library::Dsu::new(n + 1);
-    let xx_hs: HashSet<usize> = xx.clone().into_iter().collect();
-    for (i, &(u, v)) in uuvv.iter().enumerate() {
-        if xx_hs.contains(&i) {
-            continue;
+    for (i, (u, v)) in uuvv.iter().copied().enumerate() {
+        if !xhs.contains(&i) {
+            dsu.merge(u, v);
         }
+    }
+    let mut rrss = vec![];
+    for x in xx.into_iter().rev() {
+        rrss.push(dsu.size(n) - 1);
+        let (u, v) = uuvv[x];
         dsu.merge(u, v);
     }
-
-    let mut rs = vec![0; q];
-    for qq in (0..q).rev() {
-        rs[qq] = dsu.size(n) - 1;
-        let (u, v) = uuvv[xx[qq]];
-        dsu.merge(u, v);
-    }
-    let rs = rs.into_iter().join("\n");
+    let rs = rrss.into_iter().rev().join("\n");
     println!("{rs}");
 }
