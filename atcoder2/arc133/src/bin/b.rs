@@ -16,24 +16,24 @@ fn main() {
         qq: [usize; n],
     };
     // https://atcoder.jp/contests/arc133/editorial/3283
-    let mut pos = vec![0; n + 1];
-    for (i, q) in qq.iter().copied().enumerate() {
-        pos[q] = i;
+    let mut q2j = vec![0; n + 1];
+    for (j, q) in qq.iter().copied().enumerate() {
+        q2j[q] = j;
     }
-    let mut z = vec![1usize << 40; n];
+    let mut ww = vec![1usize << 40; n];
     for p in pp.iter().copied() {
         let mut vv = vec![];
         for j in (p..=n).step_by(p) {
-            vv.push(pos[j]);
+            vv.push(q2j[j]);
         }
         vv.sort_unstable();
         vv.reverse();
         for v in vv {
-            let index = z.partition_point(|&x| x < v);
-            // eprintln!("{p}: {} {} {}", v, index, z[index]);
-            z[index] = v;
+            let index = ww.partition_point(|&w| w < v);
+            // eprintln!("{p}: {} {} {}", v, index, ww[index]);
+            ww[index] = v;
         }
     }
-    let rs = z.partition_point(|&x| x < 1usize << 40);
+    let rs = ww.partition_point(|&w| w < 1usize << 40);
     println!("{rs}");
 }
