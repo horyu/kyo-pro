@@ -14,18 +14,14 @@ fn main() {
         n: usize,
         ss: [Chars; n],
     };
-    let mut ss = ss
-        .into_iter()
-        .map(|s| s.into_iter().map(|c| c == 'o').collect_vec())
-        .chain([vec![true; n]])
-        .collect_vec();
     let mut rs = 0;
-    for i in 0..n {
-        if let Some(j) = ss[i].iter().copied().rposition(|tf| !tf) {
+    let mut rr = n;
+    for s in ss {
+        if let Some(r) = s[..rr].iter().copied().rposition(|c| c == '.') {
             rs += 1;
-            for jj in j..n {
-                ss[i + 1][jj] = true;
-            }
+            rr = r;
+        } else {
+            rr = n;
         }
     }
     println!("{rs}");
