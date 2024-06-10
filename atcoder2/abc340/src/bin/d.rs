@@ -12,7 +12,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabbxx: [(usize, usize, Usize1); n - 1],
     };
-    // println!("{rs}");
+    let mut bh = BinaryHeap::new();
+    bh.push((R(0), 0));
+    let mut poped = vec![false; n];
+    while let Some((R(crr), pos)) = bh.pop() {
+        if poped[pos] {
+            continue;
+        }
+        poped[pos] = true;
+        if pos == n - 1 {
+            println!("{crr}");
+            return;
+        }
+        let (a, b, x) = aabbxx[pos];
+        bh.push((R(crr + a), pos + 1));
+        bh.push((R(crr + b), x));
+    }
 }
