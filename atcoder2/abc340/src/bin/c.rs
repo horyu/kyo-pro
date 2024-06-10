@@ -12,7 +12,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut btm = BTreeMap::new();
+    btm.insert(n, 1);
+    let mut rs = 0usize;
+    while let Some((k, v)) = btm.pop_last() {
+        rs += k * v;
+        for kk in [k / 2, k.div_ceil(2)] {
+            if 1 < kk {
+                *btm.entry(kk).or_insert(0) += v;
+            }
+        }
+    }
+    println!("{rs}");
 }
