@@ -15,7 +15,8 @@ fn main() {
         n: usize,
         k: usize,
     };
-    let comb = Combination::new(401010, 1000000007);
+    // https://blog.hamayanhamayan.com/entry/2020/02/24/092051
+    let comb = Combination::new(2e5 as usize * 2 + 10, 1000000007);
     let mut rs = ModInt1000000007::new(0);
     for i in 0..(n.min(k + 1)) {
         rs += comb.get(n, i) * comb.h(n - i, i);
