@@ -11,42 +11,37 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        xyz: [usize; 3],
+        x: usize,
+        y: usize,
+        z: usize,
         k: usize,
+        mut aa: [usize; x],
+        mut bb: [usize; y],
+        mut cc: [usize; z],
     };
-    let www = xyz
-        .iter()
-        .copied()
-        .map(|n| {
-            input! { mut ww: [usize; n] };
-            ww.sort_unstable();
-            ww.reverse();
-            ww
-        })
-        .collect_vec();
-
-    let f =
-        |ijk: &[usize]| -> usize { izip!(&www, ijk).fold(0, |acc, (ww, &index)| acc + ww[index]) };
-
+    aa.sort_unstable_by_key(|&a| R(a));
+    bb.sort_unstable_by_key(|&b| R(b));
+    cc.sort_unstable_by_key(|&c| R(c));
     let mut bh = BinaryHeap::new();
-    bh.push((f(&[0; 3]), [0; 3]));
     let mut pushed = HashSet::new();
-    pushed.insert([0; 3]);
+    bh.push((aa[0] + bb[0] + cc[0], 0, 0, 0));
+    pushed.insert((0, 0, 0));
 
-    let mut rs = vec![];
-    while rs.len() < k {
-        let (v, mut ijk) = bh.pop().unwrap();
-        rs.push(v);
-
-        for index in 0..3 {
-            ijk[index] += 1;
-            if ijk[index] < xyz[index] && pushed.insert(ijk) {
-                bh.push((f(&ijk), ijk));
+    let mut rrss = Vec::new();
+    while let Some((s, ia, ib, ic)) = bh.pop() {
+        rrss.push(s);
+        if rrss.len() == k {
+            break;
+        }
+        for &(da, db, dc) in &[(1, 0, 0), (0, 1, 0), (0, 0, 1)] {
+            let ja = ia + da;
+            let jb = ib + db;
+            let jc = ic + dc;
+            if ja < x && jb < y && jc < z && pushed.insert((ja, jb, jc)) {
+                bh.push((aa[ja] + bb[jb] + cc[jc], ja, jb, jc));
             }
-            ijk[index] -= 1;
         }
     }
-
-    let rs = rs.iter().join("\n");
+    let rs = rrss.iter().join("\n");
     println!("{rs}");
 }
