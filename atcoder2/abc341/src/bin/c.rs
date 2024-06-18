@@ -11,8 +11,48 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
+        h: usize,
+        w: usize,
         n: usize,
-        aa: [usize; n],
+        t: Chars,
+        ss: [Chars; h],
     };
-    // println!("{rs}");
+    let mut ng = vec![vec![true; w + 2]; h + 2];
+    for (i, s) in ss.into_iter().enumerate() {
+        for (j, c) in s.into_iter().enumerate() {
+            ng[i + 1][j + 1] = c == '#';
+        }
+    }
+    let mut rs = 0;
+    for i in 1..=h {
+        'outer: for j in 1..=w {
+            if ng[i][j] {
+                continue;
+            }
+            let mut ii = i;
+            let mut jj = j;
+            for tc in t.iter().copied() {
+                match tc {
+                    'L' => {
+                        jj -= 1;
+                    }
+                    'R' => {
+                        jj += 1;
+                    }
+                    'U' => {
+                        ii -= 1;
+                    }
+                    'D' => {
+                        ii += 1;
+                    }
+                    _ => unreachable!(),
+                }
+                if ng[ii][jj] {
+                    continue 'outer;
+                }
+            }
+            rs += 1;
+        }
+    }
+    println!("{rs}");
 }
