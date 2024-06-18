@@ -16,6 +16,7 @@ fn main() {
         k: usize,
         uuvvww: [(Usize1, Usize1, usize); m],
     };
+    // https://wosugi.hatenablog.com/entry/20090711/1248620290
     let mut rs = usize::MAX;
     'outer: for jj in (0..m).combinations(n - 1) {
         let mut uf = UnionFind::new(n);
