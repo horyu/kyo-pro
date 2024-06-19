@@ -11,25 +11,16 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        a: usize,
-        b: usize,
-        c: usize,
+        n: isize,
+        a: isize,
+        b: isize,
+        c: isize,
     };
-    let mut rs = !0usize;
-    let max = 9999;
-    for i in 0..=max {
-        let ai = a * i;
-        if n < ai {
-            break;
-        }
-        for j in 0..=(max - i) {
-            let aibj = ai + b * j;
-            if n < aibj {
-                break;
-            }
-            let k = (n - aibj) / c;
-            if i + j + k <= max && aibj + c * k == n {
+    let mut rs = 10000;
+    for i in (0..=(n / a).min(9999)).rev() {
+        for j in (0..=((n - a * i) / b).min(9999)).rev() {
+            let k = (n - a * i - b * j) / c;
+            if a * i + b * j + c * k == n {
                 rs = rs.min(i + j + k);
             }
         }
