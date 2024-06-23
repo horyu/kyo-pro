@@ -14,15 +14,17 @@ fn main() {
         n: usize,
         s: Chars,
     };
+    // https://atcoder.jp/contests/abc310/editorial/6784
     let mut rs = 0usize;
-    let mut cc = [0; 2];
+    let mut zero = 0;
+    let mut one = 0;
     for c in s {
         if c == '0' {
-            cc = [1, cc[0] + cc[1]];
+            (zero, one) = (1, zero + one);
         } else {
-            cc = [cc[1], cc[0] + 1];
+            (zero, one) = (one, zero + 1);
         }
-        rs += cc[1];
+        rs += one;
     }
     println!("{rs}");
 }
