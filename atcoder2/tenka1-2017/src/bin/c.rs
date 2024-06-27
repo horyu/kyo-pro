@@ -13,17 +13,18 @@ fn main() {
     input! {
         n: isize,
     };
-    // 4/n = 1/x + 1/y + 1/z
-    // 4xyz = n(xy + yz + zx)
-    // z(4xy - nx - ny) = nxy
-    // z = nxy/(4xy - nx - ny)
-    for x in 1..=3500 {
-        for y in 1..=3500 {
-            if let Some(z) = (n * x * y).checked_div(4 * x * y - n * x - n * y) {
-                if (1..=3500).contains(&z) && 4 * x * y * z == n * (x * y + y * z + z * x) {
-                    println!("{x} {y} {z}");
-                    return;
-                }
+    // 4/N=1/a+1/b+1/c
+    // 4abc = N(bc+ac+ab)
+    // c(4ab-Nb-Na) = Nab
+    // c = Nab/(4ab-Nb-Na)
+    for a in 1..=3500 {
+        for b in 1..=3500 {
+            let c = (n * a * b)
+                .checked_div(4 * a * b - n * b - n * a)
+                .unwrap_or_default();
+            if 0 < c && 4 * a * b * c == n * (b * c + a * c + a * b) {
+                println!("{a} {b} {c}");
+                return;
             }
         }
     }
