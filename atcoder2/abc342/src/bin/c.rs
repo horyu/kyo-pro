@@ -12,7 +12,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Chars,
+        q: usize,
+        xxyy: [(char, char); q],
     };
-    // println!("{rs}");
+    let mut hm = HashMap::new();
+    for c in 'a'..='z' {
+        hm.insert(c, c);
+    }
+    for (x, y) in xxyy {
+        for (&k, v) in hm.iter_mut() {
+            if x == *v {
+                *v = y;
+            }
+        }
+    }
+    let rs = s
+        .into_iter()
+        .map(|c| hm.get(&c).copied().unwrap_or(c))
+        .join("");
+    println!("{rs}");
 }
