@@ -15,11 +15,8 @@ fn main() {
         k: usize,
         ttyy: [(usize, isize); n],
     };
-    // a
-    // saa
-    // sa
-    // saaa
-    let mut vv = vec![(0isize, vec![])];
+    // https://atcoder.jp/contests/abc249/editorial/3789
+    let mut vv = vec![(0, vec![])];
     for (t, y) in ttyy {
         if t == 1 {
             vv.push((y, vec![]));
