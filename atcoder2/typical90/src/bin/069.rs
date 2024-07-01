@@ -12,7 +12,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
     };
-    // println!("{rs}");
+    const MOD: usize = 1e9 as usize + 7;
+    let mut rs = k;
+    if 2 <= n {
+        rs *= k.saturating_sub(1);
+        rs %= MOD;
+    }
+    if 3 <= n {
+        rs *= mod_pow(k.saturating_sub(2), n - 2, MOD);
+        rs %= MOD;
+    }
+    println!("{rs}");
+}
+
+fn mod_pow(mut x: usize, mut n: usize, m: usize) -> usize {
+    x %= m;
+    let mut ans = 1;
+    while n != 0 {
+        if n.is_odd() {
+            ans = ans * x % m;
+        }
+        x = x * x % m;
+        n >>= 1;
+    }
+    ans
 }
