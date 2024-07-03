@@ -19,8 +19,6 @@ fn main() {
     // 左から i 個取る
     for i in 0..=k.min(n - 1) {
         let xx = vv[..i].iter().copied().collect_vec();
-        // eprintln!("[{}]", xx.iter().join(" "));
-        // eprintln!("[{}] 0..={}", xx.iter().join(" "), k - i);
         // 右から j 個取る
         for j in 0..=(k - i) {
             let mut yy = xx.clone();
