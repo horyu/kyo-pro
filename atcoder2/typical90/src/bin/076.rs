@@ -14,5 +14,26 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let sum = aa.iter().sum::<usize>();
+    let target = sum / 10;
+    if target * 10 != sum {
+        println!("No");
+        return;
+    }
+    let aa = aa.repeat(2);
+    // 尺取法
+    let mut l = 0;
+    let mut crr = 0;
+    for r in 0..(2 * n) {
+        crr += aa[r];
+        while target < crr {
+            crr -= aa[l];
+            l += 1;
+        }
+        if crr == target {
+            println!("Yes");
+            return;
+        }
+    }
+    println!("No");
 }
