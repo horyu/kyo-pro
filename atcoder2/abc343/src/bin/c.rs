@@ -12,7 +12,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
     };
-    // println!("{rs}");
+    for i in (1..=n.nth_root(3)).rev() {
+        let x = i.pow(3);
+        let mut tmp = x;
+        let mut vv = vec![];
+        while 0 < tmp {
+            vv.push((tmp % 10) as u8);
+            tmp /= 10;
+        }
+        let ww = vv.iter().copied().rev().collect_vec();
+        if vv == ww {
+            println!("{x}");
+            return;
+        }
+    }
 }
