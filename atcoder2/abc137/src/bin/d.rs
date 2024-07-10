@@ -13,16 +13,16 @@ fn main() {
     input! {
         n: usize,
         m: usize,
-        aabb: [(usize, usize); n],
+        aabb: [(Usize1, usize); n],
     };
-    let mut a_to_bb = vec![vec![]; 1e5 as usize];
+    let mut a2bb = vec![vec![]; 1e5 as usize];
     for (a, b) in aabb {
-        a_to_bb[a - 1].push(b);
+        a2bb[a].push(b);
     }
     let mut bh = BinaryHeap::new();
 
     let mut rs = 0usize;
-    for aa in a_to_bb.into_iter().take(m) {
+    for aa in a2bb.into_iter().take(m) {
         bh.extend(aa);
 
         if let Some(b) = bh.pop() {
