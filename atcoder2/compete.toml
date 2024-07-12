@@ -132,7 +132,7 @@ path = "./{{ contest }}"
 # Defaults to `"dev"`.
 #profile = "dev"
 
-[submit.transpile]
+[submit]
 kind = "command"
 args = ["cargo", "executable-payload", "--bin", "{{ bin_name }}"]
 language_id = "5054"
