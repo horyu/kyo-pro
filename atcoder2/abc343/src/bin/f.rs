@@ -9,54 +9,59 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
+// https://atcoder.jp/contests/abc343/submissions/52197555
+use ac_library::{Monoid, Segtree};
+type U4 = ((usize, usize), (usize, usize));
+struct M;
+impl Monoid for M {
+    type S = U4;
+
+    fn identity() -> Self::S {
+        ((0, 0), (0, 0))
+    }
+
+    fn binary_operation(a: &Self::S, b: &Self::S) -> Self::S {
+        let (p, q);
+        if a.0 .0 == b.0 .0 {
+            p = (a.0 .0, a.0 .1 + b.0 .1);
+            if a.1 .0 == b.1 .0 {
+                q = (a.1 .0, a.1 .1 + b.1 .1);
+            } else {
+                q = a.1.max(b.1);
+            }
+        } else if b.0 < a.0 {
+            p = a.0;
+            if a.1 .0 == b.0 .0 {
+                q = (a.1 .0, a.1 .1 + b.0 .1);
+            } else {
+                q = a.1.max(b.0);
+            }
+        } else {
+            p = b.0;
+            if a.0 .0 == b.1 .0 {
+                q = (a.0 .0, a.0 .1 + b.1 .1);
+            } else {
+                q = a.0.max(b.1);
+            }
+        }
+        (p, q)
+    }
+}
+
 fn main() {
     input! {
         n: usize,
         q: usize,
-        mut aa: [usize; n],
-        ttxxyy: [(usize, usize, usize); q],
+        aa: [usize; n],
+        ttxxyy: [(usize, Usize1, usize); q],
     };
-    let sqrt_n = n.sqrt();
-    let mut bbttmm = vec![BTreeMap::<usize, usize>::default(); sqrt_n + 2];
-    for (i, a) in aa.iter().copied().enumerate() {
-        *bbttmm[i / sqrt_n].entry(a).or_default() += 1usize;
-    }
-
+    let mut st = Segtree::<M>::from_iter(aa.iter().copied().map(|a| ((a, 1), (0, 0))));
     for (t, x, y) in ttxxyy {
         if t == 1 {
-            let p = x - 1;
-            // 減らす
-            let old_a = aa[p];
-            let e = bbttmm[p / sqrt_n].get_mut(&old_a).unwrap();
-            *e -= 1;
-            if *e == 0 {
-                bbttmm[p / sqrt_n].remove(&old_a);
-            }
-            // 増やす
-            let new_a = y;
-            aa[p] = new_a;
-            *bbttmm[p / sqrt_n].entry(new_a).or_default() += 1;
-            continue;
+            st.set(x, ((y, 1), (0, 0)))
+        } else {
+            let rs = st.prod(x..y).1 .1;
+            println!("{rs}");
         }
-
-        let l = x - 1;
-        let r = y - 1;
-        // aa[l..=r] における2番目に大きい値の個数を求める
-        let mut btm = BTreeMap::<usize, usize>::new();
-        let mut i = l;
-        while i <= r {
-            if i % sqrt_n == 0 && i + sqrt_n - 1 <= r {
-                // 区間の左端が sqrt_n で割り切れる場合
-                for (&k, &cnt) in bbttmm[i / sqrt_n].iter().rev().take(2) {
-                    *btm.entry(k).or_default() += cnt;
-                }
-                i += sqrt_n;
-            } else {
-                *btm.entry(aa[i]).or_default() += 1;
-                i += 1;
-            }
-        }
-        let rs = btm.into_iter().rev().nth(1).unwrap_or_default().1;
-        println!("{rs}");
     }
 }
