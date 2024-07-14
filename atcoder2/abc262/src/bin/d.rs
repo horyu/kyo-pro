@@ -16,6 +16,29 @@ fn main() {
         aa: [usize; n],
     };
     let mut rs = ModInt998244353::default();
+    for k in 1..=n {
+        let mut dp = vec![vec![ModInt998244353::default(); k]; k + 1];
+        dp[0][0] = 1.into();
+        for a in aa.iter().copied() {
+            for i in (0..k).rev() {
+                for j in 0..k {
+                    let tmp = dp[i][j];
+                    dp[i + 1][(j + a) % k] += tmp;
+                }
+            }
+        }
+        rs += dp[k][0];
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main3() {
+    input! {
+        n: usize,
+        aa: [usize; n],
+    };
+    let mut rs = ModInt998244353::default();
     for size in 1..=n {
         let mut hm = HashMap::<_, _>::from_iter([((0, 0), ModInt998244353::new(1))]);
         for a in aa.iter().copied() {
