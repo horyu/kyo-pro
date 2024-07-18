@@ -13,6 +13,23 @@ fn main() {
     input! {
         n: usize,
         aa: [usize; n],
+        m: usize,
+        bb: [usize; m],
+        l: usize,
+        cc: [usize; l],
+        q: usize,
+        xx: [usize; q],
     };
-    // println!("{rs}");
+    let hs: HashSet<_> = aa
+        .iter()
+        .copied()
+        .cartesian_product(bb.iter().copied())
+        .cartesian_product(cc.iter().copied())
+        .map(|((a, b), c)| a + b + c)
+        .collect();
+    for x in xx {
+        let tf = hs.contains(&x);
+        let rs = ["No", "Yes"][tf as usize];
+        println!("{rs}");
+    }
 }
