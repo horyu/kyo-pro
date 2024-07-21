@@ -15,6 +15,38 @@ fn main() {
         x: usize,
         m: usize,
     };
+    // ダブリング
+    let nlog2 = n.ilog2() as usize;
+    let mut dp1 = vec![vec![0; m]; nlog2 + 1];
+    let mut dp2 = dp1.clone();
+    for j in 0..m {
+        dp1[0][j] = j * j % m;
+        dp2[0][j] = j;
+    }
+    for i in 1..=nlog2 {
+        for j in 0..m {
+            dp1[i][j] = dp1[i - 1][dp1[i - 1][j]];
+            dp2[i][j] = dp2[i - 1][j] + dp2[i - 1][dp1[i - 1][j]];
+        }
+    }
+    let mut a = x;
+    let mut rs = 0;
+    for i in 0..=nlog2 {
+        if 0 < n & (1 << i) {
+            rs += dp2[i][a];
+            a = dp1[i][a];
+        }
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        x: usize,
+        m: usize,
+    };
     let mut a = x;
     let mut ss = vec![0];
     let mut a_to_i = vec![!0usize; m];
