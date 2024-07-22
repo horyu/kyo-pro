@@ -11,8 +11,38 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
+        t: Chars,
         n: usize,
-        aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut sss = vec![];
+    for _ in 0..n {
+        input! {
+            a: usize,
+            ss: [Chars; a],
+        };
+        sss.push(ss);
+    }
+    let tlen = t.len();
+    let mut btm = BTreeMap::new();
+    btm.insert(0usize, 0usize);
+    for ss in sss {
+        let mut new_btm = btm.clone();
+        for (k, v) in btm {
+            if tlen <= k {
+                continue;
+            }
+            for s in &ss {
+                if izip!(&t[k..], s).all(|(&x, &y)| x == y) {
+                    let e = new_btm.entry(k + s.len()).or_insert(!0);
+                    *e = (*e).min(v + 1);
+                }
+            }
+        }
+        btm = new_btm;
+    }
+    if let Some(rs) = btm.get(&tlen) {
+        println!("{rs}");
+    } else {
+        println!("-1");
+    }
 }
