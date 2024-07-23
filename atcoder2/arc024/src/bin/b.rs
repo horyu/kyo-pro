@@ -14,6 +14,7 @@ fn main() {
         n: usize,
         mut cc: [usize; n],
     };
+    // https://img.atcoder.jp/arc024/editorial.pdf#page=13&zoom=auto,-16,595
     if cc.iter().all_equal() {
         println!("-1");
         return;
