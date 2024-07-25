@@ -14,21 +14,20 @@ fn main() {
         n: usize,
         hh: [usize; n],
     };
-    let mut ll = vec![0usize; n];
-    let mut rr = vec![0usize; n];
-    for i in 0..(n - 1) {
-        if hh[i] < hh[i + 1] {
+    // 左から右に見ていく
+    let mut ll = vec![0; n];
+    for (i, (hl, hr)) in hh.iter().copied().tuple_windows().enumerate() {
+        if hl < hr {
             ll[i + 1] = ll[i] + 1;
         }
     }
-    for i in (0..(n - 1)).rev() {
-        if hh[i] > hh[i + 1] {
-            rr[i] = rr[i + 1] + 1;
+    // 右から左に見ていく
+    let mut rr = vec![0; n];
+    for (i, (hr, hl)) in hh.iter().copied().rev().tuple_windows().enumerate() {
+        if hr < hl {
+            rr[n - 2 - i] = rr[n - 1 - i] + 1;
         }
     }
-    // for i in 0..n {
-    //     eprintln!("{i}:{} {}", ll[i], rr[i]);
-    // }
-    let rs = izip!(ll, rr).map(|(l, r)| l + r + 1).max().unwrap();
+    let rs = 1 + izip!(ll, rr).map(|(l, r)| l + r).max().unwrap();
     println!("{rs}");
 }
