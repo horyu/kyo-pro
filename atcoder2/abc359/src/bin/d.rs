@@ -18,6 +18,7 @@ fn main() {
     };
     // dp[i][j] = k+i文字目まで見て、末尾k文字がjであるような文字列の個数
     let mut dp = vec![vec![ModInt998244353::default(); 1 << k]; n + 1 - k];
+    // ttt = ['A', 'B']^k
     let ttt = (0..k)
         .map(|_| ['A', 'B'])
         .multi_cartesian_product()
@@ -37,6 +38,7 @@ fn main() {
             if ngs.contains(&j) {
                 continue;
             }
+            // A:0 B:1 として捉える
             let sscc = if s[i] == '?' {
                 vec![0, 1]
             } else {
