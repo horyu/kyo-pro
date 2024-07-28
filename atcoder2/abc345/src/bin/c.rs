@@ -11,8 +11,14 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    let counts = s.iter().copied().counts();
+    let mut vv = s.len();
+    let mut rs = usize::from(counts.values().any(|&v| 2 <= v));
+    for (_k, v) in counts {
+        vv -= v;
+        rs += v * vv;
+    }
+    println!("{rs}");
 }
