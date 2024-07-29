@@ -18,6 +18,7 @@ fn main() {
     let aa = aabb.iter().map(|ab| ab.0).sorted_unstable().collect_vec();
     let bb = aabb.iter().map(|ab| ab.1).sorted_unstable().collect_vec();
     if n.is_even() {
+        // 0.5刻み
         let l = aa[n / 2] + aa[n / 2 - 1];
         let r = bb[n / 2] + bb[n / 2 - 1];
         println!("{}", r - l + 1);
