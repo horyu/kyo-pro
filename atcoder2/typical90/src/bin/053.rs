@@ -13,6 +13,7 @@ fn main() {
     let mut stdin =
         proconio::source::line::LineSource::new(std::io::BufReader::new(std::io::stdin()));
     macro_rules! input(($($tt:tt)*) => (proconio::input!(from &mut stdin, $($tt)*)));
+    // https://x.com/e869120/status/1398827248698810369
     input! {
         t: usize,
     };
