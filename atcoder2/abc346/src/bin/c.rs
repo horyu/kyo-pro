@@ -12,7 +12,14 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        k: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut rs = (1 + k) * k / 2;
+    for a in aa.into_iter().unique() {
+        if a <= k {
+            rs -= a;
+        }
+    }
+    println!("{rs}");
 }
