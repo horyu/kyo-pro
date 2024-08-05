@@ -18,11 +18,13 @@ fn main() {
         cx: i128,
         cy: i128,
     };
+    // 終点 cx, cy を原点に移動する
     ax -= cx;
     ay -= cy;
     bx -= cx;
     by -= cy;
     fn f(mut ax: i128, mut ay: i128, mut bx: i128, mut by: i128) -> i128 {
+        // 第１象限に捉え直す
         if bx.is_negative() {
             ax = -ax;
             bx = -bx;
@@ -31,6 +33,7 @@ fn main() {
             ay = -ay;
             by = -by;
         }
+        // y=0 なら x=0 に捉え直す
         if by == 0 {
             (ax, ay) = (ay, ax);
             (bx, by) = (by, bx);
