@@ -11,8 +11,31 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        m: usize,
+        ttaaxx: [(usize, Usize1, usize); m],
     };
-    // println!("{rs}");
+    let mut ii = HashSet::<usize>::from_iter(0..h);
+    let mut jj = HashSet::<usize>::from_iter(0..w);
+    let mut counter = counter::Counter::<_>::new();
+    counter[&0] = h * w;
+    for (t, a, x) in ttaaxx.into_iter().rev() {
+        if t == 1 {
+            if ii.remove(&a) {
+                counter[&x] += jj.len();
+                counter[&0] -= jj.len();
+            }
+        } else {
+            if jj.remove(&a) {
+                counter[&x] += ii.len();
+                counter[&0] -= ii.len();
+            }
+        }
+    }
+    counter.retain(|_k, v| 0 < *v);
+    println!("{}", counter.len());
+    for (k, v) in counter.into_iter().sorted_unstable_by_key(|kv| kv.0) {
+        println!("{k} {v}");
+    }
 }
