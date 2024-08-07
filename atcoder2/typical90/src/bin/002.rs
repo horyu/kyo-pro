@@ -13,6 +13,32 @@ fn main() {
     input! {
         n: usize,
     };
+    for bits in 0..(1 << n) {
+        let mut score = 0;
+        let mut s = String::with_capacity(n);
+        for i in (0..n).rev() {
+            if bits & (1 << i) == 0 {
+                score += 1;
+                s.push('(');
+            } else {
+                score -= 1;
+                s.push(')');
+            }
+            if score < 0 {
+                break;
+            }
+        }
+        if score == 0 {
+            println!("{s}");
+        }
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+    };
     // https://drken1215.hatenablog.com/entry/2021/06/12/151200
     for cc in (0..n).map(|_| ['(', ')']).multi_cartesian_product() {
         let mut score = 0;
