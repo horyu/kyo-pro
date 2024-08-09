@@ -27,7 +27,7 @@ fn main() {
         }
     }
     for (i, (s, sl)) in ww.iter().copied().enumerate() {
-        let hm = pathfinding::prelude::dijkstra_all(&s, |&f| g[f].clone());
+        let hm = pathfinding::prelude::dijkstra_all(&s, |&f| g[f].iter().copied());
         for (t, tl) in ww[(i + 1)..].iter().copied() {
             if let Some((_, l)) = hm.get(&t).copied() {
                 rs = rs.min(sl + l + tl);
