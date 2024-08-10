@@ -12,7 +12,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        a: usize,
+        b: usize,
+        dd: [Usize1; n],
     };
-    // println!("{rs}");
+    let ab = a + b;
+    let mut dd = dd
+        .into_iter()
+        .map(|d| d % ab)
+        .sorted_unstable()
+        .collect_vec();
+    for i in 0..n {
+        let j = (i + n - 1) % n;
+        let diff = dd[i].abs_diff(dd[j]);
+        if diff < a {
+            println!("Yes");
+            return;
+        }
+        dd[i] += ab;
+    }
+    println!("No");
 }
