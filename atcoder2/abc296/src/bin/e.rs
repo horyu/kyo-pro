@@ -14,6 +14,7 @@ fn main() {
         n: usize,
         mut aa: [Usize1; n],
     };
+    // https://atcoder.jp/contests/abc296/editorial/6135
     for _ in 0..30 {
         aa = aa.iter().copied().map(|a| aa[a]).collect_vec();
     }
