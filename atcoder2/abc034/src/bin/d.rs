@@ -15,9 +15,11 @@ fn main() {
         k: usize,
         wwpp: [(f64, f64); n],
     };
+    // https://img.atcoder.jp/abc034/editorial.pdf
     let mut ok = 0.0;
     let mut ng = 100.1;
     for i in 0..10000 {
+        // 目標濃度 m に対して過不足を求め、k 個選択する
         let m = (ok + ng) / 2.0;
         let sum = wwpp
             .iter()
