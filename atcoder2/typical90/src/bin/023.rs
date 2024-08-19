@@ -15,6 +15,7 @@ fn main() {
         w: usize,
         ccc: [Chars; h],
     };
+    // https://x.com/e869120/status/1386138990361726978
     // https://atcoder.jp/contests/typical90/submissions/21987422
     const MOD: usize = 1e9 as usize + 7;
     let mut dp = HashMap::new();
@@ -32,6 +33,7 @@ fn main() {
                     if j + 1 < w {
                         xx |= (1 << 1) | (1 << (w + 1));
                     }
+                    // 次に利用する状態として、現在位置から右に1マス進んだ位置を考える
                     *next.entry(xx >> 1).or_default() += way;
                 }
             }
@@ -41,6 +43,9 @@ fn main() {
             *w %= MOD;
         }
     }
+    // for k in dp.keys() {
+    //     eprintln!("{k:b}");
+    // }
     let rs = dp.values().sum::<usize>() % MOD;
     println!("{rs}");
 }
