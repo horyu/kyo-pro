@@ -15,6 +15,7 @@ fn main() {
         s: Chars,
         t: Chars,
     };
+    // https://atcoder.jp/contests/abc272/editorial/4980
     // https://atcoder.jp/contests/abc272/submissions/35720986
     let x = chain!(&s, &s, &['!'], &t, &t, &['~'],)
         .copied()
