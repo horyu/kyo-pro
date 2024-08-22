@@ -12,7 +12,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut dsu = ac_library::Dsu::new(n);
+    for (a, b) in aabb {
+        dsu.merge(a, b);
+    }
+    let mut rs = 0;
+    for vv in dsu.groups() {
+        let len = vv.len();
+        rs += len * len.saturating_sub(1) / 2;
+    }
+    rs -= m;
+    println!("{rs}");
 }
