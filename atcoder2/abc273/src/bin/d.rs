@@ -30,28 +30,36 @@ fn main() {
     for (d, l) in ddll {
         match d {
             'L' => {
-                if let Some(yoko) = yokos.get(&y) && let Some(&wall_x) = yoko.range(..x).next_back() {
+                if let Some(yoko) = yokos.get(&y)
+                    && let Some(&wall_x) = yoko.range(..x).next_back()
+                {
                     x = (wall_x + 1).max(x.saturating_sub(l));
                 } else {
                     x = x.saturating_sub(l);
                 }
             }
             'R' => {
-                if let Some(yoko) = yokos.get(&y) && let Some(&wall_x) = yoko.range(x..).next() {
+                if let Some(yoko) = yokos.get(&y)
+                    && let Some(&wall_x) = yoko.range(x..).next()
+                {
                     x = (wall_x - 1).min(x + l);
                 } else {
                     x = (x + l).min(w - 1);
                 }
             }
             'U' => {
-                if let Some(tate) = tates.get(&x) && let Some(&wall_y) = tate.range(..y).next_back() {
+                if let Some(tate) = tates.get(&x)
+                    && let Some(&wall_y) = tate.range(..y).next_back()
+                {
                     y = (wall_y + 1).max(y.saturating_sub(l));
                 } else {
                     y = y.saturating_sub(l);
                 }
             }
             _ => {
-                if let Some(tate) = tates.get(&x) && let Some(&wall_y) = tate.range(y..).next() {
+                if let Some(tate) = tates.get(&x)
+                    && let Some(&wall_y) = tate.range(y..).next()
+                {
                     y = (wall_y - 1).min(y + l);
                 } else {
                     y = (y + l).min(h - 1);

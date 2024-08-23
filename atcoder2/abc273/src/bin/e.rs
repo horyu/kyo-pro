@@ -13,38 +13,40 @@ fn main() {
     input! {
         q: usize,
     };
-    let mut rs = vec![];
-    let mut aa = vec![];
+    let mut vv = vec![];
+    // ppxx[i] = (クエリ処理前のppxxインデックス, クエリ処理後の整数列の末尾)
+    let mut ppxx = vec![];
     let mut cur = None;
     let mut hm = HashMap::new();
-    for i in 0..q {
+    for _ in 0..q {
         input! { s: String };
         match s.as_str() {
             "ADD" => {
                 input! {x: isize};
-                aa.push((cur, x));
-                cur = Some(aa.len() - 1);
+                ppxx.push((cur, x));
+                cur = Some(ppxx.len() - 1);
             }
             "DELETE" => {
                 if let Some(i) = cur {
-                    cur = aa[i].0;
+                    cur = ppxx[i].0;
                 }
             }
             "SAVE" => {
-                input! {y: isize};
+                input! {y: usize};
                 hm.insert(y, cur);
             }
             // LOAD
             _ => {
-                input! {z: isize};
+                input! {z: usize};
                 cur = hm.get(&z).copied().unwrap_or_default();
             }
         }
         if let Some(i) = cur {
-            rs.push(aa[i].1);
+            vv.push(ppxx[i].1);
         } else {
-            rs.push(-1)
+            vv.push(-1)
         }
     }
-    println!("{}", rs.into_iter().join(" "));
+    let rs = vv.into_iter().join(" ");
+    println!("{rs}");
 }
