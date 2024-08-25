@@ -11,8 +11,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        mut aaa: [[isize; w]; h],
+        bbb: [[isize; w]; h],
     };
-    // println!("{rs}");
+    let mut cnt = 0;
+    for i in 0..(h - 1) {
+        for j in 0..(w - 1) {
+            let diff = bbb[i][j] - aaa[i][j];
+            aaa[i][j] += diff;
+            aaa[i][j + 1] += diff;
+            aaa[i + 1][j] += diff;
+            aaa[i + 1][j + 1] += diff;
+
+            cnt += diff.abs();
+        }
+    }
+    let tf = aaa == bbb;
+    let rs = ["No", "Yes"][tf as usize];
+    println!("{rs}");
+    if tf {
+        println!("{cnt}");
+    }
 }
