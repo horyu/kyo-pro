@@ -16,10 +16,15 @@ fn main() {
         k: usize,
         m: usize,
     };
+    // rs = m^(k^n) % p
     let p = 998244353;
     if m % p == 0 {
         println!("0");
     } else {
+        // P は素数なのでフェルマーの小定理より
+        // m^(p−1) ≡ 1 (mod p)
+        // k^n = q*(p-1) + r とすると
+        // m^(k^n) ≡ m^(q*(p-1) + r) ≡ m^(q*(p-1)) * m^r ≡ 1^q * m^r (mod p)
         let r = mod_pow(k, n, p - 1);
         let rs = mod_pow(m, r, p);
         println!("{rs}");
