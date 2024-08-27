@@ -12,7 +12,10 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabb: [(usize, usize); n]
     };
-    // println!("{rs}");
+    let a_sum = aabb.iter().map(|&(a, _)| a).sum::<usize>();
+    let (a, b) = aabb.into_iter().max_by_key(|(a, b)| b - a).unwrap();
+    let rs = a_sum - a + b;
+    println!("{rs}");
 }
