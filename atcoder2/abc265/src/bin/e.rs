@@ -28,17 +28,13 @@ fn main() {
     hm.insert((0isize, 0isize), ModInt998244353::new(1));
     for _ in 0..n {
         let mut new_hm = HashMap::new();
-        for (&(qx, qy), v) in &hm {
+        for ((qx, qy), v) in hm {
             for &(dx, dy) in &ddd {
                 let xy = (qx + dx, qy + dy);
                 if hs.contains(&xy) {
                     continue;
                 }
-                if let Some(e) = new_hm.get_mut(&xy) {
-                    *e += v;
-                } else {
-                    new_hm.insert(xy, *v);
-                }
+                new_hm.entry(xy).and_modify(|e| *e += v).or_insert(v);
             }
         }
         hm = new_hm;
