@@ -33,7 +33,7 @@ fn main() {
             .count()
     };
 
-    let mut rs = std::isize::MAX;
+    let mut rs = isize::MAX;
     for (&xl, &xr) in xx.iter().tuple_combinations() {
         for (&yd, &yu) in yy.iter().tuple_combinations() {
             if is_ok(xl..=xr, yd..=yu) {

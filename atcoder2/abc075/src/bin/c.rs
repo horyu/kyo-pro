@@ -12,7 +12,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut rs = 0;
+    for i in 0..m {
+        let mut uf = UnionFind::new(n);
+        for (j, (a, b)) in aabb.iter().copied().enumerate() {
+            if i == j {
+                continue;
+            }
+            uf.union(a, b);
+        }
+        let (a, b) = aabb[i];
+        if uf.union(a, b) {
+            rs += 1;
+        }
+    }
+    println!("{rs}");
 }
