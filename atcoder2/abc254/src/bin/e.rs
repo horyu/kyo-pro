@@ -25,17 +25,14 @@ fn main() {
     for (x, k) in xxkk {
         let mut qq = VecDeque::new();
         let mut pushed = HashSet::new();
-        qq.push_back((x, k));
+        let mut rs = x + 1;
+        qq.push_back((x, 0));
         pushed.insert(x);
-        let mut rs = 0;
-        while let Some((qi, qk)) = qq.pop_front() {
-            rs += qi + 1;
-            if 0 == qk {
-                continue;
-            }
-            for i in g[qi].iter().copied() {
-                if pushed.insert(i) {
-                    qq.push_back((i, qk - 1));
+        while let Some((q, d)) = qq.pop_front() {
+            for i in g[q].iter().copied() {
+                if pushed.insert(i) && d < k {
+                    qq.push_back((i, d + 1));
+                    rs += i + 1;
                 }
             }
         }
