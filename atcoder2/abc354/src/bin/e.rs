@@ -12,7 +12,26 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabb: [(usize, usize); n],
     };
-    // println!("{rs}");
+    // https://atcoder.jp/contests/abc354/editorial/10034
+    // BitDP
+    let mut dp = vec![false; 1 << n];
+    for i in 1..(1 << n) {
+        let mut tf = false;
+        for j in 0..n {
+            for k in (j + 1)..n {
+                if ((i >> j) & 1) == 1 && (i >> k) & 1 == 1 {
+                    let (a, b) = aabb[j];
+                    let (c, d) = aabb[k];
+                    if (a == c || b == d) && !dp[i ^ (1 << j) ^ (1 << k)] {
+                        tf = true;
+                    }
+                }
+            }
+        }
+        dp[i] = tf;
+    }
+    let rs = ["Aoki", "Takahashi"][dp[(1 << n) - 1] as usize];
+    println!("{rs}");
 }
