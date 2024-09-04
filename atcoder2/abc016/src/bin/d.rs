@@ -27,6 +27,7 @@ fn main() {
 }
 
 // [2線分の交差判定手法 (2次元) - Qiita](https://qiita.com/zu_rin/items/e04fdec4e3dec6072104)
+// 直線に対してもう片方の線分の端点それぞれが逆の領域にあるかどうかで判定
 type P = (isize, isize);
 fn judge(a: P, b: P, c: P, d: P) -> bool {
     let s = (a.0 - b.0) * (c.1 - a.1) - (a.1 - b.1) * (c.0 - a.0);
