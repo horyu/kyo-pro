@@ -12,7 +12,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut x = vec![vec!['#']];
+    for _ in 0..n {
+        let len = x.len();
+        let mut new_x = vec![vec!['.'; len * 3]; len * 3];
+        for i in 0..3 {
+            for j in 0..3 {
+                if i == 1 && j == 1 {
+                    continue;
+                }
+                // [len*i..len*(i+1)][len*j..len*(j+1)]の区間をxで埋める
+                for ii in 0..len {
+                    for jj in 0..len {
+                        new_x[len * i + ii][len * j + jj] = x[ii][jj];
+                    }
+                }
+            }
+        }
+        x = new_x;
+    }
+    for x in x {
+        let rs = x.iter().join("");
+        println!("{rs}");
+    }
 }
