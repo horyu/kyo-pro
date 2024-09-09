@@ -13,24 +13,21 @@ fn main() {
     input! {
         n: usize,
         x: usize,
-        aa: [usize; n],
+        mut aa: [usize; n],
     };
+    aa.push(0);
     let mut rs = 0usize;
-    let mut bb = vec![];
-    for a in aa {
-        if x < a {
-            rs += a - x;
-            bb.push(x);
-        } else {
-            bb.push(a);
-        }
-    }
-    for i in 1..n {
-        let wa = bb[i - 1] + bb[i];
-        if x < wa {
-            let diff = wa - x;
-            bb[i] -= diff;
+    for i in 0..n {
+        let sum = aa[i] + aa[i + 1];
+        if x < sum {
+            let diff = sum - x;
             rs += diff;
+            if let Some(ar) = aa[i + 1].checked_sub(diff) {
+                aa[i + 1] = ar;
+            } else {
+                aa[i + 1] = 0;
+                // aa[i] 更新
+            }
         }
     }
     println!("{rs}");
