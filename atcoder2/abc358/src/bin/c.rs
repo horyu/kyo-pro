@@ -12,7 +12,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        ss: [Chars; n],
     };
-    // println!("{rs}");
+    let kk = ss
+        .into_iter()
+        .map(|s| {
+            s.into_iter()
+                .fold(0, |bit, c| (bit << 1) | (c == 'o') as usize)
+        })
+        .collect_vec();
+    for size in 1..=n {
+        for bits in kk.iter().copied().combinations(size) {
+            if (1 << m) - 1 == bits.iter().copied().fold(0, |acc, x| acc | x) {
+                println!("{size}");
+                return;
+            }
+        }
+    }
 }
