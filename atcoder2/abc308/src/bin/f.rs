@@ -13,24 +13,17 @@ fn main() {
     input! {
         n: usize,
         m: usize,
-        mut pp: [usize; n],
+        pp: [usize; n],
         ll: [usize; m],
         dd: [usize; m],
     };
-    pp.sort_unstable();
-    let mut lldd = izip!(ll, dd).sorted_unstable().collect::<VecDeque<_>>();
-    let mut rs = 0;
-    let mut bh = BinaryHeap::new();
-    for p in pp {
-        while let Some((l, d)) = lldd.front().copied() {
-            if l <= p {
-                lldd.pop_front();
-                bh.push(d);
-            } else {
-                break;
-            }
+    let mut bts = BTreeSet::from_iter(pp.iter().copied().enumerate().map(|(i, p)| (p, i)));
+    let mut rs = pp.iter().sum::<usize>();
+    for (d, l) in izip!(dd, ll).sorted_unstable().rev() {
+        if let Some(&pi) = bts.range((l, 0)..).next() {
+            bts.remove(&pi);
+            rs -= d;
         }
-        rs += p - bh.pop().unwrap_or_default();
     }
     println!("{rs}");
 }
