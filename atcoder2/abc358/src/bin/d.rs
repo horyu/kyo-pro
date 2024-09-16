@@ -12,7 +12,20 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        m: usize,
         aa: [usize; n],
+        bb: [usize; m],
     };
-    // println!("{rs}");
+    let mut bts = BTreeSet::from_iter(aa.into_iter().enumerate().map(|(i, a)| (a, i)));
+    let mut rs = 0;
+    for b in bb {
+        if let Some(&ai) = bts.range((b, 0)..).next() {
+            bts.remove(&ai);
+            rs += ai.0;
+        } else {
+            println!("-1");
+            return;
+        }
+    }
+    println!("{rs}");
 }
