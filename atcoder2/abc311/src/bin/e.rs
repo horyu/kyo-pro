@@ -16,6 +16,7 @@ fn main() {
         n: usize,
         aabb: [(usize, usize); n],
     };
+    // https://atcoder.jp/contests/abc311/editorial/6819
     const MAX: usize = 3003;
     let mut ng = vec![vec![false; MAX]; MAX];
     for (a, b) in aabb {
