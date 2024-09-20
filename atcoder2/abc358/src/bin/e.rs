@@ -15,7 +15,9 @@ fn main() {
         k: usize,
         cc: [usize; 26],
     };
-    let comb = Combination::new(3000, ModInt998244353::modulus() as usize);
+    // https://atcoder.jp/contests/abc358/editorial/10224
+    let comb = Combination::new(k, ModInt998244353::modulus() as usize);
+    // dp[i][j] = i文字目まで使用して、長さjの文字列を作る場合の数
     let mut dp = vec![vec![ModInt998244353::default(); k + 1]; 27];
     dp[0][0] = 1.into();
     for i in 0..26 {
