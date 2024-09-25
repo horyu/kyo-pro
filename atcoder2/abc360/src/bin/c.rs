@@ -12,7 +12,13 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aa: [Usize1; n],
+        ww: [usize; n],
     };
-    // println!("{rs}");
+    let rs = izip!(aa, ww)
+        .collect::<multimap::MultiMap<_, _>>()
+        .iter_all()
+        .map(|(_, ww)| ww.iter().sum::<usize>() - ww.iter().max().unwrap())
+        .sum::<usize>();
+    println!("{rs}");
 }
