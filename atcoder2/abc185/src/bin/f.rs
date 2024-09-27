@@ -57,7 +57,7 @@ fn main() {
         if t == 1 {
             ls.apply(x - 1, y);
         } else {
-            let rs = ls.prod(x - 1, y);
+            let rs = ls.prod((x - 1)..y);
             println!("{rs}");
         }
     }

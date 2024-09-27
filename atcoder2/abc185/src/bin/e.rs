@@ -16,23 +16,37 @@ fn main() {
         aa: [usize; n],
         bb: [usize; m],
     };
-    let rs = f(&aa, &bb, &mut HashMap::new());
-    println!("{rs}");
-}
+    // 同じ長さになるように aa, bb から要素を取り除く（取り除いた要素数x）
+    // aa, bb の同じインデックスで異なる要素数y
+    // x + y が最小になるようにする
 
-fn f(cc: &[usize], dd: &[usize], memo: &mut HashMap<(usize, usize), usize>) -> usize {
-    let clen = cc.len();
-    let dlen = dd.len();
-    if let Some(rs) = memo.get(&(clen, dlen)).copied() {
-        return rs;
-    }
-    let rs = if clen == 0 || dlen == 0 {
-        clen.max(dlen)
+    let (n, m, aa, bb) = if n <= m {
+        (n, m, aa, bb)
     } else {
-        ((cc[0] != dd[0]) as usize + f(&cc[1..], &dd[1..], memo))
-            .min(1 + f(cc, &dd[1..], memo))
-            .min(1 + f(&cc[1..], dd, memo))
+        (m, n, bb, aa)
     };
-    memo.insert((clen, dlen), rs);
-    rs
+
+    // dp[i][j] = aa[..i] と bb[..j] までマッチングさせたときの x + y の最小値
+    let mut dp = vec![vec![!0; m + 1]; n + 1];
+    dp[0][0] = 0;
+    for i in 0..=n {
+        for j in 0..=m {
+            let pre = dp[i][j];
+            if j < m {
+                dp[i][j + 1] = dp[i][j + 1].min(pre + 1);
+            }
+            if i < n {
+                dp[i + 1][j] = dp[i + 1][j].min(pre + 1);
+            }
+            if i < n && j < m {
+                let d = usize::from(aa[i] != bb[j]);
+                dp[i + 1][j + 1] = dp[i + 1][j + 1].min(pre + d);
+            }
+        }
+    }
+    // for (i, dp) in dp.iter().enumerate() {
+    //     eprintln!("{i}: {:?}", dp);
+    // }
+    let rs = dp[n][m];
+    println!("{rs}");
 }
