@@ -20,12 +20,6 @@ fn main() {
     // aa, bb の同じインデックスで異なる要素数y
     // x + y が最小になるようにする
 
-    let (n, m, aa, bb) = if n <= m {
-        (n, m, aa, bb)
-    } else {
-        (m, n, bb, aa)
-    };
-
     // dp[i][j] = aa[..i] と bb[..j] までマッチングさせたときの x + y の最小値
     let mut dp = vec![vec![!0; m + 1]; n + 1];
     dp[0][0] = 0;
