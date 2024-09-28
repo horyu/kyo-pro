@@ -12,7 +12,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        t: isize,
+        s: Chars,
+        xx: [isize; n],
     };
-    // println!("{rs}");
+    let mut ll = vec![];
+    let mut rr = vec![];
+    for (c, x) in izip!(s, xx) {
+        if c == '0' {
+            ll.push(x);
+        } else {
+            rr.push(x);
+        }
+    }
+    rr.sort_unstable();
+    let mut rs = 0;
+    for l in ll {
+        // rr の中に (l-2t)..=l に含まれる数を求める
+        rs += rr.partition_point(|&r| r <= l) - rr.partition_point(|&r| r < l - 2 * t);
+    }
+    println!("{rs}");
 }
