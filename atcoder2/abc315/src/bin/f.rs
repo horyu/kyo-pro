@@ -12,6 +12,45 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        xxyy: [(usize, usize); n],
+    };
+    // スキップしたときのコストは　2^(スキップした回数) であるため、2^30 程度まで考えれば十分
+
+    // ((x, y), skip_cnt) -> cost
+    let mut hm = HashMap::new();
+    hm.insert((xxyy[0], 0), 0.0);
+    for (x, y) in xxyy[1..].iter().copied() {
+        let mut new_hm = HashMap::new();
+        for (((px, py), skip_cnt), move_cost) in hm {
+            if skip_cnt < 30 {
+                let e = new_hm.entry(((px, py), skip_cnt + 1)).or_insert(f64::MAX);
+                *e = e.min(move_cost);
+            }
+            let new_cost =
+                move_cost + ((x.abs_diff(px).pow(2) + y.abs_diff(py).pow(2)) as f64).sqrt();
+            let e = new_hm.entry(((x, y), skip_cnt)).or_insert(f64::MAX);
+            *e = e.min(new_cost);
+        }
+        hm = new_hm;
+    }
+    let mut rs = f64::MAX;
+    for ((pos, skip_cnt), move_cost) in hm {
+        if pos == xxyy[n - 1] {
+            let skip_cost = if skip_cnt == 0 {
+                0.0
+            } else {
+                2.0f64.powi(skip_cnt - 1)
+            };
+            rs = rs.min(move_cost + skip_cost);
+        }
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
         xxyy: [(f64, f64); n],
     };
     let mut dd = vec![vec![0.0; n]; n];
