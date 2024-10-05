@@ -35,7 +35,7 @@ fn main() {
             input! {l: Usize1, r: Usize1};
             let mut rs = 0;
             for bts in &bbttss {
-                if bts.range(l..=r).into_iter().next().is_some() {
+                if bts.range(l..=r).next().is_some() {
                     rs += 1;
                 }
             }
