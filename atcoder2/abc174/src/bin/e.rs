@@ -15,11 +15,7 @@ fn main() {
         k: usize,
         aa: [usize; n],
     };
-    if k == 0 {
-        let rs = aa.into_iter().max().unwrap();
-        println!("{rs}");
-        return;
-    }
+    // 最大値の最小化
     let mut ng = 0usize;
     let mut ok = 1e9 as usize;
     while 1 < ok - ng {
