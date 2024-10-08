@@ -11,8 +11,35 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut n: Usize1,
     };
-    // println!("{rs}");
+    // https://atcoder.jp/contests/abc363/editorial/10464
+    if n == 0 {
+        println!("0");
+        return;
+    }
+
+    for d in 1.. {
+        let x = (d + 1) / 2;
+        if n <= 9 * ten(x - 1) {
+            let mut rs = (ten(x - 1) + n - 1).to_string().chars().collect_vec();
+            rs.resize(d, ' ');
+            for i in x..d {
+                rs[i] = rs[d - 1 - i];
+            }
+            let rs = rs.into_iter().join("");
+            println!("{rs}");
+            return;
+        } else {
+            n -= 9 * ten(x - 1);
+        }
+    }
+}
+
+fn ten(a: usize) -> usize {
+    if a == 0 {
+        1
+    } else {
+        10 * ten(a - 1)
+    }
 }
