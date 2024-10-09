@@ -16,55 +16,43 @@ fn main() {
         ay: Usize1,
         bx: Usize1,
         by: Usize1,
-        s: [Chars; n]
+        ss: [Chars; n],
     };
-    // 01-bfs
-    let ng = s
+    let ng = ss
         .into_iter()
-        .map(|cc| cc.into_iter().map(|c| c == '#').collect_vec())
+        .map(|s| s.into_iter().map(|c| c == '#').collect_vec())
         .collect_vec();
-
-    // 右上　右下　左下　左上
-    let next = |x: usize, y: usize, dir: usize| -> Option<(usize, usize)> {
-        match dir {
-            0 => izip!((0..x).rev(), (y + 1)..n).next(),
-            1 => izip!((x + 1)..n, (y + 1)..n).next(),
-            2 => izip!((x + 1)..n, (0..y).rev()).next(),
-            _ => izip!((0..x).rev(), (0..y).rev()).next(),
-        }
-        .filter(|&(xx, yy)| !ng[xx][yy])
-    };
-
+    // d[dir][x][y] = dir方向を向いて(x, y)にいるときの移動回数
+    let mut ddd = vec![vec![vec![1usize << 60; n]; n]; 4];
     let mut qq = VecDeque::new();
-    let mut dd = vec![vec![[1 << 32; 4]; n]; n];
-    let mut checked = vec![vec![[false; 4]; n]; n];
     for dir in 0..4 {
-        if let Some((x, y)) = next(ax, ay, dir) {
-            dd[x][y][dir] = 1;
-            qq.push_back((x, y, dir));
-        }
+        ddd[dir][ax][ay] = 1;
+        qq.push_back((dir, ax, ay));
     }
-
-    while let Some((qx, qy, qdir)) = qq.pop_front() {
-        if (qx, qy) == (bx, by) {
-            println!("{}", dd[qx][qy][qdir]);
+    while let Some((dir, x, y)) = qq.pop_front() {
+        // eprint!("[{dir} {x} {y}] ");
+        if (x, y) == (bx, by) {
+            println!("{}", ddd[dir][x][y]);
             return;
         }
-        if checked[qx][qy][qdir] {
-            continue;
-        }
-        checked[qx][qy][qdir] = true;
-
-        for dir in 0..4 {
-            let Some((x, y)) = next(qx, qy, dir) else { continue };
-            let new_d = dd[qx][qy][qdir] + (qdir != dir) as usize;
-
-            if new_d < dd[x][y][dir] {
-                dd[x][y][dir] = new_d;
-                if qdir == dir {
-                    qq.push_front((x, y, dir));
+        for d in 0..4 {
+            let nx = x as isize + [1, 1, -1, -1][d];
+            let ny = y as isize + [1, -1, 1, -1][d];
+            if !(0..(n as isize)).contains(&nx)
+                || !(0..(n as isize)).contains(&ny)
+                || ng[nx as usize][ny as usize]
+            {
+                continue;
+            }
+            let nx = nx as usize;
+            let ny = ny as usize;
+            let new_d = ddd[dir][x][y] + usize::from(dir != d);
+            if new_d < ddd[d][nx][ny] {
+                ddd[d][nx][ny] = new_d;
+                if d == dir {
+                    qq.push_front((d, nx, ny));
                 } else {
-                    qq.push_back((x, y, dir));
+                    qq.push_back((d, nx, ny));
                 }
             }
         }
