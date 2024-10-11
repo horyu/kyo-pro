@@ -1,7 +1,6 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-#![feature(let_chains)]
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -14,58 +13,51 @@ fn main() {
     input! {
         h: usize,
         w: usize,
-        mut y: Usize1,
-        mut x: Usize1,
+        mut i: usize,
+        mut j: usize,
         n: usize,
-        rrcc: [(Usize1, Usize1); n],
+        rrcc: [(usize, usize); n],
         q: usize,
         ddll: [(char, usize); q],
     };
-    let mut tates = HashMap::new();
-    let mut yokos = HashMap::new();
+    let mut rows = BTreeMap::new();
+    let mut cols = BTreeMap::new();
     for (r, c) in rrcc {
-        tates.entry(c).or_insert_with(BTreeSet::new).insert(r);
-        yokos.entry(r).or_insert_with(BTreeSet::new).insert(c);
+        rows.entry(r).or_insert_with(BTreeSet::new).insert(c);
+        cols.entry(c).or_insert_with(BTreeSet::new).insert(r);
     }
     for (d, l) in ddll {
         match d {
             'L' => {
-                if let Some(yoko) = yokos.get(&y)
-                    && let Some(&wall_x) = yoko.range(..x).next_back()
-                {
-                    x = (wall_x + 1).max(x.saturating_sub(l));
-                } else {
-                    x = x.saturating_sub(l);
-                }
+                let ll = j.saturating_sub(l).max(1);
+                j = rows
+                    .get(&i)
+                    .and_then(|row| row.range(ll..j).max().map(|jj| jj + 1))
+                    .unwrap_or(ll);
             }
             'R' => {
-                if let Some(yoko) = yokos.get(&y)
-                    && let Some(&wall_x) = yoko.range(x..).next()
-                {
-                    x = (wall_x - 1).min(x + l);
-                } else {
-                    x = (x + l).min(w - 1);
-                }
+                let rr = (j + l).min(w);
+                j = rows
+                    .get(&i)
+                    .and_then(|row| row.range(j..=rr).min().map(|jj| *jj - 1))
+                    .unwrap_or(rr);
             }
             'U' => {
-                if let Some(tate) = tates.get(&x)
-                    && let Some(&wall_y) = tate.range(..y).next_back()
-                {
-                    y = (wall_y + 1).max(y.saturating_sub(l));
-                } else {
-                    y = y.saturating_sub(l);
-                }
+                let uu = i.saturating_sub(l).max(1);
+                i = cols
+                    .get(&j)
+                    .and_then(|col| col.range(uu..i).max().map(|ii| ii + 1))
+                    .unwrap_or(uu);
             }
-            _ => {
-                if let Some(tate) = tates.get(&x)
-                    && let Some(&wall_y) = tate.range(y..).next()
-                {
-                    y = (wall_y - 1).min(y + l);
-                } else {
-                    y = (y + l).min(h - 1);
-                }
+            'D' => {
+                let dd = (i + l).min(h);
+                i = cols
+                    .get(&j)
+                    .and_then(|col| col.range(i..=dd).min().map(|ii| *ii - 1))
+                    .unwrap_or(dd);
             }
+            _ => unreachable!(),
         }
-        println!("{} {}", y + 1, x + 1);
+        println!("{i} {j}");
     }
 }
