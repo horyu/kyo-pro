@@ -55,3 +55,64 @@ fn main() {
     }
     println!("{}", rs.iter().join(" "));
 }
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        k: usize,
+        aa: [usize; n],
+    };
+    let mut bts1 = BTreeSet::new();
+    let mut bts2 = BTreeSet::new();
+    let mut sum = 0;
+    for (i, a) in aa.iter().copied().enumerate().take(m) {
+        bts1.insert((a, i));
+        sum += a;
+    }
+    for _ in 0..(m - k) {
+        let (a, i) = bts1.pop_last().unwrap();
+        bts2.insert((a, i));
+        sum -= a;
+    }
+    assert_eq!(bts1.len(), k);
+    assert_eq!(bts1.len() + bts2.len(), m);
+
+    let mut rrss = vec![sum];
+    for r in m..n {
+        let l = r - m;
+        let al = aa[l];
+        if bts1.remove(&(al, l)) {
+            sum -= al;
+            if let Some((a, i)) = bts2.pop_first() {
+                bts1.insert((a, i));
+                sum += a;
+            }
+        } else {
+            bts2.remove(&(al, l));
+        }
+        assert_eq!(bts1.len() + bts2.len(), m - 1);
+        let ar = aa[r];
+        if bts1.is_empty() {
+            bts1.insert((ar, r));
+            sum += ar;
+            rrss.push(sum);
+            continue;
+        }
+        let last_a = bts1.last().copied().unwrap_or_default().0;
+        if ar <= last_a {
+            bts2.insert(bts1.pop_last().unwrap());
+            sum -= last_a;
+            bts1.insert((ar, r));
+            sum += ar;
+        } else {
+            bts2.insert((ar, r));
+        }
+        rrss.push(sum);
+        assert_eq!(bts1.len(), k);
+        assert_eq!(bts1.len() + bts2.len(), m);
+    }
+    let rs = rrss.iter().join(" ");
+    println!("{rs}");
+}
