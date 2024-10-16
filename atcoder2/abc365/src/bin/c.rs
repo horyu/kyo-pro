@@ -12,15 +12,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        m: u128,
-        aa: [u128; n],
+        m: usize,
+        aa: [usize; n],
     };
-    const MAX: u128 = 1e15 as u128;
+    const MAX: usize = 2e14 as usize + 1;
     let mut ok = 0;
     let mut ng = MAX;
     while 1 < ng - ok {
         let mid = (ok + ng) / 2;
-        let sum = aa.iter().copied().map(|a| a.min(mid)).sum::<u128>();
+        let sum = aa.iter().copied().map(|a| a.min(mid)).sum::<usize>();
         if sum <= m {
             ok = mid;
         } else {
