@@ -12,7 +12,25 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: u128,
+        aa: [u128; n],
     };
-    // println!("{rs}");
+    const MAX: u128 = 1e15 as u128;
+    let mut ok = 0;
+    let mut ng = MAX;
+    while 1 < ng - ok {
+        let mid = (ok + ng) / 2;
+        let sum = aa.iter().copied().map(|a| a.min(mid)).sum::<u128>();
+        if sum <= m {
+            ok = mid;
+        } else {
+            ng = mid;
+        }
+    }
+    if ng == MAX {
+        println!("infinite");
+        return;
+    }
+    let rs = ok;
+    println!("{rs}");
 }
