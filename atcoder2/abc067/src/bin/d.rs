@@ -1,7 +1,6 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-#![feature(drain_filter)]
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -16,54 +15,37 @@ fn main() {
         aabb: [(Usize1, Usize1); n - 1],
     };
     let mut g = vec![vec![]; n];
-    for (a, b) in aabb {
+    for (a, b) in aabb.iter().copied() {
         g[a].push(b);
         g[b].push(a);
     }
-    // 1とnの真ん中n寄りで切る
-    let mut ff = vec![!0; n];
-    let mut qq = VecDeque::new();
-    qq.push_back((0, !0));
-    while let Some((to, from)) = qq.pop_front() {
-        for &next in &g[to] {
-            if next == from {
-                continue;
-            }
-            ff[next] = to;
-            qq.push_back((next, to));
-        }
-    }
-    let mut vv = vec![n - 1];
-    while *vv.last().unwrap() != 0 {
-        vv.push(ff[*vv.last().unwrap()]);
-    }
-    // eprintln!("{}", vv.iter().join(" "));
 
-    let cut_l = vv[(vv.len() - 2) / 2];
-    let cut_r = vv[(vv.len() - 2) / 2 + 1];
-    // dbg!(cut_l, cut_r);
-    g[cut_l].drain_filter(|x| *x == cut_r);
-    g[cut_r].drain_filter(|x| *x == cut_l);
-    let calc = |start: usize| -> usize {
-        let mut cnt = 0;
+    let bfs = |start: usize| -> Vec<usize> {
+        let mut dd = vec![!0; n];
         let mut qq = VecDeque::new();
-        qq.push_back((start, start));
-        while let Some((to, from)) = qq.pop_front() {
-            for &next in &g[to] {
-                if next == from {
-                    continue;
+        qq.push_back(start);
+        dd[start] = 0;
+        while let Some(v) = qq.pop_front() {
+            for w in g[v].iter().copied() {
+                if dd[w] == !0 {
+                    dd[w] = dd[v] + 1;
+                    qq.push_back(w);
                 }
-                cnt += 1;
-                qq.push_back((next, to));
             }
         }
-        // dbg!(start, cnt);
-        cnt
+        dd
     };
-    let rs = if calc(n - 1) < calc(0) {
-        "Fennec"
-    } else {
-        "Snuke"
-    };
+
+    let xx = bfs(0);
+    let yy = bfs(n - 1);
+    let mut cnt = 0;
+    for (x, y) in izip!(xx, yy) {
+        if x <= y {
+            cnt += 1;
+        } else {
+            cnt -= 1;
+        }
+    }
+    let rs = ["Snuke", "Fennec"][(0 < cnt) as usize];
     println!("{rs}");
 }
