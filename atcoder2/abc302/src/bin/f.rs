@@ -16,27 +16,28 @@ fn main() {
     };
     let mut g = vec![vec![]; n + m];
     let mut qq = VecDeque::new();
-    let mut pushed = vec![false; n + m];
+    let mut dd = vec![!0; n + m];
     for i in 0..n {
         input! {a: usize, ss: [Usize1; a]};
         for s in ss.iter().copied() {
             g[i].push(n + s);
             g[n + s].push(i);
             if s == 0 {
-                qq.push_back((i, 0));
-                pushed[i] = true;
+                dd[i] = 0;
+                qq.push_back(i);
             }
         }
     }
-    while let Some((qi, qd)) = qq.pop_front() {
+    while let Some(qi) = qq.pop_front() {
         if qi == n + m - 1 {
-            println!("{qd}");
+            let rs = dd[qi];
+            println!("{rs}");
             return;
         }
         for next in g[qi].iter().copied() {
-            if !pushed[next] {
-                pushed[next] = true;
-                qq.push_back((next, qd + usize::from(next < n)));
+            if dd[next] == !0 {
+                dd[next] = dd[qi] + usize::from(next < n);
+                qq.push_back(next);
             }
         }
     }
