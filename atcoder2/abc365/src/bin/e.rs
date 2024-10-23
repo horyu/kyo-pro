@@ -15,7 +15,7 @@ fn main() {
         aa: [usize; n],
     };
     let mut rs = 0usize;
-    for d in 0..31 {
+    for d in 0..=(1e8 as usize).ilog2() {
         let bb = aa.iter().map(|a| a >> d & 1).collect_vec();
         // cnt[i] = 手前まで見たときに累積XORがiであるものの個数
         let mut cnt = [0; 2];
