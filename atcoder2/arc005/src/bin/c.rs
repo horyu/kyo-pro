@@ -15,54 +15,47 @@ fn main() {
         w: usize,
         ccc: [Chars; h],
     };
-
-    let mut s = (0, 0);
+    let hh = h as isize - 1;
+    let ww = w as isize - 1;
+    let (mut si, mut sj, mut gi, mut gj) = (0, 0, 0, 0);
     for (i, cc) in ccc.iter().enumerate() {
         for (j, c) in cc.iter().copied().enumerate() {
-            if c == 's' {
-                s = (i, j)
+            match c {
+                's' => (si, sj) = (i, j),
+                'g' => (gi, gj) = (i, j),
+                _ => {}
             }
         }
     }
-    let udlr = |i: usize, j: usize| -> Vec<(usize, usize)> {
-        let mut vv = vec![];
-        if 0 < i {
-            vv.push((i - 1, j));
-        }
-        if i < h - 1 {
-            vv.push((i + 1, j));
-        }
-        if 0 < j {
-            vv.push((i, j - 1));
-        }
-        if j < w - 1 {
-            vv.push((i, j + 1));
-        }
-        vv
-    };
 
     let mut qq = VecDeque::new();
-    let mut dist = vec![vec![std::usize::MAX; w]; h];
-    qq.push_front(s);
-    dist[s.0][s.1] = 0;
-    while let Some((qi, qj)) = qq.pop_front() {
-        let qd = dist[qi][qj];
-        for (i, j) in udlr(qi, qj) {
-            if ccc[i][j] == 'g' {
-                println!("YES");
-                return;
+    let mut dd = vec![vec![3; w]; h];
+    qq.push_front((si, sj, 0));
+    dd[si][sj] = 0;
+
+    while let Some((qi, qj, qd)) = qq.pop_front() {
+        for (di, dj) in [(-1, 0), (1, 0), (0, -1), (0, 1)].iter().copied() {
+            let (ni, nj) = (qi as isize + di, qj as isize + dj);
+            if ni < 0 || hh < ni || nj < 0 || ww < nj {
+                continue;
             }
-            let wall = usize::from(ccc[i][j] == '#');
-            let d = qd + wall;
-            if d < dist[i][j].min(3) {
-                dist[i][j] = d;
-                if wall == 0 {
-                    qq.push_front((i, j));
+            let (ni, nj) = (ni as usize, nj as usize);
+            let nd = qd + usize::from(ccc[ni][nj] == '#');
+            if nd < dd[ni][nj] {
+                if (ni, nj) == (gi, gj) {
+                    println!("YES");
+                    return;
+                }
+
+                dd[ni][nj] = nd;
+                if nd == qd {
+                    qq.push_front((ni, nj, nd));
                 } else {
-                    qq.push_back((i, j));
+                    qq.push_back((ni, nj, nd));
                 }
             }
         }
     }
+
     println!("NO");
 }
