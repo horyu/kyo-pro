@@ -9,10 +9,16 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
+/*
+f(x) =||x-a|-b|
+*/
+
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        q: usize,
+        a: isize,
+        b: isize,
+        ttaabb: [(usize, isize, isize); q],
     };
     // println!("{rs}");
 }
