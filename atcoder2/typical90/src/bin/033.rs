@@ -14,12 +14,10 @@ fn main() {
         h: usize,
         w: usize,
     };
-    let min = h.min(w);
-    let max = h.max(w);
-    let rs = if min == 1 {
-        max
+    let rs = if h == 1 || w == 1 {
+        h * w
     } else {
-        min.div_ceil(2) * max.div_ceil(2)
+        h.div_ceil(2) * w.div_ceil(2)
     };
     println!("{rs}");
 }
