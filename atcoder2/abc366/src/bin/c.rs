@@ -11,8 +11,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        q: usize,
     };
-    // println!("{rs}");
+    let mut rs = 0;
+    let mut vv = vec![0; 1e6 as usize + 1];
+    for _ in 0..q {
+        input! {t: usize};
+        if t == 3 {
+            println!("{rs}");
+            continue;
+        }
+        input! {x: usize};
+        if t == 1 {
+            if vv[x] == 0 {
+                rs += 1;
+            }
+            vv[x] += 1;
+        } else {
+            vv[x] -= 1;
+            if vv[x] == 0 {
+                rs -= 1;
+            }
+        }
+    }
 }
