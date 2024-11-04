@@ -9,7 +9,7 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
-use ac_library::{LazySegtree, MapMonoid, Max};
+use ac_library::{LazySegtree, MapMonoid, Max, Monoid};
 struct MaxMonoid;
 impl MapMonoid for MaxMonoid {
     type M = Max<isize>;
@@ -19,11 +19,11 @@ impl MapMonoid for MaxMonoid {
         0
     }
 
-    fn mapping(&f: &isize, &x: &isize) -> isize {
+    fn mapping(&f: &Self::F, &x: &<Self::M as Monoid>::S) -> <Self::M as Monoid>::S {
         f + x
     }
 
-    fn composition(&f: &isize, &g: &isize) -> isize {
+    fn composition(&f: &Self::F, &g: &Self::F) -> Self::F {
         f + g
     }
 }
@@ -42,7 +42,9 @@ fn main() {
             let x = ls.prod(i.saturating_sub(r)..(i + 1).saturating_sub(l));
             if x != -1 {
                 let y = ls.get(i);
-                ls.set(i, (x + v).max(y));
+                if y < x + v {
+                    ls.set(i, x + v);
+                }
             }
         }
     }
