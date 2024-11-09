@@ -21,7 +21,7 @@ fn main() {
     let comb = Combination::new(n, MOD);
     let mut rs = ModInt998244353::default();
     for k in 0..=n {
-        let r = mod_pow(m, n.saturating_sub(k + 1) + 1, MOD) * comb.get(n, k);
+        let r = mod_pow(m, 1.max(n.saturating_sub(k)), MOD) * comb.get(n, k);
         if k.is_odd() {
             rs -= r;
         } else {
