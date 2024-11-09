@@ -15,6 +15,70 @@ fn main() {
         mut k: usize,
         s: Chars,
     };
+    // https://atcoder.jp/contests/arc157/editorial/5789
+    let mut ttff = s.into_iter().map(|c| c == 'Y').collect_vec();
+    let x_count = ttff.iter().filter(|&&tf| !tf).count();
+    if x_count == n {
+        let rs = if k <= 1 { 0 } else { k - 1 };
+        println!("{rs}");
+        return;
+    }
+    if x_count < k {
+        //XYを反転させ、 (n-x_count)個のxから (n-x_count)-(k-x_count)=n-k 個X→Yにすると考えられる
+        ttff = ttff.into_iter().map(|tf| !tf).collect_vec();
+        k = n - k;
+    }
+    let gg = ttff
+        .iter()
+        .copied()
+        .group_by(|&tf| tf)
+        .into_iter()
+        .map(|(tf, group)| (tf, group.count()))
+        .collect_vec();
+    let m = gg.len();
+    // 現在のカウント
+    let mut rs = 0;
+    // 内部のXXブロックサイズ
+    let mut bb = vec![];
+    for (i, (tf, c)) in gg.iter().copied().enumerate() {
+        if tf {
+            rs += c - 1;
+        } else {
+            if 0 < i && i < m - 1 {
+                bb.push(c);
+            }
+        }
+    }
+    // 内部のXXブロックをサイズの小さい方からYYに変える
+    bb.sort_unstable();
+    for b in bb {
+        if b <= k {
+            rs += b + 1;
+            k -= b;
+        } else {
+            rs += k;
+            k = 0;
+        }
+        if k == 0 {
+            break;
+        }
+    }
+    // 外側のXXブロックを変える
+    if m == 1 {
+        rs += k.saturating_sub(1);
+    } else {
+        rs += k;
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        mut k: usize,
+        s: Chars,
+    };
     // ランレングス圧縮
     let mut rle = vec![];
     let mut ttff = vec![];
