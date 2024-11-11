@@ -16,23 +16,23 @@ fn main() {
         m: usize,
     };
     // https://atcoder.jp/contests/arc116/editorial/1041
-    // dp[i][j] = 積がiである長さjの列の個数
-    // (2e5 as usize).ilog2() = 17
-    let mut dp = vec![vec![ModInt998244353::default(); 18]; m + 1];
+    const MAX: usize = (2e5 as usize).ilog2() as usize;
+    let mint = ModInt998244353::default();
+    // dp[i][j] = 積がiとなる長さjの列の個数
+    let mut dp = vec![vec![mint; MAX + 1]; m + 1];
     dp[1][0] = 1.into();
     for i in 1..=m {
-        for ii in ((i * 2)..=m).step_by(i) {
-            for j in 0..17 {
+        for ii in ((2 * i)..=m).step_by(i) {
+            for j in 0..MAX {
                 let tmp = dp[i][j];
                 dp[ii][j + 1] += tmp;
             }
         }
     }
-
     let comb = Combination::new(n, ModInt998244353::modulus() as usize);
-    let mut rs = ModInt998244353::default();
+    let mut rs = mint;
     for i in 1..=m {
-        for j in 0..18 {
+        for j in 0..=MAX {
             if j <= n {
                 rs += dp[i][j] * comb.get(n, j);
             }
