@@ -12,7 +12,16 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
+        rr: [usize; n],
     };
-    // println!("{rs}");
+    let iter = rr
+        .into_iter()
+        .map(|r| 1..=r)
+        .multi_cartesian_product()
+        .filter(|vv| vv.iter().sum::<usize>() % k == 0);
+    for vv in iter {
+        let rs = vv.iter().join(" ");
+        println!("{rs}");
+    }
 }
