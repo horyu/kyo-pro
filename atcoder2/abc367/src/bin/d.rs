@@ -15,18 +15,16 @@ fn main() {
         m: usize,
         aa: [usize; n],
     };
-    let mut mm = btreemultimap::BTreeMultiMap::new();
+    let mut vvv = vec![vec![]; m];
     let mut crr = 0;
     for (i, a) in aa.iter().cycle().enumerate().take(n * 2) {
-        mm.insert(crr, i);
+        vvv[crr].push(i);
         crr = (crr + a) % m;
     }
     let mut rs = 0;
-    let mut tmp = 0usize;
+    let mut tmp = 0;
     for (i, a) in aa.iter().copied().enumerate() {
-        if let Some(vv) = mm.get_vec(&tmp) {
-            rs += vv.partition_point(|&v| v < i + n) - vv.partition_point(|&v| v <= i);
-        }
+        rs += vvv[tmp].partition_point(|&v| v < i + n) - vvv[tmp].partition_point(|&v| v <= i);
         tmp = (tmp + a) % m;
     }
     println!("{rs}");
