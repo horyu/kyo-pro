@@ -26,25 +26,19 @@ fn main() {
         g[v].push(u);
     }
     // dp[i][j] = i(xに訪れた回数 % 2)のときの頂点jにいるときの通り数
-    let mut dp0 = vec![vec![ModInt998244353::default(); n]; 2];
-    dp0[0][s] += 1;
+    let mut dp = vec![vec![ModInt998244353::default(); n]; 2];
+    dp[0][s] += 1;
     for kk in 0..k {
-        let mut dp1 = vec![vec![ModInt998244353::default(); n]; 2];
-        for (dx, dp) in dp0.iter().enumerate() {
-            for (i, d) in dp.iter().copied().enumerate() {
+        let mut new_dp = vec![vec![ModInt998244353::default(); n]; 2];
+        for (dx, dp) in dp.into_iter().enumerate() {
+            for (i, d) in dp.into_iter().enumerate() {
                 for j in g[i].iter().copied() {
-                    // if 0 < d.val() {
-                    //     eprintln!("{kk}-{dx}: {i}->{j}({}) {}+{d}", (dx + usize::from(j == x)) % 2, dp1[(dx + usize::from(j == x)) % 2][j]);
-                    // }
-                    dp1[(dx + usize::from(j == x)) % 2][j] += d;
+                    new_dp[dx ^ usize::from(j == x)][j] += d;
                 }
             }
         }
-        // for (dx, dp) in dp1.iter().enumerate() {
-        //     eprintln!("{dx}: {dp:?}");
-        // }
-        std::mem::swap(&mut dp0, &mut dp1);
+        dp = new_dp;
     }
-    let rs = dp0[0][t];
+    let rs = dp[0][t];
     println!("{rs}");
 }
