@@ -12,7 +12,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        k: usize,
+        xx: [Usize1; n],
         aa: [usize; n],
     };
-    // println!("{rs}");
+    // ダブリング　https://atcoder.jp/contests/abc367/editorial/10707
+    let mut pp = vec![vec![0; n]; 60];
+    pp[0] = xx;
+    for d in 1..60 {
+        for i in 0..n {
+            pp[d][i] = pp[d - 1][pp[d - 1][i]];
+        }
+    }
+    let mut qq = (0..n).collect_vec();
+    for d in 0..60 {
+        if (k >> d) & 1 != 0 {
+            qq = qq.iter().map(|&i| pp[d][i]).collect_vec();
+        }
+    }
+    let rs = qq.into_iter().map(|q| aa[q]).join(" ");
+    println!("{rs}");
 }
