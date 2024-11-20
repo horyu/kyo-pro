@@ -4,7 +4,6 @@
 use ac_library::ModInt998244353;
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
-use nalgebra::coordinates::X;
 use num_integer::*;
 use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
@@ -16,20 +15,26 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    const MAX: usize = 2e5 as usize;
-
-    let mut ft1 = ac_library::FenwickTree::new(MAX + 1, 0usize);
-    let mut ft2 = ac_library::FenwickTree::new(MAX + 1, 0usize);
-
-    let mut sum = ModInt998244353::default();
+    // カードの組み合わせは追加するたびに増える
+    // 11 | (12,21),22 | (13,31,23,32),33
+    // 既存の組み合わせ + 既存カードと新カードの組み合わせ + 新カードのみの組み合わせ
+    let mut ft_cnt = ac_library::FenwickTree::new(2e5 as usize + 1, 0usize);
+    let mut ft_sum = ac_library::FenwickTree::new(2e5 as usize + 1, 0usize);
+    // 既存の組み合わせ
+    let mut tmp = ModInt998244353::default();
     for (i, a) in aa.iter().copied().enumerate() {
-        let ma = ModInt998244353::new(a);
-        let d = ma * ft1.sum(0..=a) + ft2.sum((a + 1)..);
-        sum += d * 2 + ma;
-        let rs = sum / (i + 1).pow(2);
-        println!("{rs}");
+        // 既存カードと新カードの組み合わせ
+        // 1..=a 以下
+        tmp += 2 * a * ft_cnt.sum(0..=a);
+        // aとaより大きいカードの組み合わせ
+        tmp += 2 * ft_sum.sum((a + 1)..);
 
-        ft1.add(a, 1);
-        ft2.add(a, a);
+        // 新カードのみの組み合わせ a.max(a) = a
+        tmp += a;
+
+        let rs = tmp / (i + 1).pow(2);
+        println!("{rs}");
+        ft_cnt.add(a, 1);
+        ft_sum.add(a, a);
     }
 }
