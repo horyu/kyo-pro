@@ -12,34 +12,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        s: Bytes,
+        s: Chars,
         q: usize,
     };
-    let mut s = s.into_iter().map(|b| (b - b'a') as usize).collect_vec();
-    let mut bbttss = vec![BTreeSet::<usize>::new(); 26];
-    for (i, &c) in s.iter().enumerate() {
-        bbttss[c].insert(i);
+    let mut bbttss = vec![BTreeSet::default(); 128];
+    for (i, c) in s.iter().copied().enumerate() {
+        bbttss[c as usize].insert(i + 1);
     }
     for _ in 0..q {
-        input! {x: usize};
-        if x == 1 {
-            input! {i: Usize1, c: char};
-            let c = (c as u8 - b'a') as usize;
-            let ori_c = s[i];
-            if c != ori_c {
-                bbttss[ori_c].remove(&i);
-                bbttss[c].insert(i);
-                s[i] = c;
+        input! {t: usize};
+        if t == 1 {
+            input! {i: usize, c: char};
+            for bts in bbttss.iter_mut() {
+                bts.remove(&i);
             }
-        } else {
-            input! {l: Usize1, r: Usize1};
-            let mut rs = 0;
-            for bts in &bbttss {
-                if bts.range(l..=r).next().is_some() {
-                    rs += 1;
-                }
-            }
-            println!("{rs}");
+            bbttss[c as usize].insert(i);
+            continue;
         }
+        input! {l: usize, r: usize};
+        let mut rs = 0;
+        for bts in bbttss.iter() {
+            if bts.range(l..=r).next().is_some() {
+                rs += 1;
+            }
+        }
+        println!("{rs}");
     }
 }
