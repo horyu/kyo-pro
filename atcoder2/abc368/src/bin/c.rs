@@ -12,7 +12,21 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        hh: [usize; n],
     };
-    // println!("{rs}");
+    let mut t = 0;
+    for h in hh {
+        let (div, mut rem) = h.div_rem(&5);
+        t += div * 3;
+        while 0 < rem {
+            t += 1;
+            if t % 3 == 0 {
+                rem = rem.saturating_sub(3);
+            } else {
+                rem -= 1;
+            }
+        }
+    }
+    let rs = t;
+    println!("{rs}");
 }
