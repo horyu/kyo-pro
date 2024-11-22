@@ -12,24 +12,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        s: Chars,
+        s: Bytes,
         q: usize,
     };
-    let mut bbttss = vec![BTreeSet::default(); 128];
-    for (i, c) in s.iter().copied().enumerate() {
-        bbttss[c as usize].insert(i + 1);
+    let mut vv = s.into_iter().map(|b| (b - b'a') as usize).collect_vec();
+    let mut bbttss = vec![BTreeSet::default(); 26];
+    for (i, v) in vv.iter().copied().enumerate() {
+        bbttss[v].insert(i);
     }
     for _ in 0..q {
         input! {t: usize};
         if t == 1 {
-            input! {i: usize, c: char};
-            for bts in bbttss.iter_mut() {
-                bts.remove(&i);
+            input! {i: Usize1, c: char};
+            let b = (c as u8 - b'a') as usize;
+            if vv[i] != b {
+                bbttss[vv[i]].remove(&i);
+                bbttss[b].insert(i);
+                vv[i] = b;
             }
-            bbttss[c as usize].insert(i);
             continue;
         }
-        input! {l: usize, r: usize};
+        input! {l: Usize1, r: Usize1};
         let mut rs = 0;
         for bts in bbttss.iter() {
             if bts.range(l..=r).next().is_some() {
