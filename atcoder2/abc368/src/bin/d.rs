@@ -12,7 +12,38 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
+        aabb: [(Usize1, Usize1); n - 1],
+        vv: [Usize1; k],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (a, b) in aabb.iter().copied() {
+        g[a].push(b);
+        g[b].push(a);
+    }
+    let mut ttff = vec![false; n];
+    for v in vv.iter().copied() {
+        ttff[v] = true;
+    }
+    dfs(&g, &mut ttff, vv[0], !0);
+    let rs = ttff.into_iter().filter(|&tf| tf).count();
+    println!("{rs}");
+}
+
+// ある頂点iから頂点群vvを含まれる頂点への経路をマークする
+fn dfs(g: &[Vec<usize>], vv: &mut Vec<bool>, i: usize, p: usize) -> bool {
+    let mut rs = vv[i];
+    for j in g[i].iter().copied() {
+        if j == p {
+            continue;
+        }
+        if dfs(g, vv, j, i) {
+            vv[j] = true;
+            rs = true;
+        }
+    }
+    if rs {
+        vv[i] = true;
+    }
+    rs
 }
