@@ -13,12 +13,13 @@ fn main() {
     input! {
         n: isize,
     };
+    const MAX: isize = 3500;
     // 4/N=1/a+1/b+1/c
     // 4abc = N(bc+ac+ab)
     // c(4ab-Nb-Na) = Nab
     // c = Nab/(4ab-Nb-Na)
-    for a in 1..=3500 {
-        for b in 1..=3500 {
+    for a in 1..=MAX {
+        for b in 1..=MAX {
             let c = (n * a * b)
                 .checked_div(4 * a * b - n * b - n * a)
                 .unwrap_or_default();
