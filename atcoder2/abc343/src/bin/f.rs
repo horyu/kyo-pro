@@ -11,10 +11,10 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 // https://atcoder.jp/contests/abc343/submissions/52197555
 use ac_library::{Monoid, Segtree};
-type U4 = ((usize, usize), (usize, usize));
 struct M;
 impl Monoid for M {
-    type S = U4;
+    // ((区間内１番大きい値, その個数), (区間内２番目に大きい値, その個数))
+    type S = ((usize, usize), (usize, usize));
 
     fn identity() -> Self::S {
         ((0, 0), (0, 0))
