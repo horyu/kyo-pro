@@ -12,7 +12,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aa: [isize; n],
     };
-    // println!("{rs}");
+    let mut rs = n;
+    for g in aa
+        .into_iter()
+        .tuple_windows()
+        .map(|(x, y)| y - x)
+        .group_by(|&x| x)
+        .into_iter()
+    {
+        let size = g.1.count();
+        rs += (1 + size) * size / 2;
+    }
+    println!("{rs}");
 }
