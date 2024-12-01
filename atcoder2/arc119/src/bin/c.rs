@@ -15,6 +15,7 @@ fn main() {
         aa: [isize; n],
     };
     /*
+    https://atcoder.jp/contests/arc119/editorial/1850
     12 8 11 3 3 13 2
     累積和っぽい何か？
     (l,r)=(2,4),(3,7),(4,5)
@@ -50,7 +51,7 @@ fn main() {
         counter[&(sums[i][0] - sums[i][1])] += 1;
     }
     let mut rs = 0;
-    for (_, v) in counter {
+    for v in counter.into_map().into_values() {
         rs += v * v.saturating_sub(1) / 2;
     }
     println!("{rs}");
