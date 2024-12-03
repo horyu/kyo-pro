@@ -12,7 +12,13 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aa: [isize; n],
     };
-    // println!("{rs}");
+    // arr[i] = モンスターを i%2 回倒したときの経験値合計の最大値
+    let mut arr = [0, isize::MIN];
+    for a in aa {
+        arr = [arr[0].max(arr[1] + 2 * a), arr[1].max(arr[0] + a)];
+    }
+    let rs = arr.iter().max().unwrap();
+    println!("{rs}");
 }
