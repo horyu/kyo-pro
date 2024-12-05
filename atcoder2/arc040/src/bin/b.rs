@@ -12,7 +12,37 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        r: usize,
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut ttff = s.iter().copied().map(|c| c == 'o').collect_vec();
+    let Some(last) = ttff.iter().rposition(|&b| !b) else {
+        println!("0");
+        return;
+    };
+    if last < r {
+        println!("1");
+        return;
+    }
+    let mut pos = 0;
+    let mut rs = 1;
+    while pos <= last.saturating_sub(r) {
+        if ttff[pos] {
+            pos += 1;
+            rs += 1;
+        } else {
+            for i in pos..(pos + r) {
+                ttff[i] = true;
+            }
+            pos += 1;
+            rs += 2;
+        }
+    }
+    // dbg!(pos, rs);
+    // eprintln!(
+    //     "{}",
+    //     ttff.iter().map(|&b| if b { 'o' } else { 'x' }).join("")
+    // );
+
+    println!("{rs}");
 }
