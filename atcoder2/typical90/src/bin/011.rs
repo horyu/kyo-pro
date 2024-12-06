@@ -14,20 +14,20 @@ fn main() {
         n: usize,
         mut ddccss: [(usize, usize, usize); n],
     };
-    // ddccss.retain(|dcs| dcs.1 <= dcs.0);
-    ddccss.sort_unstable_by_key(|dcs| dcs.0);
-    // dp[見終わった仕事][合計仕事時間]
-    let mut dp = vec![vec![0; 5001]; n + 1];
-    for i in 0..n {
-        let (d, c, s) = ddccss[i];
-        for j in 0..5001 {
-            if j < c || d < j {
-                dp[i + 1][j] = dp[i][j];
-            } else {
-                dp[i + 1][j] = dp[i][j].max(dp[i][j - c] + s);
-            }
+    ddccss.sort_unstable();
+    const MAX: usize = 5000;
+    let mut dp = vec![0; MAX + 1];
+    for (d, c, s) in ddccss.iter().copied() {
+        if d < c {
+            continue;
         }
+        let mut new_dp = dp.clone();
+        for i in 0..=(d - c) {
+            new_dp[i + c] = new_dp[i + c].max(dp[i] + s);
+        }
+        dp = new_dp;
+        // eprintln!("{:?}", &dp[..9]);
     }
-    let rs = dp[n].iter().max().copied().unwrap();
+    let rs = dp.iter().max().unwrap();
     println!("{rs}");
 }
