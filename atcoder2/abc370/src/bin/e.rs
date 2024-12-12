@@ -16,14 +16,14 @@ fn main() {
         k: isize,
         aa: [isize; n],
     };
+    // https://atcoder.jp/contests/abc370/editorial/10858
     let mut hm = HashMap::new();
     hm.insert(0isize, ModInt998244353::new(1));
     let mut all = ModInt998244353::new(1);
     let mut acc = 0;
     for (i, a) in aa.into_iter().enumerate() {
         acc += a;
-        let ban = acc - k;
-        let cur = all - hm.get(&ban).copied().unwrap_or_default();
+        let cur = all - hm.get(&(acc - k)).copied().unwrap_or_default();
         *hm.entry(acc).or_insert(ModInt998244353::default()) += cur;
         all += cur;
         if i + 1 == n {
