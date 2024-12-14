@@ -12,7 +12,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        xx: [isize; n],
+        pp: [usize; n],
+        q: usize,
+        llrr: [(isize, isize); q],
     };
-    // println!("{rs}");
+    let x2i = llrr.iter().copied().flat_map(|(l, r)| [l, r]).chain(xx.iter().copied())
+        .sorted_unstable()
+        .dedup()
+        .enumerate()
+        .map(|(i, x)| (x, i))
+        .collect::<HashMap<_, _>>();
+    let size = x2i.len();
+    let mut ft = ac_library::FenwickTree::new(size, 0usize);
+    for (x, p) in izip!(xx, pp) {
+        let i = x2i[&x];
+        ft.add(i, p);
+    }
+    for (l, r) in llrr {
+        let l = x2i[&l];
+        let r = x2i[&r];
+        let rs = ft.sum(l..=r);
+        println!("{rs}");
+    }
 }
