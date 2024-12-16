@@ -17,7 +17,11 @@ fn main() {
         q: usize,
         llrr: [(isize, isize); q],
     };
-    let x2i = llrr.iter().copied().flat_map(|(l, r)| [l, r]).chain(xx.iter().copied())
+    let x2i = llrr
+        .iter()
+        .copied()
+        .flat_map(|(l, r)| [l, r])
+        .chain(xx.iter().copied())
         .sorted_unstable()
         .dedup()
         .enumerate()

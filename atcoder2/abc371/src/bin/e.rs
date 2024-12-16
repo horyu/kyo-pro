@@ -14,5 +14,20 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut mm = multimap::MultiMap::new();
+    for (i, a) in aa.iter().copied().enumerate() {
+        mm.insert(a, i + 1);
+    }
+    // 区間 1 => 1, 2 => 3, 3 => 6
+    let f = |x: usize| -> usize { x * (x + 1) / 2 };
+    let mut rs = 0;
+
+    for (a, ii) in mm {
+        rs += f(n);
+
+        for (l, r) in chain!([0], ii, [n + 1]).tuple_windows() {
+            rs -= f(r - l - 1);
+        }
+    }
+    println!("{rs}");
 }
