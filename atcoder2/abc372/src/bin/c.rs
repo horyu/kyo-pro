@@ -12,7 +12,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
+        mut s: Chars,
+        xxcc: [(Usize1, char); q],
     };
-    // println!("{rs}");
+    let mut ttff = vec![false; n - 2];
+    let mut rs = 0;
+    for (i, (c0, c1, c2)) in s.iter().copied().tuple_windows().enumerate() {
+        if (c0, c1, c2) == ('A', 'B', 'C') {
+            ttff[i] = true;
+            rs += 1;
+        }
+    }
+    for (x, c) in xxcc {
+        s[x] = c;
+        for i in x.saturating_sub(2)..=(x).min(n - 3) {
+            if ttff[i] {
+                ttff[i] = false;
+                rs -= 1;
+            }
+            if (s[i], s[i + 1], s[i + 2]) == ('A', 'B', 'C') {
+                ttff[i] = true;
+                rs += 1;
+            }
+        }
+        println!("{rs}");
+    }
 }
