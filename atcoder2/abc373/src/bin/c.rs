@@ -12,7 +12,11 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aa: [isize; n],
+        bb: [isize; n],
     };
-    // println!("{rs}");
+    let max_a = aa.iter().max().unwrap();
+    let max_b = bb.iter().max().unwrap();
+    let rs = max_a + max_b;
+    println!("{rs}");
 }
