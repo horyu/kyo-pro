@@ -12,7 +12,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        kk: [usize; n],
     };
-    // println!("{rs}");
+    let mut rs = !0;
+    for bits in 0..(1 << n) {
+        let mut arr = [0; 2];
+        for (i, k) in kk.iter().copied().enumerate() {
+            arr[(bits >> i) & 1] += k;
+        }
+        rs = rs.min(arr.iter().copied().max().unwrap());
+    }
+    println!("{rs}");
 }
