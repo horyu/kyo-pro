@@ -12,7 +12,37 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        x: usize,
+        aappbbqq: [(usize, usize, usize, usize); n],
     };
-    // println!("{rs}");
+    // https://atcoder.jp/contests/abc374/editorial/11094
+    // 最小値の最大値は二分探索
+    let mut ok = 0;
+    let mut ng = 1e10 as usize;
+    while 1usize < ng - ok {
+        let mid = (ok + ng) / 2;
+        let mut cost = 0;
+        for (a, p, b, q) in aappbbqq.iter().copied() {
+            let mut tmp = 1e10 as usize;
+            for cnt in 0..=b {
+                let cur = cnt * p + mid.saturating_sub(a * cnt).div_ceil(b) * q;
+                tmp = tmp.min(cur);
+            }
+            for cnt in 0..=a {
+                let cur = cnt * q + mid.saturating_sub(b * cnt).div_ceil(a) * p;
+                tmp = tmp.min(cur);
+            }
+            cost += tmp;
+            if x < cost {
+                break;
+            }
+        }
+        if x < cost {
+            ng = mid;
+        } else {
+            ok = mid;
+        }
+    }
+    let rs = ok;
+    println!("{rs}");
 }
