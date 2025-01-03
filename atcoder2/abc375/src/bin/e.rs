@@ -12,7 +12,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabb: [(Usize1, usize); n],
     };
+    let mut sum = 0;
+    let mut vvv = vec![vec![]; 3];
+    for (a, b) in aabb {
+        sum += b;
+        vvv[a].push(b);
+    }
+    if sum % 3 != 0 {
+        println!("-1");
+        return;
+    }
+    let target = sum / 3;
+    dbg!(sum, target);
     // println!("{rs}");
 }
