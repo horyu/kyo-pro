@@ -14,17 +14,58 @@ fn main() {
         n: usize,
         aabb: [(Usize1, usize); n],
     };
-    let mut sum = 0;
-    let mut vvv = vec![vec![]; 3];
-    for (a, b) in aabb {
-        sum += b;
-        vvv[a].push(b);
-    }
+    // https://atcoder.jp/contests/abc375/editorial/11140
+    let sum = aabb.iter().map(|ab| ab.1).sum::<usize>();
     if sum % 3 != 0 {
         println!("-1");
         return;
     }
     let target = sum / 3;
     dbg!(sum, target);
-    // println!("{rs}");
+    const A: usize = 501;
+    let mut dp = vec![vec![1usize << 60; A]; A];
+    dp[0][0] = 0;
+    for  (a, b) in aabb.iter().copied() {
+        let mut new_dp = vec![vec![1usize << 60; A]; A];
+        for i in 0..A {
+            for j in 0..A {
+                match a {
+                    0 => {
+                        if i + b < A {
+                            new_dp[i + b][j] = new_dp[i + b][j].min(dp[i][j]);
+                        }
+                        if j + b < A {
+                            new_dp[i][j + b] = new_dp[i][j + b].min(dp[i][j] + 1);
+                        }
+                        new_dp[i][j] = new_dp[i][j].min(dp[i][j] + 1);
+                    }
+                    1 => {
+                        if i + b < A {
+                            new_dp[i + b][j] = new_dp[i + b][j].min(dp[i][j] + 1);
+                        }
+                        if j + b < A {
+                            new_dp[i][j + b] = new_dp[i][j + b].min(dp[i][j]);
+                        }
+                        new_dp[i][j] = new_dp[i][j].min(dp[i][j] + 1);
+                    }
+                    _ => {
+                        if i + b < A {
+                            new_dp[i + b][j] = new_dp[i + b][j].min(dp[i][j] + 1);
+                        }
+                        if j + b < A {
+                            new_dp[i][j + b] = new_dp[i][j + b].min(dp[i][j] + 1);
+                        }
+                        new_dp[i][j] = new_dp[i][j].min(dp[i][j]);
+                    }
+                }
+            }
+        }
+        dp = new_dp;
+    }
+    let rs = dp[target][target];
+    if rs == 1usize << 60 {
+        println!("-1");
+    } else {
+        println!("{rs}");
+    }
 }
