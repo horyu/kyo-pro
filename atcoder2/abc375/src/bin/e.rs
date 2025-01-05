@@ -25,7 +25,7 @@ fn main() {
     const A: usize = 501;
     let mut dp = vec![vec![1usize << 60; A]; A];
     dp[0][0] = 0;
-    for  (a, b) in aabb.iter().copied() {
+    for (a, b) in aabb.iter().copied() {
         let mut new_dp = vec![vec![1usize << 60; A]; A];
         for i in 0..A {
             for j in 0..A {
