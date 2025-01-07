@@ -12,7 +12,26 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        mut aa: [isize; n],
+        mut bb: [isize; n - 1],
     };
-    // println!("{rs}");
+    aa.sort_unstable();
+    bb.sort_unstable();
+    let mut rs = None;
+    while let (Some(&a), Some(&b)) = (aa.last(), bb.last()) {
+        if a <= b {
+            aa.pop();
+            bb.pop();
+        } else {
+            if rs.is_none() {
+                rs = Some(a);
+                aa.pop();
+            } else {
+                println!("-1");
+                return;
+            }
+        }
+    }
+    let rs = rs.or(aa.pop()).unwrap();
+    println!("{rs}");
 }
