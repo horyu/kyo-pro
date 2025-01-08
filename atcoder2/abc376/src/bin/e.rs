@@ -11,8 +11,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            k: usize,
+            aa: [usize; n],
+            bb: [usize; n],
+        }
+        let mut rs = !0;
+        let mut b_sum = 0;
+        let mut bh = BinaryHeap::new();
+        for (i, (a, b)) in izip!(aa, bb).sorted_unstable().enumerate() {
+            b_sum += b;
+            bh.push((b, a, i));
+            if k < bh.len() {
+                if let Some((bb, _, _)) = bh.pop() {
+                    b_sum -= bb;
+                }
+            }
+            if bh.len() == k {
+                rs = rs.min(a * b_sum);
+            }
+        }
+        println!("{rs}");
+    }
 }
