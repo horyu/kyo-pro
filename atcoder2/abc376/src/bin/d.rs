@@ -12,7 +12,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (a, b) in aabb.iter().copied() {
+        g[a].push(b);
+    }
+    if let Some(vv) = pathfinding::prelude::bfs_loop(&0, |&x| g[x].iter().copied()) {
+        let rs = vv.len() - 1;
+        println!("{rs}");
+    } else {
+        println!("-1");
+    }
 }
