@@ -11,8 +11,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        n: isize,
+        m: usize,
+        aabb: [(isize, isize); m],
     };
-    // println!("{rs}");
+    let mut hs = HashSet::new();
+    let dxdy = [2, -2].into_iter().cartesian_product([1, -1]).collect_vec();
+    for (a, b) in aabb {
+        hs.insert((a, b));
+        for (x, y) in dxdy.iter().copied() {
+            hs.insert((a + x, b + y));
+            hs.insert((a + y, b + x));
+        }
+    }
+    let mut rs = n.pow(2);
+    for (x, y) in hs {
+        if (1..=n).contains(&x) && (1..=n).contains(&y) {
+            rs -= 1;
+        }
+    }
+    println!("{rs}");
 }
