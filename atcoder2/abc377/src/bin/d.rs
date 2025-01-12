@@ -12,7 +12,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        llrr: [(usize, usize); n],
     };
-    // println!("{rs}");
+    let mut ll_max = vec![0; m + 1];
+    for (l, r) in llrr {
+        ll_max[r] = ll_max[r].max(l);
+    }
+    let mut rs = 0;
+    let mut l_max = 0;
+    for r in 1..=m {
+        l_max = l_max.max(ll_max[r]);
+        rs += r - l_max;
+    }
+    println!("{rs}");
 }
