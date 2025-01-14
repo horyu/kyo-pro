@@ -14,5 +14,15 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut hm = HashMap::new();
+    let mut bb = vec![];
+    for (i, a) in aa.iter().copied().enumerate() {
+        if let Some(pre) = hm.insert(a, (i + 1) as isize) {
+            bb.push(pre);
+        } else {
+            bb.push(-1);
+        }
+    }
+    let rs = bb.iter().join(" ");
+    println!("{rs}");
 }
