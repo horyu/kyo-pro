@@ -18,7 +18,10 @@ fn main() {
     // https://atcoder.jp/contests/abc378/editorial/11289
     let mut rs = 0usize;
     let mut ft = ac_library::FenwickTree::new(m, 0usize);
-    let ss = chain!([0], aa).cumsum::<usize>().map(|s| s % m).collect_vec();
+    let ss = chain!([0], aa)
+        .cumsum::<usize>()
+        .map(|s| s % m)
+        .collect_vec();
     let mut tmp = 0;
     for r in 0..=n {
         rs += ss[r] * r + ft.sum((ss[r] + 1)..) * m - tmp;
