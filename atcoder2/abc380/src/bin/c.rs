@@ -12,7 +12,20 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut ccww = s
+        .into_iter()
+        .group_by(|&c| c)
+        .into_iter()
+        .map(|(c, g)| (c, g.count()))
+        .collect_vec();
+    let from = 2 * (k - 1) + usize::from(ccww[0].0 == '0');
+    ccww.swap(from - 1, from);
+    let mut rs = String::new();
+    for (c, w) in ccww {
+        rs.push_str(&c.to_string().repeat(w));
+    }
+    println!("{rs}");
 }
