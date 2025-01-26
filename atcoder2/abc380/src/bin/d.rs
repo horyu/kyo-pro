@@ -9,10 +9,35 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
+/*
+S
+ST
+STTS
+STTSTSST
+STTSTSSTTSSTSTTS
+*/
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Chars,
+        q: usize,
+        kk: [Usize1; q],
     };
-    // println!("{rs}");
+    let n = s.len();
+    let mut rrss = vec![];
+    for k in kk {
+        let (mut div, rem) = k.div_rem(&n);
+        let mut tf = true;
+        while 0 < div {
+            tf ^= true;
+            div -= div.next_power_of_two() >> (!div.is_power_of_two() as u8);
+        }
+        let rs = if tf {
+            s[rem]
+        } else {
+            (s[rem] as u8 ^ 0x20) as char
+        };
+        rrss.push(rs);
+    }
+    let rs = rrss.iter().join(" ");
+    println!("{rs}");
 }
