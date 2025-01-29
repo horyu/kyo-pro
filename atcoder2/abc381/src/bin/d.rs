@@ -14,5 +14,30 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut rs = 0;
+    // 尺取法
+    for start in 0..(2.min(n)) {
+        let mut l = start;
+        let mut sum = 0;
+        let mut counter = counter::Counter::<_>::new();
+        for r in (start..(n - 1)).step_by(2) {
+            if aa[r] == aa[r + 1] {
+                counter[&aa[r]] += 2;
+                sum += 2;
+                // 2個になるように縮める
+                while counter[&aa[r]] == 4 {
+                    counter[&aa[l]] -= 2;
+                    sum -= 2;
+                    l += 2;
+                }
+                rs = rs.max(sum);
+            } else {
+                // リセット
+                counter.clear();
+                sum = 0;
+                l = r + 2;
+            }
+        }
+    }
+    println!("{rs}");
 }
