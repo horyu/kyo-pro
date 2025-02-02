@@ -12,7 +12,22 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        m: usize,
         aa: [usize; n],
+        bb: [usize; m],
     };
-    // println!("{rs}");
+    let mut btm = BTreeMap::new();
+    for (i, a) in aa.iter().copied().enumerate() {
+        if btm.range(..=a).next().is_none() {
+            btm.insert(a, i);
+        }
+    }
+    for b in bb {
+        if let Some((_, i)) = btm.range(..=b).max() {
+            let rs = i + 1;
+            println!("{rs}");
+        } else {
+            println!("-1");
+        }
+    }
 }
