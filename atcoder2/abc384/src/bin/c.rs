@@ -11,8 +11,25 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        xx: [isize; 5],
     };
-    // println!("{rs}");
+    let mut mm = btreemultimap::BTreeMultiMap::new();
+    for bits in 1u32..(1 << 5) {
+        let mut sum = 0;
+        let mut s = String::new();
+        for i in 0..5 {
+            if bits & (1 << i) != 0 {
+                sum += xx[i];
+                s.push((b'A' + i as u8) as char);
+            }
+        }
+        mm.insert(sum, s);
+    }
+    for (sum, mut ss) in mm.into_iter().rev() {
+        ss.sort_unstable();
+        // eprintln!("{sum} {ss:?}");
+        for s in ss {
+            println!("{s}");
+        }
+    }
 }
