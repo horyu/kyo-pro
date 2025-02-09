@@ -12,7 +12,25 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        s: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let a_sum = aa.iter().sum::<usize>();
+    let s = s % a_sum;
+    let aa = aa.repeat(2);
+    // 尺取法
+    let mut l = 0;
+    let mut sum = 0;
+    for r in 0..aa.len() {
+        sum += aa[r];
+        while s < sum {
+            sum -= aa[l];
+            l += 1;
+        }
+        if sum == s {
+            println!("Yes");
+            return;
+        }
+    }
+    println!("No");
 }
