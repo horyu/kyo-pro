@@ -23,13 +23,16 @@ fn main() {
     for ii in g.iter_mut() {
         ii.sort_unstable_by_key(|&v| cc[v]);
     }
-    // ある頂点とx個の辺があり、それぞれの辺について、ある頂点以外にy個の辺がある
-    // x * xy = x(y + 1) <= n - 1
+    // ある頂点とx個の辺があり、接続された頂点はy個の辺を持つ
+    // xy <= n - 1
     let mut rs = !0;
     for i in 0..n {
         // 頂点iを中心とする
-        // 1 <= x <= cc[i]
-        // cc[g[i][0]] <= y <= cc[g[i][-1]]
+        for (idx, j) in g[i].iter().copied().enumerate() {
+            let x = cc[i] - idx;
+            let y = cc[j];
+            rs = rs.min(n - 1 - x * y);
+        }
     }
-    // println!("{rs}");
+    println!("{rs}");
 }
