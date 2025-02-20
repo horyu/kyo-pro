@@ -9,25 +9,6 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
-use ac_library::{LazySegtree, MapMonoid, Max};
-struct MaxMonoid;
-impl MapMonoid for MaxMonoid {
-    type M = Max<usize>;
-    type F = usize;
-
-    fn identity_map() -> Self::F {
-        0
-    }
-
-    fn mapping(&f: &Self::F, &x: &Self::F) -> Self::F {
-        f + x
-    }
-
-    fn composition(&f: &Self::F, &g: &Self::F) -> Self::F {
-        f + g
-    }
-}
-
 fn main() {
     input! {
         n: usize,
@@ -47,52 +28,46 @@ fn main() {
             ww.push((x, y));
         }
     }
-    let i2i = hsi
+    let x2i = hsi
         .into_iter()
         .sorted_unstable()
         .enumerate()
         .map(|(i, x)| (x, i))
         .collect::<HashMap<_, _>>();
-    let j2j = hsj
+    let y2j = hsj
         .into_iter()
         .sorted_unstable()
         .enumerate()
         .map(|(j, y)| (y, j))
         .collect::<HashMap<_, _>>();
-    let mut bb = bb
+    let bb = bb
         .into_iter()
-        .map(|(x, y)| (i2i[&x], j2j[&y]))
+        .map(|(x, y)| (x2i[&x], y2j[&y]))
         .collect_vec();
     let ww = ww
         .into_iter()
-        .map(|(x, y)| (i2i[&x], j2j[&y]))
+        .map(|(x, y)| (x2i[&x], y2j[&y]))
         .collect_vec();
-    let h = i2i.len();
-    let w = j2j.len();
-    let mut lsi = ac_library::LazySegtree::<MaxMonoid>::new(h);
-    let mut lsj = ac_library::LazySegtree::<MaxMonoid>::new(w);
-    bb.sort_unstable_by_key(|&(i, j)| (R(j), R(i)));
+    let h = x2i.len();
+    let w = y2j.len();
+    let mut i2v = vec![0; h];
+    let mut j2v = vec![0; w];
     for (i, j) in bb.iter().copied() {
-        let max = lsi.prod(i..);
-        lsi.apply(i, max.max(j));
+        i2v[i] = i2v[i].max(j);
+        j2v[j] = j2v[j].max(i);
     }
-    bb.sort_unstable_by_key(|&(i, j)| (R(i), R(j)));
-    for (i, j) in bb.iter().copied() {
-        let max = lsj.prod(j..);
-        lsj.apply(j, max.max(i));
+    let mut max = 0;
+    for i in (0..h).rev() {
+        max = max.max(i2v[i]);
+        i2v[i] = max;
     }
-    // for i in 0..h {
-    //     let x = lsi.get(i);
-    //     eprintln!("[{i}] {}", "#".repeat(x));
-    // }
-    // eprintln!();
-    // for j in 0..w {
-    //     let x = lsj.get(j);
-    //     eprintln!("[{j}] {}", "#".repeat(x));
-    // }
+    let mut max = 0;
+    for j in (0..w).rev() {
+        max = max.max(j2v[j]);
+        j2v[j] = max;
+    }
     for (i, j) in ww {
-        if j <= lsi.prod(i..) || i <= lsj.prod(j..) {
-            // 誤ったNo判定をしている
+        if j <= i2v[i] || i <= j2v[j] {
             println!("No");
             return;
         }
