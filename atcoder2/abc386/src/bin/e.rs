@@ -12,7 +12,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
+        k: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    // let mut rs = 0;
+    // for vv in aa.into_iter().combinations(k) {
+    //     rs = rs.max(vv.into_iter().fold(0, |acc, v| acc ^ v));
+    // }
+    let rs = dfs(n, &aa, k, 0, 0);
+    println!("{rs}");
+}
+
+fn dfs(n: usize, aa: &[usize], k: usize, i: usize, v: usize) -> usize {
+    if k == 0 {
+        return v;
+    }
+    (i..=(n - k))
+        .map(|j| dfs(n, aa, k - 1, j + 1, v ^ aa[j]))
+        .max()
+        .unwrap()
 }
