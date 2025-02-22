@@ -15,20 +15,17 @@ fn main() {
         k: usize,
         aa: [usize; n],
     };
-    // let mut rs = 0;
-    // for vv in aa.into_iter().combinations(k) {
-    //     rs = rs.max(vv.into_iter().fold(0, |acc, v| acc ^ v));
-    // }
-    let rs = dfs(n, &aa, k, 0, 0);
-    println!("{rs}");
-}
-
-fn dfs(n: usize, aa: &[usize], k: usize, i: usize, v: usize) -> usize {
-    if k == 0 {
-        return v;
+    // https://atcoder.jp/contests/abc386/editorial/11697
+    let mut rs = 0;
+    if k <= n - k {
+        for vv in aa.into_iter().combinations(k) {
+            rs = rs.max(vv.into_iter().fold(0, |acc, v| acc ^ v));
+        }
+    } else {
+        let xor_xum = aa.iter().copied().fold(0, |acc, v| acc ^ v);
+        for vv in aa.into_iter().combinations(n - k) {
+            rs = rs.max(vv.into_iter().fold(xor_xum, |acc, v| acc ^ v));
+        }
     }
-    (i..=(n - k))
-        .map(|j| dfs(n, aa, k - 1, j + 1, v ^ aa[j]))
-        .max()
-        .unwrap()
+    println!("{rs}");
 }
