@@ -14,24 +14,35 @@ fn main() {
         l: usize,
         r: usize,
     };
+    // https://atcoder.jp/contests/abc387/editorial/11832
     let rs = f(r) - f(l - 1);
     println!("{rs}");
 }
 
-fn f(n: usize) -> usize {
-    if n < 10 {
-        return n;
+fn f(mut v: usize) -> usize {
+    let mut dd = vec![];
+    while 0 < v {
+        dd.push(v % 10);
+        v /= 10;
     }
-    // 325 -> c(1**) + c(2**) + c(30*) + c(31*) + c(32*)
-    // 231 -> c(1**) + c(20*) + c(21*)
-
-    let log = n.ilog10();
-    let pow = 10usize.pow(log);
-    let head = n / pow;
-    // head.saturating_sub(1) * pow + f(n % pow)
-    (1..head).fold(0, |acc, i| i.pow(log)) + g(n % pow, head)
-}
-
-fn g(n: usize, max: usize) -> usize {
-    n
+    dd.reverse();
+    let n = dd.len();
+    let mut rs = 0;
+    for i in 1..=n {
+        if i == n {
+            rs += 1;
+            break;
+        }
+        rs += dd[0].pow((n - 1 - i) as u32) * dd[0].min(dd[i]);
+        if dd[0] <= dd[i] {
+            break;
+        }
+    }
+    for i in 0..n {
+        let max = if i != 0 { 9 } else { dd[0] - 1 };
+        for j in 1..=max {
+            rs += j.pow((n - 1 - i) as u32);
+        }
+    }
+    rs
 }
