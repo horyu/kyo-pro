@@ -14,5 +14,10 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut rs = 0;
+    for a in aa.iter().copied() {
+        let j = aa.partition_point(|&x| x < 2 * a);
+        rs += n - j;
+    }
+    println!("{rs}");
 }
