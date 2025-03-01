@@ -12,7 +12,18 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        mut aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut imos = vec![0isize; n + 1];
+    let mut tmp = 0;
+    let mut rrss = vec![];
+    for (i, mut a) in aa.iter().copied().enumerate() {
+        tmp += imos[i];
+        a += tmp as usize;
+        imos[i + 1] += 1;
+        imos[n.min(i + 1 + a)] -= 1;
+        rrss.push(a.saturating_sub(n - 1 - i));
+    }
+    let rs = rrss.iter().join(" ");
+    println!("{rs}");
 }
