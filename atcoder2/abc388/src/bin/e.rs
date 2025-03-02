@@ -12,7 +12,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        mut aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut bb = aa.split_off(n / 2);
+    let mut rs = 0;
+    while let Some(b) = bb.pop() {
+        while let Some(a) = aa.pop() {
+            if a * 2 <= b {
+                rs += 1;
+                break;
+            }
+        }
+    }
+    println!("{rs}");
 }
