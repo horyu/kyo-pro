@@ -11,8 +11,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        ss: [Chars; h],
     };
-    // println!("{rs}");
+    let u = (0..h).find(|&i| (0..w).any(|j| ss[i][j] == '#')).unwrap();
+    let d = (0..h)
+        .rev()
+        .find(|&i| (0..w).any(|j| ss[i][j] == '#'))
+        .unwrap();
+    let l = (0..w).find(|&j| (0..h).any(|i| ss[i][j] == '#')).unwrap();
+    let r = (0..w)
+        .rev()
+        .find(|&j| (0..h).any(|i| ss[i][j] == '#'))
+        .unwrap();
+    let tf = ss[u..=d]
+        .iter()
+        .all(|s| s[l..=r].iter().all(|&c| matches!(c, '#' | '?')));
+    let rs = ["No", "Yes"][tf as usize];
+    println!("{rs}");
 }
