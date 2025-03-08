@@ -14,5 +14,7 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut rs = 0;
+    // 全くわからない
+    println!("{rs}");
 }
