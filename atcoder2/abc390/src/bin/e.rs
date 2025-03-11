@@ -1,7 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-use itertools::{chain, iproduct, izip, Itertools as _};
+use itertools::{chain, iproduct, izip, Itertools};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
 use petgraph::unionfind::UnionFind;
@@ -16,24 +16,31 @@ fn main() {
         vvaacc: [(Usize1, usize, usize); n],
     };
     let mut ss = [0; 3];
-    let mut ddd = vec![vec![0; x + 1]; 3];
-    for (v, a, c) in vvaacc.into_iter().sorted_unstable_by_key(|vac| vac.2) {
+    let mut aaa = vec![vec![0; x + 1]; 3];
+    for (v, a, c) in vvaacc {
         ss[v] += a;
+        let aa = &mut aaa[v];
         for i in ((c + 1)..=x).rev() {
-            if 0 < ddd[v][i - c] {
-                ddd[v][i] = ddd[v][i].max(ddd[v][i - c] + a);
+            if 0 < aa[i - c] {
+                aa[i] = aa[i].max(aa[i - c] + a);
             }
         }
-        ddd[v][c] = ddd[v][c].max(a);
+        aa[c] = aa[c].max(a);
     }
-    let mut bbttmm = vec![BTreeMap::new(); 3];
-    for (v, dd) in ddd.into_iter().enumerate() {
-        for (c, d) in dd.into_iter().enumerate() {
-            if 0 < d {
-                bbttmm[v].insert(d, c);
+    let bbttmm = aaa
+        .into_iter()
+        .map(|aa| {
+            let mut btm = BTreeMap::new();
+            let mut max = 0;
+            for (c, a) in aa.into_iter().enumerate() {
+                if max < a {
+                    btm.insert(a, c);
+                }
+                max = max.max(a);
             }
-        }
-    }
+            btm
+        })
+        .collect_vec();
     // for btm in &bbttmm {
     //     eprintln!("{btm:?}");
     // }
@@ -44,7 +51,7 @@ fn main() {
         let mid = ok.midpoint(ng);
         let mut sum = 0;
         for btm in bbttmm.iter() {
-            if let Some((_d, c)) = btm.range(mid..).next() {
+            if let Some((_a, c)) = btm.range(mid..).next() {
                 sum += c;
             } else {
                 sum = x + 1;
