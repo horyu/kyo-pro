@@ -15,10 +15,8 @@ fn main() {
         x: usize,
         vvaacc: [(Usize1, usize, usize); n],
     };
-    let mut ss = [0; 3];
     let mut aaa = vec![vec![0; x + 1]; 3];
     for (v, a, c) in vvaacc {
-        ss[v] += a;
         let aa = &mut aaa[v];
         for i in ((c + 1)..=x).rev() {
             if 0 < aa[i - c] {
@@ -45,9 +43,13 @@ fn main() {
     //     eprintln!("{btm:?}");
     // }
     let mut ok = 0;
-    let mut ng = ss.into_iter().min().unwrap() + 1;
+    let mut ng = bbttmm
+        .iter()
+        .flat_map(|btm| btm.keys().max())
+        .min()
+        .unwrap()
+        + 1;
     while 1 < ng - ok {
-        // 目標ビタミン
         let mid = ok.midpoint(ng);
         let mut sum = 0;
         for btm in bbttmm.iter() {
