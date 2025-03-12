@@ -13,6 +13,43 @@ fn main() {
     input! {
         n: usize,
         x: usize,
+        vvaacc: [(Usize1, isize, usize); n],
+    };
+    // https://atcoder.jp/contests/abc390/editorial/12052
+    const M: usize = 5000;
+    let mut dp = vec![vec![-2e9 as isize; M + 1]; 3];
+    for i in 0..3 {
+        dp[i][0] = 0;
+    }
+    for (v, a, c) in vvaacc {
+        for j in (c..=x).rev() {
+            dp[v][j] = dp[v][j].max(dp[v][j - c] + a);
+        }
+    }
+    for i in 0..3 {
+        for j in 0..x {
+            dp[i][j + 1] = dp[i][j + 1].max(dp[i][j]);
+        }
+    }
+    let mut idx = [0; 3];
+    for i in 0..x {
+        if dp[0][idx[0]] <= dp[1][idx[1]] && dp[0][idx[0]] <= dp[2][idx[2]] {
+            idx[0] += 1;
+        } else if dp[1][idx[1]] <= dp[0][idx[0]] && dp[1][idx[1]] <= dp[2][idx[2]] {
+            idx[1] += 1;
+        } else {
+            idx[2] += 1;
+        }
+    }
+    let rs = izip!(dp, idx).map(|(dp, idx)| dp[idx]).min().unwrap();
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        x: usize,
         vvaacc: [(Usize1, usize, usize); n],
     };
     let mut aaa = vec![vec![0; x + 1]; 3];
