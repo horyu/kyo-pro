@@ -12,7 +12,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
     };
-    // println!("{rs}");
+    let mut poss = (0..n).collect_vec();
+    let mut cc = vec![1; n];
+    let mut rs = 0;
+    for _ in 0..q {
+        input! {t: usize};
+        if t == 1 {
+            input! {p: Usize1, h: Usize1};
+            let from = poss[p];
+            cc[from] -= 1;
+            if cc[from] == 1 {
+                rs -= 1;
+            }
+            let to = h;
+            poss[p] = to;
+            cc[to] += 1;
+            if cc[to] == 2 {
+                rs += 1;
+            }
+            continue;
+        }
+        println!("{rs}");
+    }
 }
