@@ -12,7 +12,13 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        i2j: [Usize1; n],
+        i2q: [Usize1; n],
     };
-    // println!("{rs}");
+    let mut q2i = vec![0; n];
+    for (i, q) in i2q.iter().copied().enumerate() {
+        q2i[q] = i;
+    }
+    let rs = q2i.iter().copied().map(|i| i2q[i2j[i]] + 1).join(" ");
+    println!("{rs}");
 }
