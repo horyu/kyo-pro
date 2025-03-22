@@ -12,7 +12,16 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        pp: [Usize1; n],
     };
-    // println!("{rs}");
+    let mut ft = ac_library::FenwickTree::new(n, 0usize);
+    let mut vv = vec![0; n];
+    for (i, p) in pp.into_iter().enumerate().rev() {
+        let pos = ft.sum(..=p) + p;
+        vv[pos] = i + 1;
+        ft.add(p, 1);
+        eprintln!("{vv:?} {}", (0..n).map(|i| ft.sum(i..=i)).join(" "));
+    }
+    let rs = vv.iter().join(" ");
+    println!("{rs}");
 }
