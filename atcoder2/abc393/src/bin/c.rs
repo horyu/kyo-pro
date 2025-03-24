@@ -12,7 +12,20 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        uuvv: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut hs = HashSet::new();
+    let mut rs = 0;
+    for (u, v) in uuvv {
+        if u == v {
+            rs += 1;
+            continue;
+        }
+        let (min, max) = if u < v { (u, v) } else { (v, u) };
+        if !hs.insert((min, max)) {
+            rs += 1;
+        }
+    }
+    println!("{rs}");
 }
