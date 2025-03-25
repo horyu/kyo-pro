@@ -12,7 +12,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    // s[i] からみて左側にある 1 の個数
+    let mut ll = vec![0; n];
+    for i in 1..n {
+        ll[i] = ll[i - 1] + usize::from(s[i - 1] == '1');
+    }
+    // s[i] からみて右側にある 1 の個数
+    let mut rr = vec![0; n];
+    for i in (0..(n - 1)).rev() {
+        rr[i] = rr[i + 1] + usize::from(s[i + 1] == '1');
+    }
+    let mut rs = 0;
+    for (i, c) in s.into_iter().enumerate() {
+        if c == '0' {
+            rs += ll[i].min(rr[i]);
+        }
+    }
+    println!("{rs}");
 }
