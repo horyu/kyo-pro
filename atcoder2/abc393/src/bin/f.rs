@@ -9,6 +9,31 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
+fn main() {
+    input! {
+        n: usize,
+        q: usize,
+        aa: [usize; n],
+        rrxx: [(Usize1, usize); q],
+    };
+    const INF: usize = 1 << 60;
+    let mut r2xxjj = vec![vec![]; n];
+    for (j, (r, x)) in rrxx.into_iter().enumerate() {
+        r2xxjj[r].push((x, j));
+    }
+    let mut rrss = vec![0; q];
+    let mut dp = vec![INF; n];
+    for (i, (a, rrxx)) in aa.into_iter().zip(r2xxjj).enumerate() {
+        let pos = dp.partition_point(|&d| d < a);
+        dp[pos] = a;
+        for (x, j) in rrxx {
+            rrss[j] = dp.partition_point(|&d| d <= x);
+        }
+    }
+    let rs = rrss.iter().join("\n");
+    println!("{rs}");
+}
+
 use ac_library::{LazySegtree, MapMonoid, Max};
 struct MaxMonoid;
 impl MapMonoid for MaxMonoid {
@@ -28,7 +53,8 @@ impl MapMonoid for MaxMonoid {
     }
 }
 
-fn main() {
+#[allow(dead_code)]
+fn main2() {
     input! {
         n: usize,
         q: usize,
