@@ -11,8 +11,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut s: Chars,
     };
-    // println!("{rs}");
+    let n = s.len();
+    let mut l = 1;
+    while l < n {
+        if ('W', 'A') == (s[l - 1], s[l]) {
+            s[l - 1] = 'A';
+            s[l] = 'C';
+            l = 1.max(l - 1);
+            continue;
+        }
+        l += 1;
+    }
+    let rs = s.iter().collect::<String>();
+    println!("{rs}");
 }
