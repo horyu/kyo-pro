@@ -11,8 +11,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut vv = vec![];
+    for c in s {
+        match c {
+            ')' => {
+                if vv.pop_if(|x| *x == '(').is_some() {
+                    continue;
+                }
+            }
+            ']' => {
+                if vv.pop_if(|x| *x == '[').is_some() {
+                    continue;
+                }
+            }
+            '>' => {
+                if vv.pop_if(|x| *x == '<').is_some() {
+                    continue;
+                }
+            }
+            _ => {}
+        }
+        vv.push(c);
+    }
+    let rs = ["No", "Yes"][vv.is_empty() as usize];
+    println!("{rs}");
 }
