@@ -12,7 +12,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        ccc: [Chars; n],
     };
+    let mut ttt = vec![vec![]; n];
+    let mut fff = vec![vec![]; n];
+    for (f, cc) in ccc.iter().enumerate() {
+        for (t, c) in cc.iter().copied().enumerate() {
+            if c == '-' {
+                continue;
+            }
+            ttt[f].push((t, c));
+            fff[t].push((f, c));
+        }
+    }
+    let mut rrss = vec![vec![!0; n]; n];
+    for from in 0..n {
+        if ccc[from][from] != '-' {
+            rrss[from][from] = 0;
+        }
+    }
     // println!("{rs}");
 }
