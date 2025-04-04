@@ -14,22 +14,38 @@ fn main() {
         n: usize,
         ccc: [Chars; n],
     };
-    let mut ttt = vec![vec![]; n];
-    let mut fff = vec![vec![]; n];
-    for (f, cc) in ccc.iter().enumerate() {
-        for (t, c) in cc.iter().copied().enumerate() {
-            if c == '-' {
+    let mut aaa = vec![vec![!0usize; n]; n];
+    let mut qq = VecDeque::new();
+    for i in 0..n {
+        qq.push_back((i, i));
+        aaa[i][i] = 0;
+    }
+    for (i, cc) in ccc.iter().enumerate() {
+        for (j, c) in cc.iter().copied().enumerate() {
+            if i == j || c == '-' {
                 continue;
             }
-            ttt[f].push((t, c));
-            fff[t].push((f, c));
+            qq.push_back((i, j));
+            aaa[i][j] = 1;
         }
     }
-    let mut rrss = vec![vec![!0; n]; n];
-    for from in 0..n {
-        if ccc[from][from] != '-' {
-            rrss[from][from] = 0;
+    while let Some((i, j)) = qq.pop_front() {
+        for k in 0..n {
+            for l in 0..n {
+                // k-i ~ j-l
+                if ccc[k][i] != '-' && ccc[j][l] != '-' && ccc[k][i] == ccc[j][l] && aaa[k][l] == !0
+                {
+                    aaa[k][l] = aaa[i][j] + 2;
+                    qq.push_back((k, l));
+                }
+            }
         }
     }
-    // println!("{rs}");
+    for aa in aaa {
+        let rs = aa
+            .into_iter()
+            .map(|a| if a == !0 { -1 } else { a as isize })
+            .join(" ");
+        println!("{rs}");
+    }
 }
