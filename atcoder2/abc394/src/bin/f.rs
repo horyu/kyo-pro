@@ -12,7 +12,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabb: [(Usize1, Usize1); n - 1],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (a, b) in aabb.iter().copied() {
+        g[a].push(b);
+        g[b].push(a);
+    }
+    let mut dsu = ac_library::Dsu::new(n);
+    for (i, vv) in g.iter().enumerate() {
+        if 4 <= vv.len() {
+            for v in vv.iter().copied() {
+                dsu.merge(i, v);
+            }
+        }
+    }
+    let mut rs = 2.min(n);
+    // let mut memo = HashMap::new();
+    for vv in dsu.groups() {
+        if vv.len() == 1 {
+            continue;
+        }
+        // TODO
+    }
+    println!("{rs}");
 }
