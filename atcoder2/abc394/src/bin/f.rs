@@ -19,21 +19,43 @@ fn main() {
         g[a].push(b);
         g[b].push(a);
     }
-    let mut dsu = ac_library::Dsu::new(n);
-    for (i, vv) in g.iter().enumerate() {
-        if 4 <= vv.len() {
-            for v in vv.iter().copied() {
-                dsu.merge(i, v);
-            }
-        }
-    }
-    let mut rs = 2.min(n);
-    // let mut memo = HashMap::new();
-    for vv in dsu.groups() {
-        if vv.len() == 1 {
+    let mut rs = -1;
+    let mut memo = HashMap::new();
+    for i in 0..n {
+        if g[i].len() < 4 {
             continue;
         }
-        // TODO
+        rs = rs.max(dfs(&g, &mut memo, !0, i));
     }
     println!("{rs}");
+}
+
+fn dfs(
+    g: &[Vec<usize>],
+    memo: &mut HashMap<(usize, usize), isize>,
+    par: usize,
+    cur: usize,
+) -> isize {
+    if let Some(&v) = memo.get(&(par, cur)) {
+        return v;
+    }
+    if g[cur].len() < 4 {
+        memo.insert((par, cur), 1);
+        return 1;
+    }
+    let mut ss = vec![];
+    for next in g[cur].iter().copied() {
+        if next == par {
+            continue;
+        }
+        ss.push(dfs(g, memo, cur, next));
+    }
+    ss.sort_unstable();
+    let rs = 1 + ss
+        .iter()
+        .rev()
+        .take(3 + usize::from(par == !0))
+        .sum::<isize>();
+    memo.insert((par, cur), rs);
+    rs
 }
