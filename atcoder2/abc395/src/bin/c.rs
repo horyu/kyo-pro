@@ -14,5 +14,18 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut mm = multimap::MultiMap::new();
+    for (i, a) in aa.into_iter().enumerate() {
+        mm.insert(a, i);
+    }
+    let rs = mm
+        .into_iter()
+        .flat_map(|(_, ii)| {
+            ii.into_iter()
+                .tuple_windows()
+                .map(|(i, j)| (1 + j - i) as isize)
+        })
+        .min()
+        .unwrap_or(-1);
+    println!("{rs}");
 }
