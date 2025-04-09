@@ -12,7 +12,24 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        x: usize,
+        uuvv: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n * 2];
+    for i in 0..n {
+        g[i].push((n + i, x));
+        g[n + i].push((i, x));
+    }
+    for (u, v) in uuvv.iter().copied() {
+        g[u].push((v, 1));
+        g[n + v].push((n + u, 1));
+    }
+    if let Some((_, rs)) = pathfinding::prelude::dijkstra(
+        &0,
+        |&i| g[i].iter().copied(),
+        |&i| i == n - 1 || i == 2 * n - 1,
+    ) {
+        println!("{rs}");
+    }
 }
