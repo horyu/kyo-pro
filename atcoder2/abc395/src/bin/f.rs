@@ -13,26 +13,31 @@ fn main() {
     input! {
         n: usize,
         x: usize,
-        uudd: [(usize, usize); n],
+        uudd: [(Usize1, Usize1); n],
     };
-    let (u_min, u_max, ud_min, ud_max) =
-        uudd.iter()
-            .copied()
-            .fold((!0, 0, !0, 0), |(min_u, max_u, min_ud, max_ud), (u, d)| {
-                (
-                    min_u.min(u),
-                    max_u.max(u),
-                    min_ud.min(u + d),
-                    max_ud.max(u + d),
-                )
-            });
-    // let mut ok = 0;
-    // let mut ng = ud_min + 1;
-    // while 1 < ng - ok {
-    //     let mid = ok.midpoint(ng);
-    //     let mut sml = mid.saturating_sub(uudd[0].1);
-    //     let mut big = mid.min(uudd[0].0);
-    // }
-
-    // println!("{rs}");
+    // https://atcoder.jp/contests/abc395/editorial/12344
+    let mut r = uudd.iter().map(|(u, d)| u + d).min().unwrap() + 1;
+    let mut l = x.min(r - 1);
+    while l + 1 < r {
+        let m = l.midpoint(r);
+        let mut tf = true;
+        let mut ll = 0usize;
+        let mut rr = m;
+        for (u, d) in uudd.iter().copied() {
+            // [L - X, R + X] & [m - D, U]
+            ll = (ll.saturating_sub(x)).max(m.saturating_sub(d));
+            rr = (rr + x).min(u);
+            if rr < ll {
+                tf = false;
+                break;
+            }
+        }
+        if tf {
+            l = m;
+        } else {
+            r = m;
+        }
+    }
+    let rs = uudd.iter().fold(0, |acc, (u, d)| acc + u + d) - l * n;
+    println!("{rs}");
 }
