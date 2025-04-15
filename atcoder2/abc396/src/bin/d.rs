@@ -15,6 +15,42 @@ fn main() {
         m: usize,
         uuvvww: [(Usize1, Usize1, usize); m],
     };
+    let mut g = vec![vec![]; n];
+    for (u, v, w) in uuvvww.iter().copied() {
+        g[u].push((v, w));
+        g[v].push((u, w));
+    }
+    fn dfs(
+        g: &Vec<Vec<(usize, usize)>>,
+        i: usize,
+        v: usize,
+        visited: &mut Vec<bool>,
+        rs: &mut usize,
+    ) {
+        if i == g.len() - 1 {
+            *rs = (*rs).min(v);
+            return;
+        }
+        visited[i] = true;
+        for (j, w) in g[i].iter().copied() {
+            if !visited[j] {
+                dfs(g, j, v ^ w, visited, rs);
+            }
+        }
+        visited[i] = false;
+    }
+    let mut rs = !0;
+    dfs(&g, 0, 0, &mut vec![false; n], &mut rs);
+    println!("{rs}");
+}
+
+#[allow(unused)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        uuvvww: [(Usize1, Usize1, usize); m],
+    };
     let mut g = vec![vec![!0usize; n]; n];
     for (u, v, w) in uuvvww.iter().copied() {
         g[u][v] = w;
