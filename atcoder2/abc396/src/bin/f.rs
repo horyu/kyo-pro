@@ -16,8 +16,12 @@ fn main() {
         aa: [usize; n],
     };
     const MAX: usize = 2e5 as usize;
-    let a2ii: multimap::MultiMap<usize, usize> =
-        multimap::MultiMap::from_iter(aa.iter().copied().enumerate().map(|(i, a)| (a, i)));
+    let a2ii = aa
+        .iter()
+        .copied()
+        .enumerate()
+        .map(|(i, a)| (a, i))
+        .into_group_map();
 
     // 転倒数を求める
     let mut rs = 0;
@@ -28,8 +32,11 @@ fn main() {
     }
     println!("{rs}");
     for k in 1..m {
-        if let Some(ii) = a2ii.get_vec(&(m - k)) {
-            // ここでいい感じに計算する
+        if let Some(ii) = a2ii.get(&(m - k)) {
+            // iiのアイテムが全て0になる
+            // i=ii[0]で考える
+            // k=1 => rs = rs + (0..i)内の(0..m-1)の数 - (i..)内の(0..m-1)の数?
+
         }
         println!("{rs}");
     }
