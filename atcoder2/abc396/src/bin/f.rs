@@ -34,9 +34,13 @@ fn main() {
     for k in 1..m {
         if let Some(ii) = a2ii.get(&(m - k)) {
             // iiのアイテムが全て0になる
-            // i=ii[0]で考える
-            // k=1 => rs = rs + (0..i)内の(0..m-1)の数 - (i..)内の(0..m-1)の数?
-
+            // k=1 => rs = rs + (0..i)内の(0..m-1)の数 - (i..)内の(0..m-1)の数
+            // k=2 => rs = rs + (0..i)内の(0..m-2)&(m-1..m)の数 - (i..)内の(0..m-2)&(m-1..m)の数
+            let len = ii.len();
+            for (cnt, i) in ii.iter().copied().enumerate() {
+                rs += i - cnt;
+                rs -= n - 1 - i - (len - 1 - cnt);
+            }
         }
         println!("{rs}");
     }
