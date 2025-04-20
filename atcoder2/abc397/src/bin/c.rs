@@ -14,5 +14,19 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut cl = counter::Counter::<_>::new();
+    let mut cr = counter::Counter::<_>::new();
+    for a in &aa {
+        cr[a] += 1;
+    }
+    let mut rs = 0;
+    for (i, a) in aa.iter().enumerate() {
+        cr[a] -= 1;
+        if cr[a] == 0 {
+            cr.remove(a);
+        }
+        cl[a] += 1;
+        rs = rs.max(cl.len() + cr.len());
+    }
+    println!("{rs}");
 }
