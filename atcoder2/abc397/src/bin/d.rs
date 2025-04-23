@@ -11,24 +11,29 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: u128,
+        n: i128,
     };
+    // https://atcoder.jp/contests/abc397/editorial/12454
+    // d = x - y; y = k とすると x = d + k
     // xxx - yyy = n
-    // xxx - n = yyy
-    for x in (n.nth_root(3) + 1)..(4e7 as u128) {
-        let yyy = x.pow(3u32) - n;
-        let y = yyy.nth_root(3);
-        if y.pow(3u32) == yyy {
+    // (d+k)^3 - k^3 - n = 3dkk + 3ddk + (ddd-n) = 0
+    for d in 1..=n.nth_root(3) {
+        // axx + bx + c = 0 => x = (-b ± √(b^2 - 4ac)) / 2a
+        let a = 3 * d;
+        let b = 3 * d * d;
+        let c = d * d * d - n;
+        let discriminant = b * b - 4 * a * c;
+        if discriminant < 0 {
+            continue;
+        }
+        let sqrt_discriminant = discriminant.sqrt();
+        let k = (-b + sqrt_discriminant) / (2 * a);
+        let y = k;
+        let x = d + k;
+        if 0 < y && x.pow(3) - y.pow(3) == n {
             println!("{x} {y}");
             return;
         }
     }
-
-    // (i + 1)^3 - i^3 <= 1e18 となる最大のi
-    // let i = 577_350_268u128; // 5.7e8
-    // dbg!(i, i.ilog10());
-    // let diff = (i + 1).pow(3u32) - i.pow(3u32);
-    // dbg!(diff, diff.ilog10());
-
     println!("-1");
 }
