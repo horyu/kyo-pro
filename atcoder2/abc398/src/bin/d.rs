@@ -12,7 +12,42 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        mut r: isize,
+        mut c: isize,
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut hs = HashSet::new();
+    let mut x = 0;
+    let mut y = 0;
+    hs.insert((x, y));
+    let mut rs = String::new();
+    for dir in s {
+        match dir {
+            'N' => {
+                r += 1;
+                x += 1;
+            }
+            'W' => {
+                c += 1;
+                y += 1;
+            }
+            'S' => {
+                r -= 1;
+                x -= 1;
+            }
+            'E' => {
+                c -= 1;
+                y -= 1;
+            }
+            _ => unreachable!(),
+        }
+        hs.insert((x, y));
+        if hs.contains(&(r, c)) {
+            rs.push('1');
+        } else {
+            rs.push('0');
+        }
+        // eprintln!("{dir} ({x} {y}) ({r} {c})");
+    }
+    println!("{rs}");
 }
