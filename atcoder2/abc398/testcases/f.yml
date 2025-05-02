@@ -19,6 +19,31 @@ cases:
       TREE
     out: |
       TREERT
+  - name: sample
+    in: |
+      ABCBA
+    out: |
+      ABCBA
+  - name: sample
+    in: |
+      ABCB
+    out: |
+      ABCBA
+  - name: sample
+    in: |
+      AA
+    out: |
+      AA
+  - name: sample
+    in: |
+      ABB
+    out: |
+      ABBA
+  - name: sample
+    in: |
+      ABBB
+    out: |
+      ABBBA
 
 extend:
   - type: Text
