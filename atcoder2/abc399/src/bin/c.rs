@@ -12,7 +12,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        uuvv: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut uf = UnionFind::new(n);
+    let mut rs = 0;
+    for (u, v) in uuvv {
+        if !uf.union(u, v) {
+            rs += 1;
+        }
+    }
+    println!("{rs}");
 }
