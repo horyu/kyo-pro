@@ -12,7 +12,36 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        s: Bytes,
+        t: Bytes,
     };
-    // println!("{rs}");
+    let s = s.into_iter().map(|b| (b - b'a') as usize).collect_vec();
+    let t = t.into_iter().map(|b| (b - b'a') as usize).collect_vec();
+    if HashSet::<_>::from_iter(t.iter().copied()).len() == 26 {
+        // すべての文字が使用されていたら同一でなければならない
+        println!("{}", -i32::from(s != t));
+        return;
+    }
+    let mut hm = HashMap::new();
+    for (&a, &b) in izip!(&s, &t) {
+        if let Some(pre) = hm.insert(a, b) {
+            if pre != b {
+                // 一つの文字が複数の候補になることはない
+                println!("-1");
+                return;
+            }
+        }
+    }
+    let mut rs = 0;
+    let mut uf = UnionFind::new(26);
+    for (k, v) in hm {
+        if k != v {
+            rs += 1;
+            if !uf.union(k, v) {
+                // ループしていたら別の文字に一度置き換える
+                rs += 1;
+            }
+        }
+    }
+    println!("{rs}");
 }
