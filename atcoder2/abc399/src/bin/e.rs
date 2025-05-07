@@ -33,17 +33,21 @@ fn main() {
             }
         }
     }
-    // 完全なループは内部を１回別の文字にする必要がある
-    // 外から流れ込むループの場合、一度外の文字に置き換えてから一緒に置換すれば余分な手が不要となる
     let mut rs = 0;
-    let mut uf = UnionFind::new(26);
+    let mut in_deg = [0; 26];
+    let mut dsu = ac_library::Dsu::new(26);
     for (k, v) in hm {
         if k != v {
             rs += 1;
-            if !uf.union(k, v) {
-                // ループしていたら別の文字に一度置き換える
-                rs += 1;
-            }
+            in_deg[v] += 1;
+            dsu.merge(k, v);
+        }
+    }
+    // 完全なループは内部を１回別の文字にする必要がある
+    // 外から接続されているループはループ内の文字を一度外の文字に変換することでループを解消できる
+    for g in dsu.groups() {
+        if 1 < g.len() && g.iter().all(|&x| in_deg[x] == 1) {
+            rs += 1;
         }
     }
     println!("{rs}");
