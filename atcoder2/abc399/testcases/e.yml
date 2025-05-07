@@ -32,6 +32,20 @@ cases:
       bcba
     out: |
       4
+  - name: sample
+    in: |
+      5
+      fghij
+      ghfgg
+    out: |
+      5
+  - name: sample
+    in: |
+      3
+      fgh
+      ghf
+    out: |
+      4
 
 extend:
   - type: Text

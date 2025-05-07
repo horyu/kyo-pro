@@ -15,9 +15,10 @@ fn main() {
         s: Bytes,
         t: Bytes,
     };
+    // https://atcoder.jp/contests/abc399/editorial/12564
     let s = s.into_iter().map(|b| (b - b'a') as usize).collect_vec();
     let t = t.into_iter().map(|b| (b - b'a') as usize).collect_vec();
-    if HashSet::<_>::from_iter(t.iter().copied()).len() == 26 {
+    if t.iter().copied().unique().count() == 26 {
         // すべての文字が使用されていたら同一でなければならない
         println!("{}", -i32::from(s != t));
         return;
@@ -32,6 +33,8 @@ fn main() {
             }
         }
     }
+    // 完全なループは内部を１回別の文字にする必要がある
+    // 外から流れ込むループの場合、一度外の文字に置き換えてから一緒に置換すれば余分な手が不要となる
     let mut rs = 0;
     let mut uf = UnionFind::new(26);
     for (k, v) in hm {
