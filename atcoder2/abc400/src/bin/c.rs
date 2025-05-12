@@ -12,7 +12,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut rs = 0;
+    for a in 1.. {
+        let aa = 2usize.pow(a);
+        let m = n / aa;
+        if m == 0 {
+            break;
+        }
+        rs += m.sqrt().div_ceil(2);
+    }
+    println!("{rs}");
 }

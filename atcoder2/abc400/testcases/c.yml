@@ -19,6 +19,19 @@ cases:
       1234567890
     out: |
       42413
+  - name: sample
+    in: |
+      1
+    out: |
+      0
+  - name: sample
+    in: |
+      2
+    out: |
+      1
+  - name: sample
+    in: |
+      1000000000000000000
 
 extend:
   - type: Text
