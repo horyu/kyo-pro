@@ -12,7 +12,16 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
     };
-    // println!("{rs}");
+    let mut ft = ac_library::FenwickTree::new(n + 1, 0u128);
+    for i in 0..k {
+        ft.add(i, 1);
+    }
+    for i in k..=n {
+        let v = ft.sum((i - k)..i) % 1_000_000_000;
+        ft.add(i, v);
+    }
+    let rs = ft.sum(n..=n);
+    println!("{rs}");
 }
