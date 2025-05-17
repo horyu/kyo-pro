@@ -22,6 +22,12 @@ cases:
       .o???o.
     out: |
       .o.o.o.
+  - name: sample
+    in: |
+      1 0
+      ?
+    out: |
+      .
 
 extend:
   - type: Text
