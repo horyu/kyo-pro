@@ -24,26 +24,33 @@ fn main() {
     // 1: g[1][..1]が存在する ? g[0][2..] & g[1][2..] : -1
     // 2: g[2][..2]が存在する ? g[..=2][3..] : -1
     let mut dsu = ac_library::Dsu::new(n);
-    let mut bts = BTreeSet::new();
+    let mut bts = BTreeSet::from_iter(1..n);
+    // let mut bts = BTreeSet::new();
     for k in 0..n {
-        while let Some(&i) = g[k].range(..=k).next() {
-            g[k].remove(&i);
+        for i in g[k].range(..k).copied() {
             dsu.merge(k, i);
         }
-        if dsu.size(0) != k + 1 {
+        if dsu.size(0) == k + 1 {
+            // 全てg[0]にまとめる
+            while let Some(&i) = bts.range(..=k).next() {
+                bts.remove(&i);
+                let (sml, big) = if g[0].len() < g[i].len() {
+                    (0, i)
+                } else {
+                    (i, 0)
+                };
+                let tmp = std::mem::take(&mut g[sml]);
+                g[big].extend(tmp);
+                g.swap(0, big);
+            }
+            // g[0][..=k] を削除
+            while let Some(&i) = g[0].range(..=k).next() {
+                g[0].remove(&i);
+            }
+            let rs = g[0].len();
+            println!("{rs}");
+        } else {
             println!("-1");
-            continue;
         }
-        if bts.len() < g[k].len() {
-            std::mem::swap(&mut bts, &mut g[k]);
-        }
-        for i in std::mem::take(&mut g[k]) {
-            bts.insert(i);
-        }
-        while let Some(&i) = bts.range(..=k).next() {
-            bts.remove(&i);
-        }
-        let rs = bts.len();
-        println!("{rs}");
     }
 }
