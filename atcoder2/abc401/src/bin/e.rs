@@ -15,6 +15,37 @@ fn main() {
         m: usize,
         uuvv: [(Usize1, Usize1); m],
     };
+    let mut g = vec![vec![]; n];
+    for (u, v) in uuvv.iter().copied() {
+        g[u].push(v);
+        g[v].push(u);
+    }
+    let mut sml = ac_library::Dsu::new(n);
+    let mut big = ac_library::Dsu::new(n);
+    for i in 0..n {
+        for j in g[i].iter().copied() {
+            if j < i {
+                sml.merge(i, j);
+            } else {
+                big.merge(i, j);
+            }
+        }
+        let rs = if sml.size(i) == i + 1 {
+            (big.size(i) - (i + 1)) as i64
+        } else {
+            -1
+        };
+        println!("{rs}");
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        uuvv: [(Usize1, Usize1); m],
+    };
     let mut g = vec![BTreeSet::new(); n];
     for (u, v) in uuvv.iter().copied() {
         g[u].insert(v);
