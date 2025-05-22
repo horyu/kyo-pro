@@ -12,7 +12,26 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
     };
-    // println!("{rs}");
+    let mut a2i = vec![vec![]; n];
+    let mut kk = vec![0; m];
+    for i in 0..m {
+        input! {k: usize, aa: [Usize1; k]};
+        kk[i] = k;
+        for a in aa {
+            a2i[a].push(i);
+        }
+    }
+    input! {bb: [Usize1; n]};
+    let mut rs = 0;
+    for b in bb {
+        for i in a2i[b].iter().copied() {
+            kk[i] -= 1;
+            if kk[i] == 0 {
+                rs += 1;
+            }
+        }
+        println!("{rs}");
+    }
 }
