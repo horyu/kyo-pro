@@ -12,7 +12,19 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut counter = counter::Counter::<_>::new();
+    let mut rs = m * m.saturating_sub(1) / 2;
+    // 円周上の直線の組が平行であるのは 同じ傾きであるとき == 垂直線が一致する
+    // 隣接した点の中点を取れるように頂点の数を2倍にして考える
+    let nn = n * 2;
+    for (a, b) in aabb {
+        let mid = (a * 2 + b * 2) / 2;
+        let x = (mid % nn).min((mid + n) % nn);
+        rs -= counter[&x];
+        counter[&x] += 1;
+    }
+    println!("{rs}");
 }
