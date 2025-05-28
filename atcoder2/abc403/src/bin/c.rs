@@ -12,7 +12,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        q: usize,
     };
-    // println!("{rs}");
+    let mut hhss = vec![HashSet::new(); n + 1];
+    for _ in 0..q {
+        input! {t: usize};
+        match t {
+            1 => {
+                input! {x: usize, y: usize};
+                hhss[x].insert(y);
+            }
+            2 => {
+                input! {x: usize};
+                hhss[x].insert(0);
+            }
+            // 3
+            _ => {
+                input! {x: usize, y: usize};
+                let tf = hhss[x].contains(&0) || hhss[x].contains(&y);
+                let rs = ["No", "Yes"][tf as usize];
+                println!("{rs}");
+            }
+        }
+    }
 }
