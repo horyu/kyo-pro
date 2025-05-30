@@ -1,7 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-use itertools::{chain, iproduct, izip, Itertools as _};
+use itertools::{chain, iproduct, izip, Itertools};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
 use petgraph::unionfind::UnionFind;
@@ -37,16 +37,21 @@ fn main() {
     }
     let mut rs = 0;
     for ii in dsu.groups() {
-        // (d=1) 1 1 2 3 4 4 のときWA
-        let bb = ii.iter().copied().map(|i| aa[i]).collect_vec();
-        let min = bb.iter().copied().min().unwrap();
-        // [min + 2n*d, min + (2n+1)*d]
-        let mut cc = [0; 2];
-        for b in bb {
-            let k = (b - min) / d;
-            cc[k % 2] += 1;
+        let cc = ii
+            .into_iter()
+            .map(|i| aa[i])
+            .counts()
+            .into_iter()
+            .sorted_unstable_by_key(|kv| kv.0)
+            .map(|kv| kv.1)
+            .collect_vec();
+        // 隣接した要素の片方が必ず0になるように任意の要素を0にする最小コストを足す
+        // [直前の値が0, 直前の値が0でない]
+        let mut xx = [0, 0];
+        for c in cc {
+            xx = [(xx[0] + c).min(xx[1] + c), xx[0]];
         }
-        rs += cc[0].min(cc[1]);
+        rs += xx[0].min(xx[1]);
     }
     println!("{rs}");
 }
