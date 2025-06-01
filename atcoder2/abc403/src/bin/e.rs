@@ -16,21 +16,18 @@ fn main() {
         ttss: [(usize, Chars); q],
     };
     let mut xx = Trie::<26, 'a'>::new();
-    let mut yy: Vec<Vec<char>> = vec![];
+    let mut yy = xx.clone();
     for (t, s) in ttss {
         if t == 1 {
-            xx.insert_autoid(&s);
-            yy.retain(|y| !xx.start_with(&y));
+            yy.remove(&s, true);
+            xx.insert(&s);
         } else {
-            if !xx.start_with(&s) {
-                yy.push(s);
+            if !xx.has_registered_prefix(&s) {
+                yy.insert(&s);
             }
         }
-        let rs = yy.len();
+        let rs = yy.count();
         println!("{rs}");
-        if q < 5 {
-            eprintln!("{yy:?}");
-        }
     }
 }
 
@@ -58,36 +55,99 @@ impl<const CHAR_SIZE: usize> Node<CHAR_SIZE> {
 #[derive(Clone, Debug)]
 struct Trie<const CHAR_SIZE: usize, const BASE: char> {
     nodes: Vec<Node<CHAR_SIZE>>,
+    node_id: usize,
+    word_id: usize,
 }
 
 #[allow(unused)]
 impl<const CHAR_SIZE: usize, const BASE: char> Trie<CHAR_SIZE, BASE> {
     fn new() -> Self {
         let nodes = vec![Node::new(0)];
-        Self { nodes }
+        Self {
+            nodes,
+            node_id: 1,
+            word_id: 0,
+        }
     }
 
-    fn insert(&mut self, word: &[char], word_id: usize) {
+    // Insert a word and return its id
+    fn insert(&mut self, word: &[char]) -> usize {
         let mut node_id = 0;
         for &ch in word {
             let c = (ch as u8 - BASE as u8) as usize;
             if self.nodes[node_id].next[c].is_none() {
-                let new_id = self.nodes.len();
-                self.nodes[node_id].next[c] = Some(new_id);
+                self.nodes[node_id].next[c] = Some(self.node_id);
                 self.nodes.push(Node::new(c));
+                self.node_id += 1;
             }
             self.nodes[node_id].common += 1;
             node_id = self.nodes[node_id].next[c].unwrap();
         }
         self.nodes[node_id].common += 1;
-        self.nodes[node_id].accept.push(word_id);
+        let current_word_id = self.word_id;
+        self.nodes[node_id].accept.push(current_word_id);
+        self.word_id += 1;
+        current_word_id
     }
 
-    fn insert_autoid(&mut self, word: &[char]) {
-        let word_id = self.nodes[0].common;
-        self.insert(word, word_id);
+    // Return removed word_ids
+    fn remove(&mut self, word: &[char], prefix: bool) -> Vec<usize> {
+        let mut node_id = 0;
+        for &ch in word {
+            let c = (ch as u8 - BASE as u8) as usize;
+            match self.nodes[node_id].next[c] {
+                Some(next_id) => node_id = next_id,
+                None => return vec![],
+            }
+        }
+        if !prefix {
+            let word_ids = std::mem::take(&mut self.nodes[node_id].accept);
+            let remove_count = word_ids.len();
+            {
+                let mut tmp_node_id = 0;
+                for &ch in word {
+                    let c = (ch as u8 - BASE as u8) as usize;
+                    self.nodes[tmp_node_id].common -= remove_count;
+                    if self.nodes[tmp_node_id].common == 0 {
+                        self.nodes[tmp_node_id].next[c] = None;
+                        break;
+                    }
+                    tmp_node_id = self.nodes[tmp_node_id].next[c].unwrap();
+                }
+                self.nodes[node_id].common -= remove_count;
+            }
+            return word_ids;
+        }
+        let remove_count = self.nodes[node_id].common;
+        if remove_count == 0 {
+            return vec![];
+        }
+        let mut word_ids = vec![];
+        let mut qq = VecDeque::new();
+        qq.push_back(node_id);
+        while let Some(current_id) = qq.pop_front() {
+            word_ids.append(&mut self.nodes[current_id].accept);
+            for &next_id in self.nodes[current_id].next.iter().flatten() {
+                qq.push_back(next_id);
+            }
+        }
+        {
+            let mut tmp_node_id = 0;
+            for &ch in word {
+                let c = (ch as u8 - BASE as u8) as usize;
+                self.nodes[tmp_node_id].common -= remove_count;
+                if self.nodes[tmp_node_id].common == 0 {
+                    self.nodes[tmp_node_id].next[c] = None;
+                    break;
+                }
+                tmp_node_id = self.nodes[tmp_node_id].next[c].unwrap();
+            }
+            self.nodes[node_id].common -= remove_count;
+        }
+        word_ids
     }
 
+    // Search for a word or prefix
     fn search(&self, word: &[char], prefix: bool) -> bool {
         let mut node_id = 0;
         for &ch in word {
@@ -104,15 +164,34 @@ impl<const CHAR_SIZE: usize, const BASE: char> Trie<CHAR_SIZE, BASE> {
         }
     }
 
+    // Check if the trie contains a word
     fn start_with(&self, prefix: &[char]) -> bool {
         self.search(prefix, true)
     }
 
-    fn count(&self) -> usize {
-        self.nodes[0].common
+    // Check if the trie contains an exact word
+    fn contains(&self, word: &[char]) -> bool {
+        self.search(word, false)
     }
 
-    fn size(&self) -> usize {
-        self.nodes.len()
+    // Check if any prefix of `word` is registered as a word in the trie
+    fn has_registered_prefix(&self, word: &[char]) -> bool {
+        let mut node_id = 0;
+        for &ch in word {
+            if !self.nodes[node_id].accept.is_empty() {
+                return true;
+            }
+            let c = (ch as u8 - BASE as u8) as usize;
+            match self.nodes[node_id].next[c] {
+                Some(next_id) => node_id = next_id,
+                None => return false,
+            }
+        }
+        !self.nodes[node_id].accept.is_empty()
+    }
+
+    // Return the number of words in the trie
+    fn count(&self) -> usize {
+        self.nodes[0].common
     }
 }
