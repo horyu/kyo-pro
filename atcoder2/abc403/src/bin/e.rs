@@ -78,9 +78,11 @@ impl<const CHAR_SIZE: usize, const BASE: char> Trie<CHAR_SIZE, BASE> {
             if self.nodes[node_id].next[c].is_none() {
                 self.nodes[node_id].next[c] = Some(self.node_id);
                 self.nodes.push(Node::new(c));
+                self.nodes[node_id].common += 1;
                 self.node_id += 1;
+            } else {
+                self.nodes[node_id].common += 1;
             }
-            self.nodes[node_id].common += 1;
             node_id = self.nodes[node_id].next[c].unwrap();
         }
         self.nodes[node_id].common += 1;
@@ -134,15 +136,19 @@ impl<const CHAR_SIZE: usize, const BASE: char> Trie<CHAR_SIZE, BASE> {
         {
             let mut tmp_node_id = 0;
             for &ch in word {
-                let c = (ch as u8 - BASE as u8) as usize;
                 self.nodes[tmp_node_id].common -= remove_count;
                 if self.nodes[tmp_node_id].common == 0 {
-                    self.nodes[tmp_node_id].next[c] = None;
-                    break;
+                    self.nodes[tmp_node_id].next.fill(None);
+                    return word_ids;
                 }
-                tmp_node_id = self.nodes[tmp_node_id].next[c].unwrap();
+                let c = (ch as u8 - BASE as u8) as usize;
+                match self.nodes[tmp_node_id].next[c] {
+                    Some(next_id) => tmp_node_id = next_id,
+                    None => break,
+                }
             }
             self.nodes[node_id].common -= remove_count;
+            self.nodes[node_id].next.fill(None);
         }
         word_ids
     }
