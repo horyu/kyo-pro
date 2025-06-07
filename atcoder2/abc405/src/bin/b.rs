@@ -16,8 +16,8 @@ fn main() {
         aa: [Usize1; n],
     };
     let mut counter = counter::Counter::<_>::new();
-    for a in aa.iter().copied() {
-        counter[&a] += 1;
+    for a in aa.iter() {
+        counter[a] += 1;
     }
     if counter.len() < m {
         println!("0");

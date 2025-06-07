@@ -14,5 +14,11 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let mut right = aa.iter().sum::<usize>();
+    let mut rs = 0;
+    for a in aa {
+        right -= a;
+        rs += a * right;
+    }
+    println!("{rs}");
 }
