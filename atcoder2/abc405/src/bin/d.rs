@@ -11,8 +11,37 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        mut ss: [Chars; h],
     };
-    // println!("{rs}");
+    let mut qq = VecDeque::new();
+    for (i, s) in ss.iter().enumerate() {
+        for (j, c) in s.iter().copied().enumerate() {
+            if c == 'E' {
+                qq.push_back((i, j));
+            }
+        }
+    }
+    while let Some((i, j)) = qq.pop_front() {
+        if 0 < i && ss[i - 1][j] == '.' {
+            ss[i - 1][j] = 'v';
+            qq.push_back((i - 1, j));
+        }
+        if i < h - 1 && ss[i + 1][j] == '.' {
+            ss[i + 1][j] = '^';
+            qq.push_back((i + 1, j));
+        }
+        if 0 < j && ss[i][j - 1] == '.' {
+            ss[i][j - 1] = '>';
+            qq.push_back((i, j - 1));
+        }
+        if j < w - 1 && ss[i][j + 1] == '.' {
+            ss[i][j + 1] = '<';
+            qq.push_back((i, j + 1));
+        }
+    }
+    for s in ss {
+        println!("{}", s.iter().join(""));
+    }
 }
