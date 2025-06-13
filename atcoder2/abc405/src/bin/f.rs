@@ -17,28 +17,23 @@ fn main() {
         q: usize,
         ccdd: [(Usize1, Usize1); q],
     };
-    let n4 = n * 4;
-    let mut ft1 = ac_library::FenwickTree::new(n4, 0isize);
-    let mut ft2 = ac_library::FenwickTree::new(n4, 0isize);
+    let n2 = n * 2;
+    let mut ft = ac_library::FenwickTree::new(n2 * 2, 0isize);
     for (a, b) in aabb.iter().copied() {
-        ft1.add(a * 2, 1);
-        ft1.add(b * 2, -1);
-        let aa = (a * 2 + n) % n4;
-        let bb = (b * 2 + n) % n4;
-        let min = aa.min(bb);
-        let max = aa.max(bb);
-        ft2.add(min, 1);
-        ft2.add(max, -1);
+        if b - a < n {
+            ft.add(a, 1);
+            ft.add(b, -1);
+        } else {
+            ft.add(b, 1);
+            ft.add(a + n2, -1);
+        }
     }
     for (c, d) in ccdd.iter().copied() {
-        let c = c * 2;
-        let d = d * 2;
-        let mut rs = ft1.sum(c..d).abs();
-        let cc = (c + n) % n4;
-        let dd = (d + n) % n4;
-        let min = cc.min(dd);
-        let max = cc.max(dd);
-        rs = rs.max(ft2.sum(min..max).abs());
+        let rs = if d - c < n {
+            ft.sum(c..d).abs()
+        } else {
+            ft.sum(d..(c + n2)).abs()
+        };
         println!("{rs}");
     }
 }
