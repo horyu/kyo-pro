@@ -1,6 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
+#![allow(clippy::assign_op_pattern)]
 use ac_library::ModInt998244353;
 use itertools::{chain, iproduct, izip, Itertools as _};
 use itertools_num::ItertoolsNum as _;
@@ -15,29 +16,48 @@ fn main() {
         t: usize,
         nnkk: [(usize, usize); t],
     };
-    // https://atcoder.jp/contests/abc406/editorial/13071
+    // https://atcoder.jp/contests/abc406/editorial/13057
+    // c(n, k) = 0以上n以下の整数のうち popcountがkのものの個数
+    let mut c = HashMap::new();
+    // s(n, k) = 0以上n以下の整数のうち popcountがkのものの総和
+    let mut s = HashMap::new();
     for (n, k) in nnkk {
-        let l = n.ilog2() as usize + 1; // n のビット長
-        // i ビット目までを埋めた時点で N より小さいことが確定している非負整数であって，
-        // 立っているビットが上から i ビット目までであり，
-        // dp1​(i,j)：立っているビット数が j であるものの個数
-        // dp2​(i,j)：立っているビット数が j であるものの総和
-        let mut dp1 = vec![vec![ModInt998244353::default(); k + 1]; l];
-        let mut dp2 = dp1.clone();
-        dp1[0][0] += 1;
-
-        // N未満が確定している場合の遷移
-        for i in 0..l {
-            for j in 0..=k {
-                dp1[i + 1][j] = dp1[i + 1][j] + dp1[i][j];
-                dp2[i + 1][j] = dp2[i + 1][j] + dp2[i][j];
-                if j + 1 <= k {
-                    dp1[i + 1][j + 1] = dp1[i + 1][j + 1] + dp1[i][j];
-                    dp2[i + 1][j + 1] = dp2[i + 1][j + 1] + dp1[i][j] * (2usize << (k - 1 - i));
-                }
-            }
-        }
-        // TODO
+        let rs = fs(n, k, &mut c, &mut s);
+        println!("{rs}");
     }
-    // println!("{rs}");
+}
+
+fn fs(
+    n: usize,
+    k: usize,
+    c: &mut HashMap<(usize, usize), ModInt998244353>,
+    s: &mut HashMap<(usize, usize), ModInt998244353>,
+) -> ModInt998244353 {
+    if let Some(&v) = s.get(&(n, k)) {
+        return v;
+    }
+    if n == 0 || k == 0 {
+        s.insert((n, k), ModInt998244353::new(0));
+        return ModInt998244353::new(0);
+    }
+    let v = fs(n / 2, k, c, s) * 2 + fs((n - 1) / 2, k - 1, c, s) * 2 + fc((n - 1) / 2, k - 1, c);
+    s.insert((n, k), v);
+    v
+}
+
+fn fc(n: usize, k: usize, c: &mut HashMap<(usize, usize), ModInt998244353>) -> ModInt998244353 {
+    if let Some(&v) = c.get(&(n, k)) {
+        return v;
+    }
+    if k == 0 {
+        c.insert((n, k), ModInt998244353::new(1));
+        return ModInt998244353::new(1);
+    }
+    if n == 0 {
+        c.insert((n, k), ModInt998244353::new(0));
+        return ModInt998244353::new(0);
+    }
+    let v = fc(n / 2, k, c) + fc((n - 1) / 2, k - 1, c);
+    c.insert((n, k), v);
+    v
 }

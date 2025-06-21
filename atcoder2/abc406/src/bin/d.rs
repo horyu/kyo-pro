@@ -21,8 +21,8 @@ fn main() {
     let mut i2jj: HashMap<usize, HashSet<usize>> = HashMap::new();
     let mut j2ii: HashMap<usize, HashSet<usize>> = HashMap::new();
     for (x, y) in xxyy {
-        i2jj.entry(x).or_insert(HashSet::default()).insert(y);
-        j2ii.entry(y).or_insert(HashSet::default()).insert(x);
+        i2jj.entry(x).or_default().insert(y);
+        j2ii.entry(y).or_default().insert(x);
     }
     for (t, v) in ttvv {
         let mut rs = 0;
