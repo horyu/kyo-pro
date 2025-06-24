@@ -11,8 +11,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Bytes,
     };
-    // println!("{rs}");
+    let mut aa = s.iter().map(|&c| (c - b'0') as usize).collect_vec();
+    let mut sub = 0;
+    let mut rs = 0;
+    while let Some(a) = aa.pop() {
+        let b = (10 + a - sub) % 10;
+        rs += b + 1;
+        sub = (sub + b) % 10;
+    }
+    println!("{rs}");
 }
