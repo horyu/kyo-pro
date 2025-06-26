@@ -14,7 +14,8 @@ fn main() {
         x: usize,
         y: usize,
     };
-    let cnt = (1..=6).cartesian_product(1..=6)
+    let cnt = (1..=6)
+        .cartesian_product(1..=6)
         .filter(|&(a, b)| x <= a + b || y <= a.abs_diff(b))
         .count();
     let rs = cnt as f64 / 36.0;

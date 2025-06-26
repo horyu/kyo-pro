@@ -11,8 +11,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            aa: [usize; 2 * n],
+        };
+        // dp[i] := (括弧がi個ある時のMAX
+        let mut dp = vec![0; 1];
+        for (i, a) in aa.iter().copied().enumerate() {
+            let mut new_dp = vec![0; dp.len() + 1];
+            for (j, v) in dp.iter().copied().enumerate().rev() {
+                new_dp[j + 1] = new_dp[j + 1].max(dp[j] + a);
+                if 0 < j {
+                    new_dp[j - 1] = new_dp[j - 1].max(dp[j]);
+                }
+            }
+            new_dp.truncate((n + 1).min(2 * n - i + 1));
+            dp = new_dp;
+        }
+        let rs = dp[0];
+        println!("{rs}");
+    }
 }

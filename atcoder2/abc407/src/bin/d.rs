@@ -27,7 +27,7 @@ fn main() {
                 return true;
             }
             for i in 0..h {
-                for j in 0.. w {
+                for j in 0..w {
                     let ij = i * w + j;
                     if bits & (1 << ij) == 0 {
                         continue;
