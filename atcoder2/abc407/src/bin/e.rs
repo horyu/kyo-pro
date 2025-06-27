@@ -18,6 +18,7 @@ fn main() {
             n: usize,
             aa: [usize; 2 * n],
         };
+        // TODO: TLE する 配列を都度宣言するのではなくずらすことできる？あるいはメモ化再起
         // dp[i] := (括弧がi個ある時のMAX
         let mut dp = vec![0; 1];
         for (i, a) in aa.iter().copied().enumerate() {
