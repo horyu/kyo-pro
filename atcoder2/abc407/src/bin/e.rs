@@ -19,7 +19,17 @@ fn main() {
             aa: [usize; 2 * n],
         };
         // https://atcoder.jp/contests/abc407/editorial/13106
-        // let rs = dp[0];
-        // println!("{rs}");
+        let mut rs = 0;
+        let mut bh = BinaryHeap::new();
+        for i in 0..n {
+            if i == 0 {
+                bh.push(aa[i]);
+            } else {
+                bh.push(aa[i * 2 - 1]);
+                bh.push(aa[i * 2]);
+            }
+            rs += bh.pop().unwrap();
+        }
+        println!("{rs}");
     }
 }
