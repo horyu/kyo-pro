@@ -12,7 +12,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        llrr: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut imos = vec![0isize; n + 1];
+    for (l, r) in llrr {
+        imos[l] += 1;
+        imos[r + 1] -= 1;
+    }
+    for i in 0..n {
+        imos[i + 1] += imos[i];
+    }
+    let rs = imos[..n].iter().min().unwrap();
+    println!("{rs}");
 }
