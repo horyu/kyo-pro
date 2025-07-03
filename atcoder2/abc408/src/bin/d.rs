@@ -18,6 +18,34 @@ fn main() {
             n: usize,
             s: Chars,
         };
+        // https://atcoder.jp/contests/abc408/editorial/13166
+        // cc[i] := aa[i](i番目までの0の個数) - bb[i](i番目までの1の個数)
+        let mut cc = vec![0; n + 1];
+        for (i, c) in s.iter().copied().enumerate() {
+            cc[i + 1] = cc[i] + if c == '0' { 1 } else { -1 };
+        }
+        let sum = s.iter().filter(|&&c| c == '1').count() as i32;
+        let mut max = 0;
+        let mut res = 0;
+        for i in 0..=n {
+            res = res.min(cc[i] - max);
+            max = max.max(cc[i]);
+        }
+        let rs = sum + res;
+        println!("{rs}");
+    }
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        t: usize,
+    };
+    for _ in 0..t {
+        input! {
+            n: usize,
+            s: Chars,
+        };
         // vv := 1の個数 → 0の個数 → 1の個数 → ...
         let mut vv = vec![];
         for (c, g) in s.iter().copied().group_by(|&c| c).into_iter() {
