@@ -12,7 +12,14 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        d: usize,
+        r: usize,
+        hh: [usize; n],
     };
+    let mut mm = btreemultimap::BTreeMultiMap::new();
+    for (i, h) in hh.iter().copied().enumerate() {
+        mm.insert(h, i);
+    }
+    // 小さいhから遅延セグ木を更新する
     // println!("{rs}");
 }
