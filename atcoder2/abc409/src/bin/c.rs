@@ -12,7 +12,26 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        l: usize,
+        dd: [usize; n - 1],
     };
-    // println!("{rs}");
+    if l % 3 != 0 {
+        println!("0");
+        return;
+    }
+    let mut cc = vec![0usize; l];
+    let mut pos = 0;
+    cc[pos] += 1;
+    for d in dd {
+        pos += d;
+        pos %= l;
+        cc[pos] += 1;
+    }
+    // eprintln!("{cc:?}");
+    let mut rs = 0;
+    let ll = l / 3;
+    for i in 0..ll {
+        rs += cc[i] * cc[i + ll] * cc[i + 2 * ll];
+    }
+    println!("{rs}");
 }
