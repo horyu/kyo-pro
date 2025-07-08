@@ -11,8 +11,17 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
+        nnss: [(usize, Chars); t],
     };
-    // println!("{rs}");
+    for (n, mut s) in nnss {
+        if let Some(mut i) = (0..(n - 1)).find(|&i| s[i + 1] < s[i]) {
+            while i + 1 < n && s[i + 1] <= s[i] {
+                s.swap(i, i + 1);
+                i += 1;
+            }
+        }
+        let rs = s.iter().join("");
+        println!("{rs}");
+    }
 }
