@@ -11,8 +11,30 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut n: usize,
+        q: usize,
+        xxyy: [(isize, isize); n],
     };
-    // println!("{rs}");
+    let mut dsu = ac_library::Dsu::new(n + q);
+    let mut xxyy = xxyy.into_iter().map(|(x, y)| (x + y, x - y)).collect_vec();
+    for _ in 0..n {
+        input! {t: usize};
+        match t {
+            1 => {
+                input! {a: isize, b: isize};
+                let (x, y) = (a + b, a - b);
+                xxyy.push((x, y));
+                n += 1;
+            }
+            2 => {
+                // TODO
+            }
+            _ => {
+                input! {u: Usize1, v: Usize1};
+                let tf = dsu.same(u, v);
+                let rs = ["No", "Yes"][tf as usize];
+                println!("{rs}");
+            }
+        }
+    }
 }
