@@ -17,17 +17,48 @@ fn main() {
     };
     let mut dsu = ac_library::Dsu::new(n + q);
     let mut xxyy = xxyy.into_iter().map(|(x, y)| (x + y, x - y)).collect_vec();
-    for _ in 0..n {
+    let mut mm = btreemultimap::BTreeMultiMap::new();
+    let d = |a: (isize, isize), b: (isize, isize)| (a.0.abs_diff(b.0)).max(a.1.abs_diff(b.1));
+    for (i, ixy) in xxyy.iter().copied().enumerate() {
+        for (j, jxy) in xxyy.iter().copied().enumerate().skip(i + 1) {
+            mm.insert(d(ixy, jxy), (i, j));
+        }
+    }
+    for _ in 0..q {
         input! {t: usize};
         match t {
             1 => {
                 input! {a: isize, b: isize};
-                let (x, y) = (a + b, a - b);
-                xxyy.push((x, y));
+                let xy = (a + b, a - b);
+                for (i, ixy) in xxyy.iter().copied().enumerate() {
+                    mm.insert(d(xy, ixy), (i, n));
+                }
+                xxyy.push(xy);
                 n += 1;
             }
             2 => {
-                // TODO
+                let mut merged = false;
+                while let Some((k, iijj)) = mm
+                    .keys()
+                    .next()
+                    .copied()
+                    .map(|k| (k, mm.remove(&k).unwrap()))
+                {
+                    for (i, j) in iijj {
+                        if dsu.same(i, j) {
+                            continue;
+                        }
+                        dsu.merge(i, j);
+                        merged = true;
+                    }
+                    if merged {
+                        println!("{k}");
+                        break;
+                    }
+                }
+                if !merged {
+                    println!("-1");
+                }
             }
             _ => {
                 input! {u: Usize1, v: Usize1};
