@@ -30,8 +30,14 @@ fn main() {
             1 => {
                 input! {a: isize, b: isize};
                 let xy = (a + b, a - b);
+                let mut tmp = multimap::MultiMap::new();
                 for (i, ixy) in xxyy.iter().copied().enumerate() {
-                    mm.insert(d(xy, ixy), (i, n));
+                    let l = dsu.leader(i);
+                    tmp.insert(l, d(xy, ixy));
+                }
+                for (l, dd) in tmp {
+                    let min = dd.into_iter().min().unwrap();
+                    mm.insert(min, (l, n));
                 }
                 xxyy.push(xy);
                 n += 1;
