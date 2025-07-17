@@ -12,7 +12,27 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        h: usize,
+        m: usize,
+        aabb: [(usize, usize); n],
     };
-    // println!("{rs}");
+    let mut hm = HashMap::new();
+    hm.insert((h, m), 0);
+    for (qi, (a, b)) in aabb.into_iter().enumerate() {
+        let mut new_hm = HashMap::new();
+        for ((x, y), c) in hm {
+            if a <= x {
+                new_hm.insert((x - a, y), c + 1);
+            }
+            if b <= y {
+                new_hm.insert((x, y - b), c + 1);
+            }
+        }
+        if new_hm.is_empty() {
+            println!("{qi}");
+            return;
+        }
+        hm = new_hm;
+    }
+    println!("{n}");
 }
