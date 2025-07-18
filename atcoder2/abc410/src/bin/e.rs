@@ -16,23 +16,27 @@ fn main() {
         m: usize,
         aabb: [(usize, usize); n],
     };
-    let mut hm = HashMap::new();
-    hm.insert((h, m), 0);
+    let mut hs = HashSet::new();
+    hs.insert((0, 0));
     for (qi, (a, b)) in aabb.into_iter().enumerate() {
-        let mut new_hm = HashMap::new();
-        for ((x, y), c) in hm {
-            if a <= x {
-                new_hm.insert((x - a, y), c + 1);
+        // let mut xx2 = BTreeMap::new();
+        // let mut yy2 = BTreeMap::new();
+        let mut new_hs = HashSet::new();
+        for (x, y) in hs {
+            let (xx, yy) = (x + a, y + b);
+            if xx <= h {
+                new_hs.insert((xx, y));
+
             }
-            if b <= y {
-                new_hm.insert((x, y - b), c + 1);
+            if yy <= m {
+                new_hs.insert((x, yy));
             }
         }
-        if new_hm.is_empty() {
+        if new_hs.is_empty() {
             println!("{qi}");
             return;
         }
-        hm = new_hm;
+        hs = new_hs;
     }
     println!("{n}");
 }
