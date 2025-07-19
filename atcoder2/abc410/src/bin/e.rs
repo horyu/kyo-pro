@@ -16,26 +16,40 @@ fn main() {
         m: usize,
         aabb: [(usize, usize); n],
     };
-    let mut hs = HashSet::new();
-    hs.insert((0, 0));
+    let mut btm = BTreeMap::new();
+    btm.insert(0, 0);
     for (qi, (a, b)) in aabb.into_iter().enumerate() {
-        // let mut xx2 = BTreeMap::new();
-        // let mut yy2 = BTreeMap::new();
-        let mut new_hs = HashSet::new();
-        for (x, y) in hs {
+        let mut x2y = BTreeMap::new();
+        let mut y2x = x2y.clone();
+        for (x, y) in btm {
             let (xx, yy) = (x + a, y + b);
             if xx <= h {
-                new_hs.insert((xx, y));
+                x2y.insert(xx, y);
+                y2x.insert(y, xx);
             }
             if yy <= m {
-                new_hs.insert((x, yy));
+                // 右上に点があれば削除
+                while let Some((&ty, &tx)) = y2x.range(yy..).next_back()
+                    && x <= tx
+                {
+                    y2x.remove(&ty);
+                    x2y.remove(&tx);
+                }
+                if let Some((&tx, &ty)) = x2y.range(x..).next()
+                    && ty <= yy
+                {
+                    // nop
+                } else {
+                    x2y.insert(x, yy);
+                    y2x.insert(yy, x);
+                }
             }
         }
-        if new_hs.is_empty() {
+        if x2y.is_empty() {
             println!("{qi}");
             return;
         }
-        hs = new_hs;
+        btm = x2y;
     }
     println!("{n}");
 }
