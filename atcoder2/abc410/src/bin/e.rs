@@ -1,7 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
-use itertools::{chain, iproduct, izip, Itertools as _};
+use itertools::{Itertools as _, chain, iproduct, izip};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
 use petgraph::unionfind::UnionFind;
@@ -26,7 +26,6 @@ fn main() {
             let (xx, yy) = (x + a, y + b);
             if xx <= h {
                 new_hs.insert((xx, y));
-
             }
             if yy <= m {
                 new_hs.insert((x, yy));
