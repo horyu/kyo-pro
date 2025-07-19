@@ -7,7 +7,7 @@ strip = true
 [package]
 name = "nikkei2019-qual"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [package.metadata.cargo-compete.bin]
 nikkei2019-qual-a = { alias = "a", problem = "https://atcoder.jp/contests/nikkei2019-qual/tasks/nikkei2019_qual_a" }

@@ -7,7 +7,7 @@ strip = true
 [package]
 name = "arc108"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [package.metadata.cargo-compete.bin]
 arc108-a = { alias = "a", problem = "https://atcoder.jp/contests/arc108/tasks/arc108_a" }

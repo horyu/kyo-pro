@@ -7,7 +7,7 @@ strip = true
 [package]
 name = "tenka1-2018"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [package.metadata.cargo-compete.bin]
 tenka1-2018-c = { alias = "c", problem = "https://atcoder.jp/contests/tenka1-2018/tasks/tenka1_2018_c" }

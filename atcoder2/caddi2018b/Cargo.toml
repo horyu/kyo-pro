@@ -7,7 +7,7 @@ strip = true
 [package]
 name = "caddi2018b"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [package.metadata.cargo-compete.bin]
 caddi2018b-a = { alias = "a", problem = "https://atcoder.jp/contests/caddi2018b/tasks/caddi2018b_a" }

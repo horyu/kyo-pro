@@ -7,7 +7,7 @@ strip = true
 [package]
 name = "diverta2019-2"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [package.metadata.cargo-compete.bin]
 diverta2019-2-a = { alias = "a", problem = "https://atcoder.jp/contests/diverta2019-2/tasks/diverta2019_2_a" }

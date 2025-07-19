@@ -7,7 +7,7 @@ strip = true
 [package]
 name = "abc059"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [package.metadata.cargo-compete.bin]
 abc059-a = { alias = "a", problem = "https://atcoder.jp/contests/abc059/tasks/abc059_a" }

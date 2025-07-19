@@ -7,7 +7,7 @@ strip = true
 [package]
 name = "sumitrust2019"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [package.metadata.cargo-compete.bin]
 sumitrust2019-a = { alias = "a", problem = "https://atcoder.jp/contests/sumitrust2019/tasks/sumitb2019_a" }
