@@ -16,40 +16,34 @@ fn main() {
         m: usize,
         aabb: [(usize, usize); n],
     };
-    let mut btm = BTreeMap::new();
-    btm.insert(0, 0);
-    for (qi, (a, b)) in aabb.into_iter().enumerate() {
-        let mut x2y = BTreeMap::new();
-        let mut y2x = x2y.clone();
-        for (x, y) in btm {
-            let (xx, yy) = (x + a, y + b);
-            if xx <= h {
-                x2y.insert(xx, y);
-                y2x.insert(y, xx);
+    // https://atcoder.jp/contests/abc410/editorial/13207
+    // dp[i + 1][m] = i番目のモンスターを倒した時点で魔力がmであるときの最大h
+    let mut dp = vec![vec![!0; m + 1]; n + 1];
+    dp[0][m] = h;
+    for (i, (a, b)) in aabb.into_iter().enumerate() {
+        for j in 0..=m {
+            if dp[i][j] == !0 {
+                continue;
             }
-            if yy <= m {
-                // 右上に点があれば削除
-                while let Some((&ty, &tx)) = y2x.range(yy..).next_back()
-                    && x <= tx
-                {
-                    y2x.remove(&ty);
-                    x2y.remove(&tx);
-                }
-                if let Some((&tx, &ty)) = x2y.range(x..).next()
-                    && ty <= yy
-                {
-                    // nop
+            if a <= dp[i][j] {
+                if dp[i + 1][j] == !0 {
+                    dp[i + 1][j] = dp[i][j] - a;
                 } else {
-                    x2y.insert(x, yy);
-                    y2x.insert(yy, x);
+                    dp[i + 1][j] = dp[i + 1][j].max(dp[i][j] - a);
+                }
+            }
+            if b <= j {
+                if dp[i + 1][j - b] == !0 {
+                    dp[i + 1][j - b] = dp[i][j];
+                } else {
+                    dp[i + 1][j - b] = dp[i + 1][j - b].max(dp[i][j]);
                 }
             }
         }
-        if x2y.is_empty() {
-            println!("{qi}");
-            return;
-        }
-        btm = x2y;
     }
-    println!("{n}");
+    let rs = dp
+        .into_iter()
+        .rposition(|dp| dp.into_iter().any(|d| d != !0))
+        .unwrap_or_default();
+    println!("{rs}");
 }
