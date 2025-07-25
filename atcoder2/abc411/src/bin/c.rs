@@ -35,17 +35,17 @@ fn main() {
                             btm.insert(k, a - k);
                             btm.insert(a + 1, k + v - a - 1);
                         }
-                    },
+                    }
                     Ordering::Equal => {
                         if v == 1 {
                             btm.remove(&k);
                         } else {
                             btm.insert(k, v - 1);
                         }
-                    },
+                    }
                     Ordering::Greater => {
                         unreachable!();
-                    },
+                    }
                 }
             } else {
                 unreachable!();
@@ -81,5 +81,4 @@ fn main() {
         let rs = btm.len();
         println!("{rs}");
     }
-
 }
