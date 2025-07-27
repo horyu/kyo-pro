@@ -11,8 +11,29 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            mut ss: [usize; n],
+        };
+        let last = ss.pop().unwrap();
+        let mut x = ss.swap_remove(0);
+        let bts = BTreeSet::from_iter(ss);
+        let mut rs = 2;
+        while 2 * x < last {
+            if let Some(&y) = bts.range((x + 1)..=(2 * x)).next_back() {
+                rs += 1;
+                x = y;
+            } else {
+                break;
+            }
+        }
+        if 2 * x < last {
+            println!("-1");
+        } else {
+            println!("{rs}");
+        }
+    }
 }
