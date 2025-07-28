@@ -12,7 +12,39 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut g = vec![0; n];
+    for (a, b) in aabb {
+        g[a] |= 1 << b;
+        g[b] |= 1 << a;
+    }
+    // ii の順でサイクルを作る際に元からある辺の数
+    let f = |ii: &[usize]| -> i32 {
+        debug_assert!(ii.len() >= 3);
+        let ii = ii.iter().copied().collect_vec();
+        let mut checked = 0;
+        let mut tmp = 0;
+        for (i, j) in ii.iter().copied().cycle().tuple_windows().take(ii.len()) {
+            tmp += (g[i] & (1 << j) != 0) as i32;
+            checked |= 1 << i;
+        }
+        tmp
+    };
+    let nn = n as i32;
+    let mm = m as i32;
+    let mut rs = i32::MAX;
+    for ii in (0..n).permutations(n) {
+        let v = f(&ii);
+        rs = rs.min(mm - v + (nn - v));
+        if 6 <= n {
+            for mid in 3..=(n - 3) {
+                let x = f(&ii[..mid]);
+                let y = f(&ii[mid..]);
+                rs = rs.min(mm - x - y + (nn - x - y));
+            }
+        }
+    }
+    println!("{rs}");
 }
