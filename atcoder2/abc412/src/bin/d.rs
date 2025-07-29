@@ -15,6 +15,35 @@ fn main() {
         m: usize,
         aabb: [(Usize1, Usize1); m],
     };
+    // https://atcoder.jp/contests/abc412/editorial/13385
+    let mut g = vec![vec![0; n]; n];
+    for (a, b) in aabb.iter().copied() {
+        g[a][b] = 1;
+        g[b][a] = 1;
+    }
+    let mut rs = !0;
+    for ee in (0..(n - 1)).flat_map(|i| ((i + 1)..n).map(move |j| (i, j))).combinations(n) {
+        let mut deg = vec![0; n];
+        let mut sum = 0;
+        for (a, b) in ee {
+            deg[a] += 1;
+            deg[b] += 1;
+            sum += g[a][b];
+        }
+        if deg.into_iter().all(|d| d == 2) {
+            rs = rs.min(n + m - 2 * sum);
+        }
+    }
+    println!("{rs}");
+}
+
+#[allow(dead_code)]
+fn main2() {
+    input! {
+        n: usize,
+        m: usize,
+        aabb: [(Usize1, Usize1); m],
+    };
     let mut g = vec![0; n];
     for (a, b) in aabb {
         g[a] |= 1 << b;
