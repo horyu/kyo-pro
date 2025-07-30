@@ -22,7 +22,10 @@ fn main() {
         g[b][a] = 1;
     }
     let mut rs = !0;
-    for ee in (0..(n - 1)).flat_map(|i| ((i + 1)..n).map(move |j| (i, j))).combinations(n) {
+    for ee in (0..(n - 1))
+        .flat_map(|i| ((i + 1)..n).map(move |j| (i, j)))
+        .combinations(n)
+    {
         let mut deg = vec![0; n];
         let mut sum = 0;
         for (a, b) in ee {
