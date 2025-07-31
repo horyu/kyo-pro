@@ -18,10 +18,10 @@ fn main() {
         println!("1");
         return;
     }
-    // l.sqrt() 以下の素数列挙
+    // r.sqrt() 以下の素数列挙
     let mut primes = vec![];
     {
-        let sqrt = l.sqrt();
+        let sqrt = r.sqrt();
         let mut is_prime = vec![true; sqrt + 1];
         is_prime[0] = false;
         is_prime[1] = false;
@@ -41,44 +41,23 @@ fn main() {
         }
     }
     // dbg!(primes.len());
-    let mut hm = HashMap::new();
-    for p in primes {
-        let mut cnt = 0;
-        let mut i = p;
-        while i < l {
-            i = i.saturating_mul(p);
-            cnt += 1;
-        }
-        hm.insert(p, cnt - 1);
-    }
-    // dbg!(&hm.len());
-    let mut rs = 0;
-    for mut i in l..=r {
-        let mut tmp = vec![];
-        for (&k, &v) in hm.iter() {
-            let mut cnt = 0;
-            while i.is_multiple_of(k) {
-                i /= k;
-                cnt += 1;
-            }
-            if v < cnt {
-                tmp.push((k, cnt));
-            }
-        }
-        if 1 < i && i < l {
-            // 篩から外れた素数
-            hm.insert(i, 1);
-            i = 1;
-        }
-        if 1 < i {
-            tmp.push((i, 1));
-        }
-        if !tmp.is_empty() {
-            rs += 1;
-        }
-        for (k, v) in tmp {
-            hm.insert(k, v);
+    let mut vv = vec![true; r - l + 1];
+    for p in primes.iter().copied() {
+        for i in ((l.div_ceil(p) * p)..=r).step_by(p) {
+            vv[i - l] = false;
         }
     }
+    for p in primes.iter().copied() {
+        let mut x = p;
+        while x < l {
+            x = x.saturating_mul(p);
+        }
+        while x <= r {
+            vv[x - l] = true;
+            x = x.saturating_mul(p);
+        }
+    }
+    vv[0] = true;
+    let rs = vv.iter().filter(|&&x| x).count();
     println!("{rs}");
 }
