@@ -11,8 +11,29 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        q: usize,
     };
-    // println!("{rs}");
+    let mut qq = VecDeque::new();
+    for _ in 0..q {
+        input! { t: usize };
+        if t == 1 {
+            input! { c: usize, x: usize };
+            qq.push_back((c, x));
+        } else {
+            input! { mut k: usize };
+            let mut rs = 0;
+            while 0 < k
+                && let Some((c, x)) = qq.pop_front()
+            {
+                if c <= k {
+                    rs += x * c;
+                } else {
+                    rs += x * k;
+                    qq.push_front((c - k, x));
+                }
+                k = k.saturating_sub(c);
+            }
+            println!("{rs}");
+        }
+    }
 }
