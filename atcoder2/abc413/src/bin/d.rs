@@ -11,8 +11,28 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            mut aa: [isize; n],
+        };
+        aa.sort_unstable_by_key(|&a| a.abs());
+        let mut tf = aa
+            .iter()
+            .copied()
+            .tuple_windows()
+            .all(|(x, y, z)| x * z == y * y);
+        // r = -1 パターン
+        if !tf {
+            let vv = aa.iter().copied().counts().into_iter().collect_vec();
+            if vv.len() == 2 {
+                let (x, y) = (vv[0], vv[1]);
+                tf |= x.0.abs() == y.0.abs() && x.1.abs_diff(y.1) <= 1;
+            }
+        }
+        let rs = ["No", "Yes"][tf as usize];
+        println!("{rs}");
+    }
 }
