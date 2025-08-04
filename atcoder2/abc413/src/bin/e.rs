@@ -11,8 +11,13 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            pp: [usize; n],
+        };
+        // TODO
+    }
 }
