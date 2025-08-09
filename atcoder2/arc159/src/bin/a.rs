@@ -17,7 +17,34 @@ fn main() {
         q: usize,
         sstt: [(Usize1, Usize1); q],
     };
-    let nk = n * k;
-    // mod n で考える？
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (i, aa) in aaa.iter().enumerate() {
+        for (j, a) in aa.iter().copied().enumerate() {
+            if 0 < a {
+                g[i].push(j);
+            }
+        }
+    }
+    // mod n で考える
+    'outer: for (s, t) in sstt {
+        let ss = s % n;
+        let tt = t % n;
+        let mut qq = VecDeque::new();
+        let mut pushed = vec![false; n];
+        qq.push_back((ss, 1));
+        pushed[ss] = true;
+        while let Some((qi, qd)) = qq.pop_front() {
+            for i in g[qi].iter().copied() {
+                if tt == i {
+                    println!("{qd}");
+                    continue 'outer;
+                }
+                if !pushed[i] {
+                    pushed[i] = true;
+                    qq.push_back((i, qd + 1));
+                }
+            }
+        }
+        println!("-1");
+    }
 }
