@@ -33,35 +33,35 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 */
 fn main() {
     input! {
-        a: usize,
-        b: usize,
+        mut a: usize,
+        mut b: usize,
     };
-    // let a = 10usize.pow(12) - 3;
-    // let b = a - 100;
-    let (mut a, mut b) = if a < b { (a, b) } else { (b, a) };
-    dbg!(b - a);
-    let mut dd = divisors(b - a);
-    eprintln!("{dd:?}");
-    let d_max = dd.pop().unwrap_or(1);
+    if a == b {
+        println!("1");
+        return;
+    }
+    // https://atcoder.jp/contests/arc159/editorial/6106
+    // https://atcoder.jp/contests/arc159/submissions/45734011
+    if b < a {
+        std::mem::swap(&mut a, &mut b);
+    }
     let mut rs = 0usize;
-    // let mut counter = counter::Counter::<_>::new();
     while 0 < a {
-        if a % d_max == 0 && b % d_max == 0 {
-            rs += a / d_max;
+        let g = a.gcd(&b);
+        a /= g;
+        b /= g;
+        if b - a == 1 {
+            rs += a;
             break;
         }
-        rs += 1;
-        let g = dd.iter().copied().rfind(|&d| a % d == 0 && b % d == 0).unwrap_or(1);
-        // assert!(g == a.gcd(&b));
-        // if counter[&g] == 0 {
-        //     eprintln!("{a} {b} : {g} {counter:?}");
-        // }
-        // counter[&g] += 1;
-        a -= g;
-        b -= g;
+        let mut t = !0;
+        for d in divisors(b - a).into_iter().skip(1) {
+            t = t.min(a % d);
+        }
+        rs += t;
+        a -= t;
+        b -= t;
     }
-    // dbg!(counter);
-    dbg!(a, b);
     println!("{rs}");
 }
 
