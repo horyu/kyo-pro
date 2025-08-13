@@ -13,25 +13,38 @@ fn main() {
     input! {
         n: usize,
         k: usize,
-        aa: [usize; n],
+        mut aa: [usize; n],
     };
-    let mut vv = vec![];
-    let mut base = vec![];
+    // https://atcoder.jp/contests/arc160/editorial/6338
+    let mut x = 1;
+    let mut y = n * (n + 1) / 2;
     for l in 0..n {
-        if 0 < l {
-            base.push(aa[l - 1]);
+        let mut sml = vec![];
+        let mut big = vec![];
+        for r in (l + 1)..n {
+            if aa[r] < aa[l] {
+                sml.push(aa[r]);
+            } else {
+                big.push(aa[r]);
+            }
         }
-        for r in l..n {
-            let mut tmp = base.clone();
-            tmp.extend(aa[l..=r].iter().rev());
-            tmp.extend(aa[(r + 1)..n].iter());
-            vv.push(tmp);
+        let mut v = !0;
+        if k - x < sml.len() {
+            sml.sort_unstable();
+            v = sml[k - x];
         }
+        if y - k < big.len() {
+            big.sort_unstable_by_key(|&b| R(b));
+            v = big[y - k];
+        }
+        if v != !0 {
+            let j = l + aa[l..].iter().position(|&a| a == v).unwrap();
+            aa[l..=j].reverse();
+            break;
+        }
+        x += sml.len();
+        y -= big.len();
     }
-    vv.sort_unstable();
-    // for (i, v) in vv.into_iter().enumerate() {
-    //     eprintln!("{i:2}: {}", v.iter().join(" "));
-    // }
-    let rs = vv[k - 1].iter().join(" ");
+    let rs = aa.into_iter().join(" ");
     println!("{rs}");
 }
