@@ -16,6 +16,16 @@ cases:
       4
       17
       727512986
+  - name: sampleX
+    in: |
+      3
+      24
+      25
+      26
+    out: |
+      298
+      314
+      320
 
 extend:
   - type: Text
