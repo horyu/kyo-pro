@@ -25,19 +25,15 @@ fn main() {
         rs += ModInt998244353::new(sqrt).pow(3);
         // sqrt<k<=n の範囲で xy,yz,zx <= n となる組み合わせ
         // 25 => 5*5
-        // 6*4, 7~8*3, 9~12*2, 13~25*1
-        // 1*(25~13), 2*(12~9), 3*(8~7), 4*(6~6)
-        if n < 100 {
-            eprintln!("[{n}]({sqrt}): {rs}");
-        }
-        for i in 1..sqrt {
-            let r = n / i;
-            let l = n / (i + 1) + 1;
-            // 2つの値が i, 1つの値が l..=r となる組み合わせ
-            rs += 3 * (r - l + 1);
+        // 4*(6~6), 3*(7~8), 2*(9~12), 1*(13~25)
+        let mut l = sqrt + 1;
+        while l <= n {
+            let r = n / (n / l);
             if n < 100 {
-                eprintln!("{i} +{:?}*3={}*3 => {rs}", (l..=r), r - l + 1);
+                eprintln!("[{n}]: {} x {:?}", n / l, l..=r);
             }
+            rs += (n / l).pow(2) * 3 * (r - l + 1);
+            l = r + 1;
         }
         println!("{rs}");
     }

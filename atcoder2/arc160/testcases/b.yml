@@ -25,7 +25,7 @@ cases:
     out: |
       298
       314
-      320
+      326
 
 extend:
   - type: Text
