@@ -11,8 +11,20 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
+        nn: [usize; t],
     };
-    // println!("{rs}");
+    let bts = BTreeSet::from_iter(
+        (0..64)
+            .map(|i| 1usize << i)
+            .combinations(3)
+            .map(|vv| vv[0] | vv[1] | vv[2]),
+    );
+    for n in nn {
+        if let Some(rs) = bts.range(..=n).last() {
+            println!("{rs}");
+        } else {
+            println!("-1");
+        }
+    }
 }
