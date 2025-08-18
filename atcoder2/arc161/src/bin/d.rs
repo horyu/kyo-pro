@@ -12,7 +12,23 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        d: usize,
     };
-    // println!("{rs}");
+    if (n - 1) / 2 < d {
+        println!("No");
+        return;
+    }
+    println!("Yes");
+    let mut m = 0;
+    let mut rrss = vec![(0, 0); n * d + 1];
+    for i in 1..=n {
+        for k in 1..=d {
+            m += 1;
+            rrss[m].0 = i;
+            rrss[m].1 = if i + k <= n { i + k } else { i + k - n };
+        }
+    }
+    for (a, b) in rrss.into_iter().skip(1).take(m) {
+        println!("{a} {b}");
+    }
 }
