@@ -12,7 +12,15 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        ccll: [(String, usize); n],
     };
-    // println!("{rs}");
+    let mut rs = String::new();
+    for (c, l) in ccll {
+        if 100 < rs.len() + l {
+            println!("Too Long");
+            return;
+        }
+        rs.push_str(&c.repeat(l));
+    }
+    println!("{rs}");
 }
