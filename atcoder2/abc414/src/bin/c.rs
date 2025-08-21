@@ -11,8 +11,12 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
+        a: usize,
         n: usize,
-        aa: [usize; n],
     };
+    let log10 = n.ilog10();
+    // 前半分(<1e6)が定まれば後半分(>1e6)も定まる
+    // TODO
+
     // println!("{rs}");
 }
