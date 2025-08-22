@@ -16,9 +16,6 @@ fn main() {
         r: usize,
         xxyy: [(usize, usize); n],
     };
-    let rs = xxyy
-        .into_iter()
-        .filter(|&(x, y)| x <= l && r <= y)
-        .count();
+    let rs = xxyy.into_iter().filter(|&(x, y)| x <= l && r <= y).count();
     println!("{rs}");
 }
