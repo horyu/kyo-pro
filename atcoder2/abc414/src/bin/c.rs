@@ -29,9 +29,8 @@ fn main() {
 
     let mut vv = vec![];
     let mut pow10 = vec![1];
-    let mut len = 1;
-    loop {
-        while pow10.len() < len {
+    for len in 1.. {
+        if pow10.len() < len {
             pow10.push(pow10.last().unwrap() * 10);
         }
         if n < pow10[len - 1] {
@@ -63,7 +62,6 @@ fn main() {
                 break;
             }
         }
-        len += 1;
     }
 
     let rs = vv.into_iter().sum::<usize>();
