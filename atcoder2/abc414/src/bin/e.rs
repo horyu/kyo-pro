@@ -1,6 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables)]
 #![feature(int_roundings)]
+use ac_library::ModInt998244353;
 use itertools::{Itertools as _, chain, iproduct, izip};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -10,6 +11,7 @@ use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
 /*
+a % b = c, c < b < a <= n
 (b,c) a
 (2,1) 3,5,7 @ 9
 (3,1) 4,7 @ 10
@@ -32,8 +34,10 @@ fn main() {
     input! {
         n: usize,
     };
-    // a % b = c, c < b < a <= n
-
-    // println!("{rs}");
+    // https://atcoder.jp/contests/abc414/editorial/13455
+    let mut rs = ModInt998244353::new(n - 1) * (n - 2) / 2;
+    for b in 2..=n.sqrt() {
+        rs -= (n / b - b) * 2 + 1;
+    }
+    println!("{rs}");
 }
-
