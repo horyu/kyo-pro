@@ -11,8 +11,29 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut n: usize,
+        m: usize,
+        mut aabb: [(usize, usize); m],
     };
-    // println!("{rs}");
+    // b/a を昇順にソート
+    aabb.sort_unstable_by(|(a1, b1), (a2, b2)| (b1 * a2).cmp(&(b2 * a1)));
+    for (a,b) in aabb.iter().copied() {
+        eprintln!("{a} {b} : {}", b as f64 / a as f64);
+    }
+    let mut rs = 0usize;
+    while let Some((a, b)) = aabb.last().copied() {
+        if n < a {
+            aabb.pop();
+            continue;
+        }
+        // n -> n-1*(a-b) -> n-2*(a-b) -> ...
+        // 初項 n, 公差 -(a-b), 項数 k=(n-a)/(a-b)+1
+        let d = a - b;
+        let k = (n - a) / d + 1;
+        rs += k;
+        n -= k * d;
+        aabb.pop();
+        eprintln!("[{n}] ({a},{b}) {d}x{k}={}", k * d);
+    }
+    println!("{rs}");
 }
