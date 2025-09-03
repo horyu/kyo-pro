@@ -10,6 +10,11 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
+#[cfg(not(debug_assertions))]
+macro_rules! eprintln {
+    ($($tt:tt)*) => {};
+}
+
 use ac_library::{LazySegtree, MapMonoid, Max};
 struct MaxMonoid;
 impl MapMonoid for MaxMonoid {
@@ -49,7 +54,7 @@ fn main() {
         ls.set(k, v);
     }
     eprintln!(
-        "{} : {} {btm:?}",
+        "{}\n{} {btm:?}",
         s.iter().join(""),
         (0..n).map(|i| ls.get(i)).join("")
     );
@@ -71,9 +76,8 @@ fn main() {
                     btm.insert(idx, len - 1);
                     ls.set(idx, len - 1);
                 } else if i < idx + len - 1 {
-                    // iが中間: (l_idx..=(i-1)),i..=i,((i+1)..=(l_idx+l_len-1))
-                    //   i-1-(l_idx-1), 1, (l_idx+l_len-1)-(i+1)-1
-                    //   i-i_idx, 1, l_idx+l_len-i-1
+                    // iが中間: (idx..=(i-1)),i..=i,((i+1)..=(idx+len-1))
+                    // 長さ   : i-idx, 1, idx+len-i-1
                     let l_len = i - idx;
                     btm.insert(idx, l_len);
                     ls.set(idx, l_len);
@@ -85,12 +89,12 @@ fn main() {
                 // ls.set(i, 1);
             }
             // i.. の範囲を更新
-            if let Some(len) = btm.remove(&i) {
-                if 1 < len {
-                    // i開始のグループを縮小
-                    btm.insert(i + 1, len - 1);
-                    ls.set(i + 1, len - 1);
-                }
+            if let Some(len) = btm.remove(&i)
+                && 1 < len
+            {
+                // i開始のグループを縮小
+                btm.insert(i + 1, len - 1);
+                ls.set(i + 1, len - 1);
             }
             // 一旦 i を更新
             btm.insert(i, 1);
@@ -113,14 +117,33 @@ fn main() {
                 ls.set(l_idx, l_len + r_len);
             }
             eprintln!(
-                "{} : {} {btm:?}",
+                "{}\n{} {btm:?}",
                 s.iter().join(""),
                 (0..n).map(|i| ls.get(i)).join("")
             );
             continue;
         }
-        input! {l: Usize1, r: Usize1};
+        input! {mut l: Usize1, mut r: Usize1};
+        let mut rs = 1;
+        // ..lのグループが重なる場合
+        if let Some((&idx, &len)) = btm.range(..l).next_back()
+            && l < idx + len
+        {
+            // l..=(r.min(idx + len - 1))
+            rs = rs.max(r.min(idx + len - 1) - l + 1);
+            l = idx + len;
+        }
+        // ..rのグループが飛び出る場合
+        if l <= r
+            && let Some((&idx, &len)) = btm.range(l..=r).next_back()
+            && r < idx + len - 1
+        {
+            rs = rs.max(r - idx + 1);
+            r = idx.saturating_sub(1);
+        }
+        if l < r {
+            rs = rs.max(ls.prod(l..=r));
+        }
+        println!("{rs}");
     }
-
-    // println!("{rs}");
 }

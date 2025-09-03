@@ -23,6 +23,21 @@ cases:
       a
       1 1 z
     out: >
+  - name: sampleX
+    in: |
+      4 7
+      aaaa
+      1 3 b
+      2 1 4
+      2 2 4
+      1 3 a
+      1 4 b
+      1 4 a
+      2 1 4
+    out: |
+      2
+      1
+      4
 
 extend:
   - type: Text

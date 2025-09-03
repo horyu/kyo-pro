@@ -33,6 +33,11 @@ use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
+#[cfg(not(debug_assertions))]
+macro_rules! eprintln {
+    ($($tt:tt)*) => {};
+}
+
 fn main() {
     input! {
         n: usize,
