@@ -1,5 +1,5 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
-#![allow(unused_imports, unused_variables)]
+#![allow(unused_imports, unused_variables, unused_macros)]
 #![feature(int_roundings)]
 use itertools::{chain, iproduct, izip, Itertools};
 use itertools_num::ItertoolsNum as _;
