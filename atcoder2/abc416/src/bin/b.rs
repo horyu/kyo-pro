@@ -16,8 +16,15 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut t = s.clone();
+    let ii = chain!([0], s.iter().positions(|&c| c == '#'), [s.len()]);
+    for (i, j) in ii.tuple_windows() {
+        if let Some(c) = t[i..j].iter_mut().find(|c| **c == '.') {
+            *c = 'o';
+        }
+    }
+    let rs = t.into_iter().join("");
+    println!("{rs}");
 }
