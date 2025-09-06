@@ -1,5 +1,6 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables, unused_macros)]
+#![allow(dead_code)]
 #![feature(int_roundings)]
 use itertools::{Itertools as _, chain, iproduct, izip};
 use itertools_num::ItertoolsNum as _;
@@ -14,32 +15,131 @@ use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDequ
 macro_rules! eprintln {
     ($($tt:tt)*) => {};
 }
-
-use ac_library::{LazySegtree, MapMonoid, Max};
-struct MaxMonoid;
-impl MapMonoid for MaxMonoid {
-    type M = Max<usize>;
-    type F = usize;
-
-    fn identity_map() -> Self::F {
-        0
-    }
-
-    fn mapping(&f: &usize, &x: &usize) -> usize {
-        f.max(x)
-    }
-
-    fn composition(&f: &usize, &g: &usize) -> usize {
-        f.max(g)
-    }
-}
-
 fn main() {
     input! {
         n: usize,
         q: usize,
         mut s: Chars,
     };
+    // https://atcoder.jp/contests/abc415/submissions/67806684
+    use ac_library::{Monoid, Segtree};
+    #[derive(Clone, Copy, Debug)]
+    struct S {
+        lc: char,
+        ln: usize,
+        rc: char,
+        rn: usize,
+        max: usize,
+        size: usize,
+    }
+    impl Monoid for S {
+        type S = Option<S>;
+        fn identity() -> Self::S {
+            None
+        }
+        fn binary_operation(a: &Self::S, b: &Self::S) -> Self::S {
+            match (a, b) {
+                (_, None) => *a,
+                (None, _) => *b,
+                (Some(a), Some(b)) => {
+                    let size = a.size + b.size;
+                    if a.lc == b.rc && a.ln == a.size && b.rn == b.size {
+                        Some(S {
+                            lc: a.lc,
+                            ln: size,
+                            rc: b.rc,
+                            rn: size,
+                            max: size,
+                            size,
+                        })
+                    } else {
+                        Some(S {
+                            lc: a.lc,
+                            ln: if a.rc == b.lc && a.ln == a.size {
+                                a.ln + b.ln
+                            } else {
+                                a.ln
+                            },
+                            rc: b.rc,
+                            rn: if a.rc == b.lc && b.ln == b.size {
+                                a.rn + b.ln
+                            } else {
+                                b.rn
+                            },
+                            max: std::cmp::max(
+                                a.max.max(b.max),
+                                if a.rc == b.lc { a.rn + b.ln } else { 0 },
+                            ),
+                            size,
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    let mut st = Segtree::<S>::new(n);
+    for (i, s) in s.into_iter().enumerate() {
+        st.set(
+            i,
+            Some(S {
+                lc: s,
+                ln: 1,
+                rc: s,
+                rn: 1,
+                max: 1,
+                size: 1,
+            }),
+        );
+    }
+    for _ in 0..q {
+        input! {t: usize};
+        if t == 1 {
+            input! {i: Usize1, x: char};
+            st.set(
+                i,
+                Some(S {
+                    lc: x,
+                    ln: 1,
+                    rc: x,
+                    rn: 1,
+                    max: 1,
+                    size: 1,
+                }),
+            );
+            continue;
+        }
+        input! {l: Usize1, r: Usize1};
+        let s = st.prod(l..=r).unwrap();
+        let rs = s.max;
+        println!("{rs}");
+    }
+}
+
+fn main2() {
+    input! {
+        n: usize,
+        q: usize,
+        mut s: Chars,
+    };
+    use ac_library::{LazySegtree, MapMonoid, Max};
+    struct MaxMonoid;
+    impl MapMonoid for MaxMonoid {
+        type M = Max<usize>;
+        type F = usize;
+
+        fn identity_map() -> Self::F {
+            0
+        }
+
+        fn mapping(&f: &usize, &x: &usize) -> usize {
+            f.max(x)
+        }
+
+        fn composition(&f: &usize, &g: &usize) -> usize {
+            f.max(g)
+        }
+    }
     let mut btm = BTreeMap::new();
     for (_c, g) in s.iter().copied().group_by(|&c| c).into_iter() {
         let len = g.count();
