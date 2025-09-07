@@ -17,7 +17,19 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
+        x: Usize1,
+        ss: [String; n],
     };
-    // println!("{rs}");
+    let mut vv = vec![];
+    for ss in (0..k).map(|_| &ss).multi_cartesian_product() {
+        let mut tmp = String::new();
+        for s in ss {
+            tmp.push_str(s);
+        }
+        vv.push(tmp);
+    }
+    vv.sort_unstable();
+    let rs = &vv[x];
+    println!("{rs}");
 }
