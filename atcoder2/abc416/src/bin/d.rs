@@ -16,8 +16,36 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            m: usize,
+            aa: [usize; n],
+            bb: [usize; n],
+        };
+        let mut btm = BTreeMap::new();
+        for a in aa {
+            *btm.entry(a % m).or_insert(0) += 1;
+        }
+        let mut rs = 0usize;
+        for b in bb {
+            let b = b % m;
+            let c = m - b;
+            let k = *btm
+                .range(c..)
+                .next()
+                .or_else(|| btm.range(..).next())
+                .unwrap()
+                .0;
+            rs += (k + b) % m;
+            let e = btm.get_mut(&k).unwrap();
+            *e -= 1;
+            if *e == 0 {
+                btm.remove(&k);
+            }
+        }
+        println!("{rs}");
+    }
 }
