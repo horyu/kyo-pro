@@ -21,108 +21,106 @@ fn main() {
         aabbcc: [(Usize1, Usize1, usize); m],
         k: usize,
         t: usize,
-        dd: [usize; k],
+        dd: [Usize1; k],
         q: usize,
     };
-    let mut mat = vec![vec![!0usize; n]; n];
-    for i in 0..n {
+    const MAX: usize = 1usize << 60;
+    let mut mat = vec![vec![MAX; n + 1]; n + 1];
+    for i in 0..=n {
         mat[i][i] = 0;
     }
     for (a, b, c) in aabbcc {
+        let c = c * 2;
         if c < mat[a][b] {
             mat[a][b] = c;
             mat[b][a] = c;
         }
     }
-    for di in dd.iter().copied() {
-        for dj in dd.iter().copied() {
-            if t < mat[di][dj] {
-                mat[di][dj] = t;
-            }
-        }
+    for d in dd.iter().copied() {
+        mat[d][n] = t;
+        mat[n][d] = t;
     }
-    for k in 0..n {
-        for i in 0..n {
-            for j in 0..n {
-                let tmp = mat[i][k].saturating_add(mat[k][j]);
+    for k in 0..=n {
+        for i in 0..=n {
+            for j in 0..=n {
+                let tmp = mat[i][k] + mat[k][j];
                 if tmp < mat[i][j] {
                     mat[i][j] = tmp;
                 }
             }
         }
     }
-    let mut rs = 0;
-    for (i, ma) in mat.iter().enumerate() {
-        // for (j, m) in ma.iter().copied().enumerate() {
-        //     if m != !0 {
-        //         rs += m;
-        //         eprintln!("{i}-{j}: {m}");
-        //     }
-        // }
-        for m in ma.iter().copied() {
-            if m != !0 {
-                rs += m;
+    // for ma in mat.iter() {
+    //     eprintln!("{:?}", ma);
+    // }
+    let mut sum = 0;
+    for (i, ma) in mat[..n].iter().enumerate() {
+        for (j, m) in ma.iter().copied().enumerate().skip(i + 1).take(n - i - 1) {
+            if 0 < m && m < MAX {
+                sum += 2 * m;
+                eprintln!("{i}-{j}: {m}");
             }
         }
     }
-    let mut dd = HashSet::<usize>::from_iter(dd);
-    dbg!(rs);
+    dbg!(sum);
     for _ in 0..q {
-        input! {t: usize};
-        if t == 1 {
+        input! {qt: usize};
+        if qt == 1 {
             input! {x: Usize1, y: Usize1, c: usize};
+            let c = c * 2;
             if mat[x][y] <= c {
                 continue;
             }
-            if mat[x][y] == !0 {
-                rs += 2 * c;
+            if mat[x][y] == MAX {
+                sum += 2 * c;
             } else {
-                rs -= 2 * (mat[x][y] - c);
+                sum -= 2 * (mat[x][y] - c);
             }
             mat[x][y] = c;
             mat[y][x] = c;
-            for i in 0..n {
-                if i == x || i == y {
-                    continue;
-                }
-                for j in (i + 1)..n {
-                    if j == x || j == y {
-                        continue;
-                    }
-                    let min = (mat[i][x].saturating_add(c).saturating_add(mat[y][j]))
-                        .min(mat[i][y].saturating_add(c).saturating_add(mat[x][j]));
+            for i in 0..=n {
+                for j in (i + 1)..=n {
+                    let min = (mat[i][x] + c + mat[y][j]).min(mat[i][y] + c + mat[x][j]);
                     if min < mat[i][j] {
-                        if mat[i][j] == !0 {
-                            rs += 2 * min;
-                        } else {
-                            rs -= 2 * (mat[i][j] - min);
+                        if i != n && j != n {
+                            if mat[i][j] == MAX {
+                                sum += 2 * min;
+                            } else {
+                                sum -= 2 * (mat[i][j] - min);
+                            }
                         }
+                        eprintln!("[1] {i}-{j}: {min} <- {}", mat[i][j]);
                         mat[i][j] = min;
                         mat[j][i] = min;
                     }
                 }
             }
-        } else if t == 2 {
+        } else if qt == 2 {
             input! {x: Usize1};
-            if dd.contains(&x) {
+            if mat[x][n] <= t {
                 continue;
             }
-            for d in dd.iter().copied() {
-                if mat[x][d] <= t {
-                    continue;
+            mat[x][n] = t;
+            mat[n][x] = t;
+            for i in 0..=n {
+                for j in (i + 1)..=n {
+                    let min = (mat[i][x] + t + mat[n][j]).min(mat[i][n] + t + mat[x][j]);
+                    if min < mat[i][j] {
+                        if i != n && j != n {
+                            if mat[i][j] == MAX {
+                                sum += 2 * min;
+                            } else {
+                                sum -= 2 * (mat[i][j] - min);
+                            }
+                        }
+                        eprintln!("[2] {i}-{j}: {min} <- {}", mat[i][j]);
+                        mat[i][j] = min;
+                        mat[j][i] = min;
+                    }
                 }
-                if mat[x][d] == !0 {
-                    rs += 2 * t;
-                } else {
-                    rs -= 2 * (mat[x][d] - t);
-                }
-                mat[x][d] = t;
-                mat[d][x] = t;
-
             }
-            dd.insert(x);
         } else {
-            println!("{rs}");
+            println!("{}", sum / 2);
         }
     }
 }
