@@ -53,16 +53,6 @@ fn main() {
     // for ma in mat.iter() {
     //     eprintln!("{:?}", ma);
     // }
-    let mut sum = 0;
-    for (i, ma) in mat[..n].iter().enumerate() {
-        for (j, m) in ma.iter().copied().enumerate().skip(i + 1).take(n - i - 1) {
-            if 0 < m && m < MAX {
-                sum += 2 * m;
-                eprintln!("{i}-{j}: {m}");
-            }
-        }
-    }
-    dbg!(sum);
     for _ in 0..q {
         input! {qt: usize};
         if qt == 1 {
@@ -71,24 +61,12 @@ fn main() {
             if mat[x][y] <= c {
                 continue;
             }
-            if mat[x][y] == MAX {
-                sum += 2 * c;
-            } else {
-                sum -= 2 * (mat[x][y] - c);
-            }
             mat[x][y] = c;
             mat[y][x] = c;
             for i in 0..=n {
                 for j in (i + 1)..=n {
                     let min = (mat[i][x] + c + mat[y][j]).min(mat[i][y] + c + mat[x][j]);
                     if min < mat[i][j] {
-                        if i != n && j != n {
-                            if mat[i][j] == MAX {
-                                sum += 2 * min;
-                            } else {
-                                sum -= 2 * (mat[i][j] - min);
-                            }
-                        }
                         eprintln!("[1] {i}-{j}: {min} <- {}", mat[i][j]);
                         mat[i][j] = min;
                         mat[j][i] = min;
@@ -106,13 +84,6 @@ fn main() {
                 for j in (i + 1)..=n {
                     let min = (mat[i][x] + t + mat[n][j]).min(mat[i][n] + t + mat[x][j]);
                     if min < mat[i][j] {
-                        if i != n && j != n {
-                            if mat[i][j] == MAX {
-                                sum += 2 * min;
-                            } else {
-                                sum -= 2 * (mat[i][j] - min);
-                            }
-                        }
                         eprintln!("[2] {i}-{j}: {min} <- {}", mat[i][j]);
                         mat[i][j] = min;
                         mat[j][i] = min;
@@ -120,6 +91,14 @@ fn main() {
                 }
             }
         } else {
+            let mut sum = 0;
+            for ma in mat.iter().take(n) {
+                for m in ma.iter().copied().take(n) {
+                    if m != MAX {
+                        sum += m;
+                    }
+                }
+            }
             println!("{}", sum / 2);
         }
     }
