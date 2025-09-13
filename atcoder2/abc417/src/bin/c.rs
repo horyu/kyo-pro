@@ -19,5 +19,15 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    // j - i = ai + aj
+    // i + ai = j - aj
+    let mut counter = counter::Counter::<_>::new();
+    let mut rs = 0usize;
+    for (j, a) in aa.iter().copied().enumerate() {
+        if a < j + 1 {
+            rs += counter[&(j + 1 - a)];
+        }
+        counter[&(j + 1 + a)] += 1;
+    }
+    println!("{rs}");
 }
