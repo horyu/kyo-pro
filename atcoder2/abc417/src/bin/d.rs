@@ -17,7 +17,10 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        ppaabb: [(usize, usize, usize); n],
+        q: usize,
+        xx: [usize; n],
     };
+    // テンション0..=1000の範囲で逆順にDP?
     // println!("{rs}");
 }
