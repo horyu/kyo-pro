@@ -21,18 +21,43 @@ fn main() {
         q: usize,
         xx: [usize; q],
     };
-    // テンション0..=1000の範囲で逆順にDP
     // dp[i][j] = テンションjでi番目のプレゼントを処理したときの最終的な値
-    let mut memo = vec![vec![None::<usize>; 1001]; n + 1];
-    memo[n] = (0..=1000).map(Some).collect_vec();
+    let mut memo = vec![vec![None::<usize>; 1001]; n];
     let mut subs = vec![0; n + 1];
     for (i, (p, a, b)) in ppaabb.iter().copied().enumerate() {
         subs[i + 1] = subs[i] + b;
     }
     for x in xx {
         let pos = subs.partition_point(|&s| 500 + s < x);
-        // TODO
+        if pos == n + 1 {
+            println!("{}", x - subs[n]);
+            continue;
+        }
         // 処理しつつmemoに値があればそれを使う
+        let mut rs = x - subs[pos];
+        // eprintln!("{x} {pos}:{:?} -> {rs}", subs.get(pos));
+        let mut vv = vec![];
+        for i in pos..n {
+            if rs <= 1000
+                && let Some(v) = memo[i][rs]
+            {
+                rs = v;
+                break;
+            }
+            vv.push((i, rs));
+            let (p, a, b) = ppaabb[i];
+            if rs <= p {
+                rs += a;
+            } else {
+                rs = rs.saturating_sub(b);
+            }
+        }
+        println!("{rs}");
         // memoを更新
+        for (i, v) in vv {
+            if v <= 1000 {
+                memo[i][v] = Some(rs);
+            }
+        }
     }
 }
