@@ -18,6 +18,7 @@ fn main() {
     input! {
         t: usize,
     }
+    // https://atcoder.jp/contests/abc417/editorial/13589
     for _ in 0..t {
         input! {
             n: usize,
@@ -31,13 +32,11 @@ fn main() {
             g[u].push(v);
             g[v].push(u);
         }
-        // TODO: 多分xとyのパスの間にない一方通行の辺を消す
         for vv in g.iter_mut() {
             vv.sort_unstable();
         }
-        let mut rrss = vec![x + 1];
+        let mut rrss = vec![];
         let mut visited = vec![false; n];
-        visited[x] = true;
         fn dfs(
             g: &Vec<Vec<usize>>,
             visited: &mut Vec<bool>,
@@ -45,6 +44,8 @@ fn main() {
             v: usize,
             y: usize,
         ) -> bool {
+            rrss.push(v + 1);
+            visited[v] = true;
             if v == y {
                 return true;
             }
@@ -52,14 +53,11 @@ fn main() {
                 if visited[w] {
                     continue;
                 }
-                visited[w] = true;
-                rrss.push(w + 1);
                 if dfs(g, visited, rrss, w, y) {
                     return true;
                 }
-                rrss.pop();
-                visited[w] = false;
             }
+            rrss.pop();
             false
         }
         dfs(&g, &mut visited, &mut rrss, x, y);
