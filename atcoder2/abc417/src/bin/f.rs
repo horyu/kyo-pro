@@ -14,22 +14,54 @@ macro_rules! eprintln {
     ($($tt:tt)*) => {};
 }
 
-use ac_library::{Additive, MapMonoid, Monoid};
-struct MM;
-impl MapMonoid for MM {
-    type M = Additive<i32>;
-    type F = i32;
+// https://atcoder.jp/contests/abc417/submissions/69228878
+type Mint = ac_library::ModInt998244353;
+
+#[derive(Clone, Copy, Debug, Default)]
+struct Node {
+    sum: Mint,
+    len: usize,
+}
+
+use ac_library::{MapMonoid, Monoid};
+struct M;
+impl Monoid for M {
+    type S = Node;
+
+    fn identity() -> Self::S {
+        Self::S::default()
+    }
+
+    fn binary_operation(a: &Self::S, b: &Self::S) -> Self::S {
+        Self::S {
+            sum: a.sum + b.sum,
+            len: a.len + b.len,
+        }
+    }
+}
+
+struct F;
+impl MapMonoid for F {
+    type M = M;
+    type F = Option<Mint>;
 
     fn identity_map() -> Self::F {
-        0
+        None
     }
 
     fn mapping(f: &Self::F, x: &<Self::M as Monoid>::S) -> <Self::M as Monoid>::S {
-        f + x
+        if let Some(v) = f {
+            Node {
+                sum: *v * x.len,
+                len: x.len,
+            }
+        } else {
+            *x
+        }
     }
 
     fn composition(f: &Self::F, g: &Self::F) -> Self::F {
-        f + g
+        f.or(*g)
     }
 }
 
@@ -40,8 +72,21 @@ fn main() {
         aa: [usize; n],
         llrr: [(Usize1, Usize1); m],
     };
-    let mut ls = ac_library::LazySegtree::<MM>::new(n);
-    // TODO
-
-    // println!("{rs}");
+    let mut ls = ac_library::LazySegtree::<F>::new(n);
+    for (i, a) in aa.into_iter().enumerate() {
+        ls.set(
+            i,
+            Node {
+                sum: Mint::new(a),
+                len: 1,
+            },
+        );
+    }
+    for (l, r) in llrr {
+        let n = ls.prod(l..=r);
+        let v = n.sum / Mint::new(r - l + 1);
+        ls.apply_range(l..=r, Some(v));
+    }
+    let rs = (0..n).map(|i| ls.get(i).sum).join(" ");
+    println!("{rs}");
 }
