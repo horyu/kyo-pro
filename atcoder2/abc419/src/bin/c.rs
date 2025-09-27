@@ -17,7 +17,20 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        rrcc: [(usize, usize); n],
     };
-    // println!("{rs}");
+    let mut r_max = 0;
+    let mut r_min = !0;
+    let mut c_max = 0;
+    let mut c_min = !0;
+    for (r, c) in rrcc {
+        r_max = r_max.max(r);
+        r_min = r_min.min(r);
+        c_max = c_max.max(c);
+        c_min = c_min.min(c);
+    }
+    let dr = r_max - r_min;
+    let dc = c_max - c_min;
+    let rs = dr.max(dc).div_ceil(2);
+    println!("{rs}");
 }
