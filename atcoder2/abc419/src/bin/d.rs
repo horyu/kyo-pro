@@ -17,7 +17,27 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        s: Chars,
+        t: Chars,
+        llrr: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut ttff = vec![false; n + 1];
+    for (l, r) in llrr {
+        ttff[l] ^= true;
+        ttff[r + 1] ^= true;
+    }
+    let mut rs = String::new();
+    let mut flip = false;
+    for (tc, sc, tf) in izip!(t, s, ttff) {
+        if tf {
+            flip = !flip;
+        }
+        if flip {
+            rs.push(tc);
+        } else {
+            rs.push(sc);
+        }
+    }
+    println!("{rs}");
 }
