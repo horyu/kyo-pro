@@ -17,7 +17,10 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
+        m: usize,
+        l: usize,
         aa: [usize; n],
     };
+    // dp？
     // println!("{rs}");
 }
