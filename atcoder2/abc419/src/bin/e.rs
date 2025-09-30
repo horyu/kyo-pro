@@ -21,6 +21,26 @@ fn main() {
         l: usize,
         aa: [usize; n],
     };
-    // dp？
-    // println!("{rs}");
+    // https://atcoder.jp/contests/abc419/editorial/13669
+    let mut dp = vec![1usize << 60; m];
+    dp[0] = 0;
+    for i in 0..l {
+        let mut new_dp = vec![1usize << 60; m];
+        for j in 0..m {
+            let mut cost = 0;
+            for k in (i..n).step_by(l) {
+                if aa[k] <= j {
+                    cost += j - aa[k];
+                } else {
+                    cost += m + j - aa[k];
+                }
+            }
+            for k in 0..m {
+                new_dp[(j + k) % m] = new_dp[(j + k) % m].min(dp[k] + cost);
+            }
+        }
+        dp = new_dp;
+    }
+    let rs = dp[0];
+    println!("{rs}");
 }
