@@ -17,7 +17,26 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
+        mut aa: [usize; n],
+        mut bb: [usize; n],
+        ccxxvv: [(char, Usize1, usize); q],
     };
-    // println!("{rs}");
+    let mut rs = izip!(&aa, &bb).map(|(&a, &b)| a.min(b)).sum::<usize>();
+    for (c, x, v) in ccxxvv {
+        if c == 'A' {
+            let old = aa[x].min(bb[x]);
+            let new = v.min(bb[x]);
+            rs += new;
+            rs -= old;
+            aa[x] = v;
+        } else {
+            let old = aa[x].min(bb[x]);
+            let new = aa[x].min(v);
+            rs += new;
+            rs -= old;
+            bb[x] = v;
+        }
+        println!("{rs}");
+    }
 }
