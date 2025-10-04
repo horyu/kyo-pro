@@ -20,8 +20,9 @@ fn main() {
         q: usize,
     };
     let mut dsu = ac_library::Dsu::new(n);
-    let mut counter = counter::Counter::<_>::new();
+    let mut cc = vec![0; n];
     let mut ttff = vec![false; n];
+    let mut rrss = vec![];
     for _ in 0..q {
         input! {
             t: usize,
@@ -33,30 +34,28 @@ fn main() {
             }
             let lu = dsu.leader(u);
             let lv = dsu.leader(v);
-            if lu == lv {
-                continue;
+            if lu != lv {
+                cc[dsu.merge(u, v)] = cc[lu] + cc[lv];
             }
-            let uc = counter[&lu];
-            let vc = counter[&lv];
-            let nc = uc + vc;
-            counter[&dsu.merge(u, v)] = nc;
         } else if t == 2 {
             input! {
                 v: Usize1,
             }
             if ttff[v] {
-                counter[&dsu.leader(v)] -= 1;
+                cc[dsu.leader(v)] -= 1;
             } else {
-                counter[&dsu.leader(v)] += 1;
+                cc[dsu.leader(v)] += 1;
             }
             ttff[v] ^= true;
         } else {
             input! {
                 v: Usize1,
             }
-            let tf = 0 < counter[&dsu.leader(v)];
-            let rs = ["No", "Yes"][tf as usize];
-            println!("{rs}");
+            let tf = 0 < cc[dsu.leader(v)];
+            let rs = if tf { "Yes" } else { "No" };
+            rrss.push(rs);
         }
     }
+    let rs = rrss.into_iter().join("\n");
+    println!("{rs}");
 }
