@@ -17,7 +17,46 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
     };
-    // println!("{rs}");
+    let mut dsu = ac_library::Dsu::new(n);
+    let mut counter = counter::Counter::<_>::new();
+    let mut ttff = vec![false; n];
+    for _ in 0..q {
+        input! {
+            t: usize,
+        }
+        if t == 1 {
+            input! {
+                u: Usize1,
+                v: Usize1,
+            }
+            let lu = dsu.leader(u);
+            let lv = dsu.leader(v);
+            if lu == lv {
+                continue;
+            }
+            let uc = counter[&lu];
+            let vc = counter[&lv];
+            let nc = uc + vc;
+            counter[&dsu.merge(u, v)] = nc;
+        } else if t == 2 {
+            input! {
+                v: Usize1,
+            }
+            if ttff[v] {
+                counter[&dsu.leader(v)] -= 1;
+            } else {
+                counter[&dsu.leader(v)] += 1;
+            }
+            ttff[v] ^= true;
+        } else {
+            input! {
+                v: Usize1,
+            }
+            let tf = 0 < counter[&dsu.leader(v)];
+            let rs = ["No", "Yes"][tf as usize];
+            println!("{rs}");
+        }
+    }
 }
