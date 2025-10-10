@@ -16,8 +16,9 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        mut aa: [usize; 6],
     };
+    aa.sort_unstable();
+    // TODO
     // println!("{rs}");
 }
