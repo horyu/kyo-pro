@@ -4,6 +4,7 @@
 use itertools::{Itertools as _, chain, iproduct, izip};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
+use num_traits::Pow;
 use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
 use std::cmp::{Ordering, Reverse as R};
@@ -16,9 +17,9 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        mut aa: [usize; 6],
+        aa: [usize; 6],
     };
-    aa.sort_unstable();
+    // https://atcoder.jp/contests/abc421/submissions/69008500
     // TODO
     // println!("{rs}");
 }
