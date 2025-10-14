@@ -58,7 +58,7 @@ fn main() {
             for k in p..=j {
                 p2i[i2p[k]] = k;
             }
-            rrss.push(format!("{} {}", j + 1, p + 1));
+            rrss.push(format!("{} {}", j, p));
         }
         eprintln!("{i2p:?}");
     }
