@@ -28,6 +28,12 @@ cases:
       3 0
       1 2
       3 0
+  - name: sampleX
+    in: |
+      5
+      5 4 3 2 1
+    out: |
+      Yes
 
 extend:
   - type: Text
