@@ -16,8 +16,20 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
+        nn: [(usize, usize, usize); t],
     };
-    // println!("{rs}");
+    for (mut na, nb, mut nc) in nn {
+        let min = na.min(nb).min(nc);
+        let mut rs = min;
+        na -= min;
+        nc -= min;
+        if 0 < na && 0 < nc {
+            // aac のパターンがx、accのパターンがyとして x+y=k を最大化
+            // 2x+y <= na, x+2y <= nc
+            // 3x+3y <= na+nc
+            rs += na.min(nb).min((na + nc) / 3);
+        }
+        println!("{rs}");
+    }
 }
