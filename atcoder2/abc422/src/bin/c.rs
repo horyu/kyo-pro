@@ -28,7 +28,7 @@ fn main() {
             // aac のパターンがx、accのパターンがyとして x+y=k を最大化
             // 2x+y <= na, x+2y <= nc
             // 3x+3y <= na+nc
-            rs += na.min(nb).min((na + nc) / 3);
+            rs += na.min(nc).min((na + nc) / 3);
         }
         println!("{rs}");
     }
