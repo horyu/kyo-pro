@@ -17,7 +17,16 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        k: usize,
     };
+    let pow = 2usize.pow(n as u32);
+    let mut bb = vec![k / pow; pow];
+    let mut kk = k % pow;
+    // 可能な限り分散するようにkkを分配する
+    // 2の冪乗ごとに分配するイメージ
+    // 12345678
+    // 1 3 2 4
+    //  5 7 6 8
+    todo!();
     // println!("{rs}");
 }
