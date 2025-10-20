@@ -16,22 +16,11 @@ macro_rules! eprintln {
 
 /*
 可能な限り分散するようにkkを分配する
-2の冪乗ごとに分配するイメージ
-12345678
-1 3 2 4
- 5 7 6 8
 01234567
 1       :0+[0]
     2   :4+[0] -> [0,4]
   3   4 :2+[0,4] -> [0,4,2,6]
  5 7 6 8:1+[0,4,2,6]
-
-1234567890123456
-1   3   2   4
-  5   7   6   8
- 9   1   0   2
-   3   5   4   6
-0123456789012345
 */
 
 fn main() {
@@ -41,7 +30,36 @@ fn main() {
     };
     let size = 2usize.pow(n as u32);
     let mut bb = vec![k / size; size];
-    // TODO
+    let mut kk = k % size;
+    let mut left = size / 2;
+    let mut ii = vec![];
+    while 0 < kk {
+        if ii.is_empty() {
+            kk -= 1;
+            bb[0] += 1;
+            ii.push(0);
+            continue;
+        }
+        let mut extends = vec![];
+        for i in ii.iter().copied() {
+            kk -= 1;
+            bb[left + i] += 1;
+            if kk == 0 {
+                break;
+            }
+            extends.push(left + i);
+        }
+        ii.extend(extends);
+        left /= 2;
+    }
+    // アンバランス x
+    let mut x = 0;
+    let mut cc = bb.clone();
+    for _ in 0..n {
+        x = x.max(cc.first().unwrap() - cc.last().unwrap());
+        cc = cc.chunks(2).map(|cc| cc[0] + cc[1]).collect_vec();
+    }
+    println!("{x}");
     let rs = bb.iter().join(" ");
     println!("{rs}");
 }
