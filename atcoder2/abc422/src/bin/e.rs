@@ -35,7 +35,7 @@ impl TimeKeeper {
 }
 
 fn main() {
-    let time_keeper = TimeKeeper::new(0.98);
+    let time_keeper = TimeKeeper::new(1.85);
     input! {
         n: usize,
         xxyy: [(isize, isize); n],
@@ -43,7 +43,7 @@ fn main() {
     // (x2​−x1​)(y−y1​)=(y2​−y1​)(x−x1​) を使う
     // ax+by+c=0; a=y2-y1, b=-(x2-x1), c=(x2-x1)*y1-(y2-y1)*x1
     // 要素をシャッフル
-    let xxyy = HashSet::<(isize, isize)>::from_iter(xxyy.iter().cloned())
+    let xxyy = HashSet::<(isize, isize)>::from_iter(xxyy)
         .into_iter()
         .collect_vec();
     for (i, (x1, y1)) in xxyy.iter().copied().enumerate() {
@@ -64,15 +64,18 @@ fn main() {
                 continue;
             }
             counter[&key] += 1;
-            if n / 2 < counter[&key] {
+            if n / 2 <= counter[&key] {
                 println!("Yes");
                 println!("{}", key.iter().join(" "));
+                // for (x, y) in xxyy.iter().copied() {
+                //     eprintln!("{x} {y}: {}", a * x + b * y + c);
+                // }
                 return;
             }
         }
-        for (k, v) in counter {
-            eprintln!("{k:?}: {v}");
-        }
+        // for (k, v) in counter {
+        //     eprintln!("{k:?}: {v}");
+        // }
     }
     println!("No");
 }
