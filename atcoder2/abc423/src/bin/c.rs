@@ -17,7 +17,39 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        r: Usize1,
+        mut ll: [usize; n],
     };
-    // println!("{rs}");
+    let Some(left) = ll.iter().position(|&l| l == 0) else {
+        println!("0");
+        return;
+    };
+    let right = ll.iter().rposition(|&l| l == 0).unwrap();
+    // ドアleft から ドアright の区間内にある全ドアを開ける
+    let mut rs = 0;
+    for i in left..right {
+        if ll[i] == 1 {
+            rs += 1;
+            ll[i] = 0;
+        }
+    }
+    // 高橋君の位置 r から空いている区間までドアを開ける
+    if r <= left {
+        for i in r..=left {
+            if ll[i] == 1 {
+                rs += 1;
+                ll[i] = 0;
+            }
+        }
+    } else if right <= r {
+        for i in (right..=r).rev() {
+            if ll[i] == 1 {
+                rs += 1;
+                ll[i] = 0;
+            }
+        }
+    }
+    // 全てのドアを閉める
+    rs += ll.iter().filter(|&&l| l == 0).count();
+    println!("{rs}");
 }
