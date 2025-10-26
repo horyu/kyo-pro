@@ -17,10 +17,11 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        r: Usize1,
+        r: usize,
         mut ll: [usize; n],
     };
     let Some(left) = ll.iter().position(|&l| l == 0) else {
+        // 全てのドアが閉まっていたらOK
         println!("0");
         return;
     };
@@ -42,7 +43,7 @@ fn main() {
             }
         }
     } else if right <= r {
-        for i in (right..=r).rev() {
+        for i in right..r {
             if ll[i] == 1 {
                 rs += 1;
                 ll[i] = 0;
