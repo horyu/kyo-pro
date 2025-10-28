@@ -14,10 +14,35 @@ macro_rules! eprintln {
     ($($tt:tt)*) => {};
 }
 
+/*
+[1:1]
+1 = 0+(1)
+[1:2]
+21
+ 1
+22 = 1+(1,1)
+[1:3]
+321
+ 21
+  1
+343 = 2+(1,2,1)
+[1:4]
+4321
+ 321
+  21
+   1
+4664 = 3+(1,3,3,1)
+
+f(x,y)をパスカルの三角形のx行y列の値とする
+ans = sum_{i=l}^{r} aa[i] * ((r-l) + f(r-l,i-l))
+*/
 fn main() {
     input! {
         n: usize,
+        q: usize,
         aa: [usize; n],
+        llrr: [(Usize1, Usize1); q],
     };
+    // TODO: 高速化　(l,r)=(1,n) q個でTLE
     // println!("{rs}");
 }
