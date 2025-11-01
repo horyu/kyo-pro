@@ -17,7 +17,17 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabb: [(usize, usize); n],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n + 1];
+    for (i, (a, b)) in aabb.iter().copied().enumerate() {
+        if (a, b) == (0, 0) {
+            g[n].push(i);
+            continue;
+        }
+        g[a - 1].push(i);
+        g[b - 1].push(i);
+    }
+    let rs = pathfinding::prelude::bfs_reach(n, |&s| g[s].iter().copied()).count() - 1;
+    println!("{rs}");
 }
