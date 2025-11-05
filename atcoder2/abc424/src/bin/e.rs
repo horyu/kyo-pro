@@ -14,10 +14,57 @@ macro_rules! eprintln {
     ($($tt:tt)*) => {};
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+struct F64Ord(pub f64);
+impl Eq for F64Ord {}
+impl PartialOrd for F64Ord {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+impl Ord for F64Ord {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.0.partial_cmp(&other.0).unwrap()
+    }
+}
+
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            mut k: usize,
+            mut x: usize,
+            aa: [usize; n],
+        };
+        let mut btm = BTreeMap::new();
+        for (cnt, a) in aa.into_iter().sorted_unstable().dedup_with_count() {
+            btm.insert(F64Ord(a as f64), cnt);
+        }
+        while 0 < k {
+            let (F64Ord(a), c) = btm.pop_last().unwrap();
+            // eprintln!("[{k}] {:?} {}", a, c);
+            if k < c {
+                btm.insert(F64Ord(a), c - k);
+                btm.insert(F64Ord(a / 2.0), k * 2);
+                break;
+            } else if k == c {
+                btm.insert(F64Ord(a / 2.0), c * 2);
+                break;
+            }
+            k -= c;
+            let key = F64Ord(a / 2.0);
+            let cnt = c * 2;
+            btm.entry(key).and_modify(|v| *v += cnt).or_insert(cnt);
+        }
+        for (F64Ord(a), c) in btm.into_iter().rev() {
+            if x <= c {
+                println!("{a:.20}");
+                break;
+            }
+            x -= c;
+        }
+    }
 }
