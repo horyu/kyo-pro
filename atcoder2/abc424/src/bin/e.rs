@@ -45,19 +45,30 @@ fn main() {
         }
         while 0 < k {
             let (F64Ord(a), c) = btm.pop_last().unwrap();
-            // eprintln!("[{k}] {:?} {}", a, c);
-            if k < c {
-                btm.insert(F64Ord(a), c - k);
-                btm.insert(F64Ord(a / 2.0), k * 2);
-                break;
-            } else if k == c {
-                btm.insert(F64Ord(a / 2.0), c * 2);
-                break;
+            match k.cmp(&c) {
+                Ordering::Less => {
+                    btm.insert(F64Ord(a), c - k);
+                    let cnt = k * 2;
+                    btm.entry(F64Ord(a / 2.0))
+                        .and_modify(|v| *v += cnt)
+                        .or_insert(cnt);
+                    break;
+                }
+                Ordering::Equal => {
+                    let cnt = c * 2;
+                    btm.entry(F64Ord(a / 2.0))
+                        .and_modify(|v| *v += cnt)
+                        .or_insert(cnt);
+                    break;
+                }
+                Ordering::Greater => {
+                    k -= c;
+                    let cnt = c * 2;
+                    btm.entry(F64Ord(a / 2.0))
+                        .and_modify(|v| *v += cnt)
+                        .or_insert(cnt);
+                }
             }
-            k -= c;
-            let key = F64Ord(a / 2.0);
-            let cnt = c * 2;
-            btm.entry(key).and_modify(|v| *v += cnt).or_insert(cnt);
         }
         for (F64Ord(a), c) in btm.into_iter().rev() {
             if x <= c {
