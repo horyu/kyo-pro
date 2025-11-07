@@ -17,7 +17,22 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
+        q: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let ss = chain!([0], aa.into_iter().cycle().take(2 * n))
+        .cumsum::<usize>()
+        .collect_vec();
+    let mut shift = 0;
+    for _ in 0..q {
+        input! {t: usize};
+        if t == 1 {
+            input! {c: usize};
+            shift = (shift + c) % n;
+        } else {
+            input! {l: Usize1, r: Usize1};
+            let rs = ss[r + 1 + shift] - ss[l + shift];
+            println!("{rs}");
+        }
+    }
 }
