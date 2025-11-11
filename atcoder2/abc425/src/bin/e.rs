@@ -28,9 +28,20 @@ fn main() {
         }
         memo.push(counter);
     }
+    let mfactors = factors(m);
+    let mfactors_opt = if mfactors.keys().any(|&k| 5000 < k) {
+        None
+    } else {
+        Some(mfactors)
+    };
+
     let mut rs = String::new();
     for _ in 0..t {
         input! { n: usize, cc: [usize; n] };
+        if n == 1 {
+            rs.push_str("1\n");
+            continue;
+        }
         let sum = cc.iter().sum::<usize>();
         let mut counter = memo[sum].clone();
         for c in cc {
@@ -39,6 +50,16 @@ fn main() {
                 if counter[k] == 0 {
                     counter.remove(k);
                 }
+            }
+        }
+        if let Some(mfactors) = &mfactors_opt {
+            if mfactors.len() <= counter.len()
+                && mfactors
+                    .iter()
+                    .all(|(k, v)| v <= counter.get(k).unwrap_or(&0))
+            {
+                rs.push_str(&format!("0\n"));
+                continue;
             }
         }
         let v = counter
