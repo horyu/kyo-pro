@@ -1,6 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables, unused_macros)]
 #![feature(int_roundings)]
+#![allow(dead_code)]
 use itertools::{Itertools as _, chain, iproduct, izip};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
@@ -15,6 +16,33 @@ macro_rules! eprintln {
 }
 
 fn main() {
+    input! {
+        t: usize,
+        m: usize,
+    };
+    const K: usize = 5010;
+    let mut binom = vec![vec![0usize; K]; K];
+    binom[0][0] = 1;
+    for n in 1..K {
+        binom[n][0] = 1;
+        for k in 1..=n {
+            binom[n][k] = (binom[n - 1][k - 1] + binom[n - 1][k]) % m;
+        }
+    }
+    for _ in 0..t {
+        input! { n: usize, cc: [usize; n] };
+        let mut rs = 1;
+        let mut s = 0;
+        for c in cc {
+            s += c;
+            rs *= binom[s][c];
+            rs %= m;
+        }
+        println!("{rs}");
+    }
+}
+
+fn main2() {
     input! {
         t: usize,
         m: usize,
@@ -52,15 +80,14 @@ fn main() {
                 }
             }
         }
-        if let Some(mfactors) = &mfactors_opt {
-            if mfactors.len() <= counter.len()
-                && mfactors
-                    .iter()
-                    .all(|(k, v)| v <= counter.get(k).unwrap_or(&0))
-            {
-                rs.push_str(&format!("0\n"));
-                continue;
-            }
+        if let Some(mfactors) = &mfactors_opt
+            && mfactors.len() <= counter.len()
+            && mfactors
+                .iter()
+                .all(|(k, v)| v <= counter.get(k).unwrap_or(&0))
+        {
+            rs.push_str("0\n");
+            continue;
         }
         let v = counter
             .into_map()
