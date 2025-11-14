@@ -17,7 +17,21 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        q: usize,
+        xxyy: [(usize, usize); q],
     };
-    // println!("{rs}");
+    let mut ft = ac_library::FenwickTree::new(n + 1, 0isize);
+    for i in 1..=n {
+        ft.add(i, 1);
+    }
+    for (x, y) in xxyy {
+        let sum = ft.sum(..=x);
+        if 0 < sum {
+            ft.add(0, -sum);
+            ft.add(y, sum);
+        }
+        let rs = sum.max(0);
+        println!("{rs}");
+        eprintln!("{}", (0..=n).map(|i| ft.sum(i..=i)).join(" "));
+    }
 }
