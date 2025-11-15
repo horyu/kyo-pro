@@ -16,8 +16,26 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
+        nnss: [(usize, Chars); t]
     };
-    // println!("{rs}");
+    for (n , s) in nnss {
+        let mut ww  = vec![[0; 2]; n + 1];
+        for (i, c) in s.iter().copied().enumerate() {
+            ww[i + 1] = ww[i];
+            ww[i + 1][usize::from(c == '1')] += 1;
+        }
+        let mut rs = !0;
+        let mut l = 0;
+        while l < n {
+            let cl = s[l];
+            let r = l + s[l..].iter().position(|&c| c == cl).unwrap();
+            let mut cnt = 0;
+            // TODO
+            l = r + 1;
+            rs = rs.min(cnt);
+        }
+
+        println!("{rs}");
+    }
 }
