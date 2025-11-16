@@ -19,23 +19,28 @@ fn main() {
         t: usize,
         nnss: [(usize, Chars); t]
     };
-    for (n , s) in nnss {
-        let mut ww  = vec![[0; 2]; n + 1];
+    for (n, s) in nnss {
+        let mut ww = vec![[0; 2]; n + 1];
         for (i, c) in s.iter().copied().enumerate() {
             ww[i + 1] = ww[i];
             ww[i + 1][usize::from(c == '1')] += 1;
         }
-        let mut rs = !0;
+        let mut rs = !0usize;
         let mut l = 0;
+        for pos in [0, 1] {
+            eprintln!("{}", (0..=n).map(|i| ww[i][pos]).join(""));
+        }
         while l < n {
             let cl = s[l];
-            let r = l + s[l..].iter().position(|&c| c == cl).unwrap();
-            let mut cnt = 0;
-            // TODO
-            l = r + 1;
+            let pos = usize::from(cl == '1');
+            let r = l + s[l..].iter().take_while(|&&c| c == cl).count() - 1;
+            let left = ww[l][pos] * 2 + ww[l][1 ^ pos];
+            let right = (ww[n][pos] - ww[r + 1][pos]) * 2 + (ww[n][1 ^ pos] - ww[r + 1][1 ^ pos]);
+            let cnt = left + right;
             rs = rs.min(cnt);
+            eprintln!("[{n}] {l}-{r}: {cnt}({left} + {right})");
+            l = r + 1;
         }
-
         println!("{rs}");
     }
 }
