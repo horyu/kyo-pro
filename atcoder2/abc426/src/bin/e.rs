@@ -31,12 +31,43 @@ fn main() {
             fff.swap(0, 1);
             tt.swap(0, 1);
         }
-        // x = sx + (gx - sx) * u
-        // y = sy + (gy - sy) * u
-        // dx = (sx0-sx1) + (gx0-sx0 - (gx1-sx1)) * u
-        // dy = (sy0-sy1) + (gy0-sy0 - (gy1-sy1)) * u
+        eprintln!("{tt:?}");
+        // x = sx + (gx - sx) * u / tt[?]
+        // y = sy + (gy - sy) * u / tt[?]
+        let (sy0, sx0, gy0, gx0) = fff[0];
+        let (sy1, sx1, gy1, gx1) = fff[1];
+        let p0 = |u: f64| {
+            if u <= tt[0] {
+                (sx0 + (gx0 - sx0) * u / tt[0], sy0 + (gy0 - sy0) * u / tt[0])
+            } else {
+                (gx0, gy0)
+            }
+        };
+        let p1 = |u: f64| (sx1 + (gx1 - sx1) * u / tt[1], sy1 + (gy1 - sy1) * u / tt[1]);
+        let f = |u: f64| {
+            let (px0, py0) = p0(u);
+            let (px1, py1) = p1(u);
+            (px0 - px1).hypot(py0 - py1)
+        };
         // dx^2 + dy^2 が最小となるのは両端または極小点
-        // TODO
+        let mut rs = f(0.0).min(f(tt[0])).min(f(tt[1]));
+        eprintln!("{} {} {}", f(0.0), f(tt[0]), f(tt[1]));
+        // 0 ~ tt[0] の範囲に極小点が auu + bu + c としたとき u = -b/2a
+        let a = ((gx0 - sx0) / tt[0] - (gx1 - sx1) / tt[1]).powi(2)
+            + ((gy0 - sy0) / tt[0] - (gy1 - sy1) / tt[1]).powi(2);
+        let b = 2.0
+            * ((sx0 - sx1) * ((gx0 - sx0) / tt[0] - (gx1 - sx1) / tt[1])
+                + (sy0 - sy1) * ((gy0 - sy0) / tt[0] - (gy1 - sy1) / tt[1]));
+        if 1e-12 < a.abs() {
+            let u = -b / (2.0 * a);
+            if 0.0 <= u && u <= tt[0] {
+                rs = rs.min(f(u));
+                eprintln!("extreme: {}", f(u));
+            }
+        }
+        // tt[0] ~ tt[1] の範囲で線分と点の距離が最小となる場合
+        // TOOD
+
+        println!("{rs}");
     }
-    // println!("{rs}");
 }
