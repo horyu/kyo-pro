@@ -6,6 +6,7 @@ use itertools_num::ItertoolsNum as _;
 use num_integer::*;
 use petgraph::unionfind::UnionFind;
 use proconio::{input, marker::*};
+use core::f64;
 use std::cmp::{Ordering, Reverse as R};
 use std::collections::{BTreeMap, BTreeSet, BinaryHeap, HashMap, HashSet, VecDeque};
 
@@ -31,7 +32,7 @@ fn main() {
             fff.swap(0, 1);
             tt.swap(0, 1);
         }
-        eprintln!("{tt:?}");
+        // eprintln!("{tt:?}");
         // x = sx + (gx - sx) * u / tt[?]
         // y = sy + (gy - sy) * u / tt[?]
         let (sy0, sx0, gy0, gx0) = fff[0];
@@ -49,25 +50,21 @@ fn main() {
             let (px1, py1) = p1(u);
             (px0 - px1).hypot(py0 - py1)
         };
-        // dx^2 + dy^2 が最小となるのは両端または極小点
-        let mut rs = f(0.0).min(f(tt[0])).min(f(tt[1]));
-        eprintln!("{} {} {}", f(0.0), f(tt[0]), f(tt[1]));
-        // 0 ~ tt[0] の範囲に極小点が auu + bu + c としたとき u = -b/2a
-        let a = ((gx0 - sx0) / tt[0] - (gx1 - sx1) / tt[1]).powi(2)
-            + ((gy0 - sy0) / tt[0] - (gy1 - sy1) / tt[1]).powi(2);
-        let b = 2.0
-            * ((sx0 - sx1) * ((gx0 - sx0) / tt[0] - (gx1 - sx1) / tt[1])
-                + (sy0 - sy1) * ((gy0 - sy0) / tt[0] - (gy1 - sy1) / tt[1]));
-        if 1e-12 < a.abs() {
-            let u = -b / (2.0 * a);
-            if 0.0 <= u && u <= tt[0] {
-                rs = rs.min(f(u));
-                eprintln!("extreme: {}", f(u));
-            }
-        }
-        // tt[0] ~ tt[1] の範囲で線分と点の距離が最小となる場合
-        // TOOD
 
-        println!("{rs}");
+        // [0.0, tt[0]]: 二次関数部分 , [tt[0], tt[1]]: 点と線分の距離部分 に対して三分探索
+        let mut rs = f64::INFINITY;
+        for (mut l, mut r) in [(0.0, tt[0]), (tt[0], tt[1])] {
+            for _ in 0..100 {
+                let m1 = (2.0 * l + r) / 3.0;
+                let m2 = (l + 2.0 * r) / 3.0;
+                if f(m1) < f(m2) {
+                    r = m2;
+                } else {
+                    l = m1;
+                }
+            }
+            rs = rs.min(f((l + r) / 2.0));
+        }
+        println!("{rs:.15}");
     }
 }
