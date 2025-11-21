@@ -17,7 +17,19 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        uuvv: [(Usize1, Usize1); m],
     };
-    // println!("{rs}");
+    let mut g = vec![vec![]; n];
+    for (u, v) in uuvv.iter().copied() {
+        g[u].push(v);
+        g[v].push(u);
+    }
+    let mut rs = !0usize;
+    for bits in 1usize..(1 << n) {
+        let mut ok = true;
+        let mut cnt = 0;
+        // TODO
+    }
+    println!("{rs}");
 }
