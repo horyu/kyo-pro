@@ -27,9 +27,17 @@ fn main() {
     }
     let mut rs = !0usize;
     for bits in 1usize..(1 << n) {
-        let mut ok = true;
         let mut cnt = 0;
-        // TODO
+        for (i, jj) in g.iter().enumerate() {
+            let bi = (bits >> i) & 1;
+            for j in jj.iter().copied() {
+                let bj = (bits >> j) & 1;
+                if bi == bj {
+                    cnt += 1;
+                }
+            }
+        }
+        rs = rs.min(cnt / 2);
     }
     println!("{rs}");
 }
