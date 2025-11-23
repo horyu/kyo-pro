@@ -16,8 +16,17 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
-    // println!("{rs}");
+    for _ in 0..t {
+        input! {
+            n: usize,
+            m: usize,
+            k: usize,
+            s: Chars,
+            uuvv: [(Usize1, Usize1); m],
+        };
+        // TODO
+        // println!("{rs}");
+    }
 }
