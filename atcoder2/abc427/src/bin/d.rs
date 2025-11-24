@@ -22,11 +22,42 @@ fn main() {
         input! {
             n: usize,
             m: usize,
-            k: usize,
+            k: Usize1,
             s: Chars,
             uuvv: [(Usize1, Usize1); m],
         };
-        // TODO
-        // println!("{rs}");
+        let ttff = s.into_iter().map(|c| c == 'A').collect_vec();
+        let mut g = vec![vec![]; n];
+        for (u, v) in uuvv.iter().copied() {
+            g[u].push(v);
+        }
+        let mut memo = vec![vec![None::<bool>; k + 1]; n];
+        fn f(
+            pos: usize,
+            k: usize,
+            ttff: &[bool],
+            g: &Vec<Vec<usize>>,
+            memo: &mut Vec<Vec<Option<bool>>>,
+        ) -> bool {
+            if let Some(v) = memo[pos][k] {
+                return v;
+            }
+            let ans = if k == 0 {
+                return g[pos]
+                    .iter()
+                    .copied()
+                    .any(|i| g[i].iter().copied().all(|j| ttff[j]));
+            } else {
+                g[pos]
+                    .iter()
+                    .copied()
+                    .any(|i| g[i].iter().copied().all(|j| f(j, k - 1, ttff, g, memo)))
+            };
+            memo[pos][k] = Some(ans);
+            ans
+        }
+        let tf = f(0, k, &ttff, &g, &mut memo);
+        let rs = ["Bob", "Alice"][tf as usize];
+        println!("{rs}");
     }
 }
