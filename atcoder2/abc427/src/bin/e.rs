@@ -16,8 +16,26 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        h: usize,
+        w: usize,
+        mut ss: [Chars; h],
     };
-    // println!("{rs}");
+    let (tx, ty) = ss
+        .iter()
+        .enumerate()
+        .find_map(|(i, s)| {
+            s.iter()
+                .enumerate()
+                .find_map(|(j, &c)| (c == 'T').then_some((i, j)))
+        })
+        .unwrap();
+    ss[tx][ty] = '.';
+    let mut qq = VecDeque::new();
+    qq.push_back((ss.clone(), 0));
+    let mut checked = HashSet::new();
+    checked.insert(ss);
+    while let Some((ss, d)) = qq.pop_front() {
+        // TOOD
+    }
+    println!("-1");
 }
