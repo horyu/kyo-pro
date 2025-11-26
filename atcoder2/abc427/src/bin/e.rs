@@ -31,11 +31,55 @@ fn main() {
         .unwrap();
     ss[tx][ty] = '.';
     let mut qq = VecDeque::new();
-    qq.push_back((ss.clone(), 0));
+    qq.push_back((ss.clone(), 1));
     let mut checked = HashSet::new();
     checked.insert(ss);
+    let f = |ss: &Vec<Vec<char>>| -> Vec<Vec<Vec<char>>> {
+        let mut res = vec![];
+        // 上にずらす
+        {
+            let mut vv = ss.clone();
+            vv.rotate_left(1);
+            vv[h - 1].fill('.');
+            res.push(vv);
+        }
+        // 下にずらす
+        {
+            let mut vv = ss.clone();
+            vv.rotate_right(1);
+            vv[0].fill('.');
+            res.push(vv);
+        }
+        // 左にずらす
+        {
+            let mut vv = ss.clone();
+            for s in vv.iter_mut() {
+                s.rotate_left(1);
+                s[w - 1] = '.';
+            }
+            res.push(vv);
+        }
+        // 右にずらす
+        {
+            let mut vv = ss.clone();
+            for s in vv.iter_mut() {
+                s.rotate_right(1);
+                s[0] = '.';
+            }
+            res.push(vv);
+        }
+        res.into_iter().filter(|vv| vv[tx][ty] == '.').collect()
+    };
     while let Some((ss, d)) = qq.pop_front() {
-        // TOOD
+        for vv in f(&ss) {
+            if checked.insert(vv.clone()) {
+                if vv.iter().flatten().all(|&c| c == '.') {
+                    println!("{d}");
+                    return;
+                }
+                qq.push_back((vv, d + 1));
+            }
+        }
     }
     println!("-1");
 }
