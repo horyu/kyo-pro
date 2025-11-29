@@ -40,13 +40,14 @@ fn main() {
                 btm.insert(slen, c);
             }
         } else {
-            btm.pop_last();
             let c = s.pop().unwrap();
-            if c == ')' {
-                let slen = s.len();
-                if let Some(pos) = r2l.remove(&slen) {
-                    btm.insert(pos, '(');
-                }
+            let slen = s.len();
+            if c == ')'
+                && let Some(pos) = r2l.remove(&slen)
+            {
+                btm.insert(pos, '(');
+            } else {
+                btm.pop_last();
             }
         }
         eprintln!("{s:?} {btm:?} {r2l:?}");
