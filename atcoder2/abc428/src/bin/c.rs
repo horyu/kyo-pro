@@ -18,40 +18,20 @@ fn main() {
     input! {
         q: usize,
     };
-    let mut r2l = BTreeMap::new();
-    let mut btm = BTreeMap::new();
-    let mut s = vec![];
+    // https://atcoder.jp/contests/abc428/editorial/14238
+    let mut aa = VecDeque::from([0isize]);
+    let mut bb = VecDeque::from([0isize]);
     for _ in 0..q {
         input! {t: usize};
         if t == 1 {
             input! {c: char};
-            let slen = s.len();
-            s.push(c);
-            if c == ')' {
-                if let Some((&pos, &cc)) = btm.last_key_value()
-                    && cc == '('
-                {
-                    btm.pop_last();
-                    r2l.insert(slen, pos);
-                } else {
-                    btm.insert(slen, c);
-                }
-            } else {
-                btm.insert(slen, c);
-            }
+            aa.push_front(aa[0] + if c == '(' { 1 } else { -1 });
+            bb.push_front(aa[0].min(bb[0]));
         } else {
-            let c = s.pop().unwrap();
-            let slen = s.len();
-            if c == ')'
-                && let Some(pos) = r2l.remove(&slen)
-            {
-                btm.insert(pos, '(');
-            } else {
-                btm.pop_last();
-            }
+            aa.pop_front();
+            bb.pop_front();
         }
-        eprintln!("{s:?} {btm:?} {r2l:?}");
-        let rs = ["No", "Yes"][btm.is_empty() as usize];
+        let rs = ["No", "Yes"][usize::from(aa[0] == 0 && bb[0] == 0)];
         println!("{rs}");
     }
 }
