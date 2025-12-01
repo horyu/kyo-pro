@@ -16,8 +16,15 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
+        ccdd: [(usize, usize); t],
     };
-    // println!("{rs}");
+    for (c, d) in ccdd {
+        // 1<=x<=d
+        // f(c,c+x) = c * 10^((c+x).ilog10() + 1) + c+x
+        //          = k^2
+
+
+        // println!("{rs}");
+    }
 }
