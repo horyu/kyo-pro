@@ -20,19 +20,22 @@ fn main() {
         ccdd: [(usize, usize); t],
     };
     for (c, d) in ccdd {
-        // 1<=x<=d
-        // f(c,c+x) = c * 10^((c+x).ilog10() + 1) + c+x
-        //          = k^2
-        // c   = k^2 / 10^n
-        // c+x = k^2 % 10^n
-        // x = k^2 % 10^n - k^2 / 10^n
-        // println!("{rs}");
+        let mut xmin = 1;
+        let mut xmax = 9;
+        let mut mul = 10;
+        let mut rs = 0;
+        while xmin <= c + d {
+            let l = xmin.max(c + 1);
+            let r = xmax.min(c + d);
+            if l <= r {
+                let vl = c * mul + l;
+                let vr = c * mul + r;
+                rs += vr.sqrt() - (vl - 1).sqrt();
+            }
+            xmin *= 10;
+            xmax = xmax * 10 + 9;
+            mul *= 10;
+        }
+        println!("{rs}");
     }
-    let mut bts = BTreeSet::new();
-    for i in 1..=24 {
-        // eprintln!("{i}: {}", i * i % 100);
-        bts.insert(i * i % 100);
-    }
-    dbg!(bts.len());
-    dbg!(bts);
 }
