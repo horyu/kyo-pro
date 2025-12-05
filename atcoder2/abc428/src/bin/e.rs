@@ -25,8 +25,12 @@ fn main() {
         rerooting.add_edge(b, a);
     }
     rerooting.build();
-    // TODO: 再確認
-    // println!("{rs}");
+    let rs = rerooting
+        .ans
+        .iter()
+        .map(|dp| dp.idx.unwrap() + 1)
+        .join("\n");
+    println!("{rs}");
 }
 
 // https://algo-logic.info/tree-dp/
@@ -66,7 +70,7 @@ impl Rerooting {
     fn new(n: usize) -> Self {
         Self {
             dp: vec![vec![]; n],
-            ans: vec![DP::identity(); n],
+            ans: (0..n).map(|i| DP::new(0, Some(i))).collect(),
             g: vec![vec![]; n],
         }
     }
@@ -82,9 +86,12 @@ impl Rerooting {
     }
 
     fn dfs(&mut self, v: usize, p: usize) -> DP {
-        let mut dp_cum = DP::identity();
+        let mut dp_cum = DP::new(0, Some(v));
         let deg = self.g[v].len();
-        self.dp[v] = vec![DP::identity(); deg];
+        self.dp[v] = self.g[v]
+            .iter()
+            .map(|e| DP::new(0, Some(e.to)))
+            .collect_vec();
         for i in 0..deg {
             let u = self.g[v][i].to;
             if u == p {
@@ -95,6 +102,7 @@ impl Rerooting {
         }
         add_root(&dp_cum)
     }
+
     fn bfs(&mut self, v: usize, dp_p: &DP, p: usize) {
         let deg = self.g[v].len();
         for i in 0..deg {
@@ -102,7 +110,10 @@ impl Rerooting {
                 self.dp[v][i] = *dp_p;
             }
         }
-        let mut dp_l = vec![DP::identity(); deg + 1];
+        let mut dp_l = vec![DP::identity()];
+        for &Edge { to } in self.g[v].iter() {
+            dp_l.push(DP::new(0, Some(to)));
+        }
         let mut dp_r = dp_l.clone();
         for i in 0..deg {
             dp_l[i + 1] = merge(&dp_l[i], &self.dp[v][i]);
