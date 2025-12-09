@@ -1,7 +1,7 @@
 #![allow(clippy::many_single_char_names, clippy::needless_range_loop, clippy::collapsible_else_if)]
 #![allow(unused_imports, unused_variables, unused_macros)]
 #![feature(int_roundings)]
-use itertools::{Itertools as _, chain, iproduct, izip};
+use itertools::{Itertools, chain, iproduct, izip};
 use itertools_num::ItertoolsNum as _;
 use num_integer::*;
 use petgraph::unionfind::UnionFind;
@@ -19,5 +19,11 @@ fn main() {
         n: usize,
         aa: [usize; n],
     };
-    // println!("{rs}");
+    let rs = aa
+        .into_iter()
+        .counts()
+        .into_values()
+        .map(|cnt| cnt * cnt.saturating_sub(1) / 2 * (n - cnt))
+        .sum::<usize>();
+    println!("{rs}");
 }
