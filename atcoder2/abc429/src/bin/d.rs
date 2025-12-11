@@ -21,37 +21,28 @@ fn main() {
         c: usize,
         mut aa: [usize; n],
     };
+    // https://atcoder.jp/contests/abc429/editorial/14279
     aa.sort_unstable();
-    aa.extend(chain!(
-        aa.clone().into_iter().map(|a| a + m),
-        aa.clone().into_iter().map(|a| a + 2 * m)
-    ));
-    let ccpp = aa.into_iter().dedup_with_count().collect_vec();
-    let len = ccpp.len();
-    let sspp = ccpp
-        .iter()
-        .scan(0usize, |acc, &(cnt, pos)| {
-            *acc += cnt;
-            Some((*acc, pos))
-        })
-        .collect_vec();
-    eprintln!("{ccpp:?}");
-    eprintln!("{sspp:?}");
+    let (pp, bb): (Vec<usize>, Vec<usize>) = aa.iter().copied().dedup_with_count().unzip();
+    let k = bb.len();
+    let mut r = 0;
+    let mut cur = 0;
     let mut rs = 0usize;
-    let mut pre_i = 0usize;
-    for (i, (si, pi)) in sspp.iter().copied().enumerate().take(len) {
-        if pi == 0 {
-            continue;
+    for i in 0..k {
+        while cur < c {
+            cur += pp[r];
+            r += 1;
+            if k <= r {
+                r -= k;
+            }
         }
-        let j = i + sspp[i..].partition_point(|(sj, pj)| sj - si < c);
-        // dbg!(si, sspp[j]);
-        eprintln!(
-            "[{i}: ({si},{pi})] {:?} -> diff:{} rs:{rs}",
-            sspp[j],
-            sspp[j].0 - si
-        );
-        rs += (sspp[j].0 - si) * (pi - pre_i);
-        pre_i = pi;
+        if i == 0 {
+            // 円の先頭と末尾部分
+            rs += (m + bb[0] - bb[k - 1]) * cur;
+        } else {
+            rs += (bb[i] - bb[i - 1]) * cur;
+        }
+        cur -= pp[i];
     }
     println!("{rs}");
 }
