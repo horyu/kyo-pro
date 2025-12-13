@@ -64,6 +64,7 @@ fn main() {
             }
             for j in g[i].iter().copied() {
                 if dist[base][j] == !0 {
+                    // 多分ここで特定の頂点に対してあるsafeな頂点の個数を3個以上考える必要がない
                     new_iibb.push((j, base));
                 }
             }
