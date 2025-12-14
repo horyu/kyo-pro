@@ -22,9 +22,9 @@ fn main() {
         s: Chars,
     };
     let mut g = vec![vec![]; n];
-    for (u, v) in uuvv.iter().copied() {
-        g[u].push(v);
-        g[v].push(u);
+    for (e_idx, (u, v)) in uuvv.iter().copied().enumerate() {
+        g[u].push((v, e_idx));
+        g[v].push((u, e_idx));
     }
     let ttff = s.iter().copied().map(|c| c == 'S').collect_vec();
     let (ss, dd) =
@@ -39,51 +39,14 @@ fn main() {
                 }
                 (ss, dd)
             });
-    // Dangerousな頂点に対して、距離が一番近いSafeな頂点と二番目に近いSafeな頂点
-    let mut d2ss = vec![[None::<usize>; 2]; n];
-    // 頂点間の距離
-    let mut dist = vec![vec![!0usize; n]; n];
-    let mut checked_cnt = 0;
-    let mut iibb = ss.iter().copied().map(|i| (i, i)).collect_vec();
-    for d in 0.. {
-        let mut new_iibb = vec![];
-        for (i, base) in iibb {
-            if dist[base][i] != !0 {
-                continue;
-            }
-            dist[base][i] = d;
-            dist[i][base] = d;
-            if !ttff[i] {
-                let d2s = &mut d2ss[i];
-                if d2s[0].is_none() {
-                    d2s[0] = Some(base);
-                } else if d2s[0] != Some(base) && d2s[1].is_none() {
-                    d2s[1] = Some(base);
-                    checked_cnt += 1;
-                }
-            }
-            for j in g[i].iter().copied() {
-                if dist[base][j] == !0 {
-                    // 多分ここで特定の頂点に対してあるsafeな頂点の個数を3個以上考える必要がない
-                    new_iibb.push((j, base));
-                }
-            }
-        }
-        if checked_cnt == dd.len() {
-            break;
-        }
-        iibb = new_iibb;
+    // Dangerousな頂点に対して、距離 + 距離が一番近いSafeな頂点群と二番目に近いSafeな頂点群
+    let mut d2ss = vec![vec![(!0, HashSet::<usize>::new()); 2]; n];
+    let mut node_cnts = vec![0; n];
+    let mut edge_cnts = vec![0; m];
+    let mut iibb = ss.iter().copied().map(|s| (s, s)).collect_vec();
+    for depth in 1.. {
+        // TODO
+        // 同じ辺を通る回数は2回までに制限する
     }
-    let rs = dd
-        .into_iter()
-        .map(|d| {
-            d2ss[d]
-                .iter()
-                .copied()
-                .flatten()
-                .map(|i| dist[d][i])
-                .sum::<usize>()
-        })
-        .join("\n");
-    println!("{rs}");
+    // println!("{rs}");
 }
