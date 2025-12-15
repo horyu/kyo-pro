@@ -41,12 +41,53 @@ fn main() {
             });
     // Dangerousな頂点に対して、距離 + 距離が一番近いSafeな頂点群と二番目に近いSafeな頂点群
     let mut d2ss = vec![vec![(!0, HashSet::<usize>::new()); 2]; n];
-    let mut node_cnts = vec![0; n];
-    let mut edge_cnts = vec![0; m];
+    let mut edge_used = vec![HashSet::new(); m];
+    let mut ok_dd = HashSet::new();
     let mut iibb = ss.iter().copied().map(|s| (s, s)).collect_vec();
     for depth in 1.. {
-        // TODO
         // 同じ辺を通る回数は2回までに制限する
+        let mut new_iibb = vec![];
+        for (i, base) in iibb {
+            for (j, e_idx) in g[i].iter().copied() {
+                if 2 <= edge_used[e_idx].len() {
+                    continue;
+                }
+                if !edge_used[e_idx].insert(base) {
+                    continue;
+                }
+                if !ttff[j] {
+                    let dss = &mut d2ss[j];
+                    if dss[0].0 == !0 {
+                        dss[0].0 = depth;
+                        dss[0].1.insert(base);
+                    } else if dss[0].0 == depth {
+                        dss[0].1.insert(base);
+                        ok_dd.insert(j);
+                    } else if dss[1].0 == !0 {
+                        dss[1].0 = depth;
+                        dss[1].1.insert(base);
+                        ok_dd.insert(j);
+                    }
+                }
+                new_iibb.push((j, base));
+            }
+        }
+        if ok_dd.len() == dd.len() {
+            break;
+        }
+        iibb = new_iibb;
     }
-    // println!("{rs}");
+    let rs = dd
+        .into_iter()
+        .map(|d| {
+            let dss = &d2ss[d];
+            eprintln!("d={} dss={:?}", d, dss);
+            if 2 <= dss[0].1.len() {
+                dss[0].0 * 2
+            } else {
+                dss[0].0 + dss[1].0
+            }
+        })
+        .join("\n");
+    println!("{rs}");
 }
