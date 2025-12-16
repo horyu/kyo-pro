@@ -45,17 +45,13 @@ fn main() {
     let mut ok_dd = HashSet::new();
     let mut iibb = ss.iter().copied().map(|s| (s, s)).collect_vec();
     for depth in 1.. {
-        // 同じ辺を通る回数は2回までに制限する
         let mut new_iibb = vec![];
         for (i, base) in iibb {
             for (j, e_idx) in g[i].iter().copied() {
-                if 2 <= edge_used[e_idx].len() {
-                    continue;
-                }
                 if !edge_used[e_idx].insert(base) {
                     continue;
                 }
-                if !ttff[j] {
+                if !ttff[j] && !ok_dd.contains(&j) {
                     let dss = &mut d2ss[j];
                     if dss[0].0 == !0 {
                         dss[0].0 = depth;
