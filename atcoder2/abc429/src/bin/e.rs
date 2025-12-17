@@ -41,14 +41,14 @@ fn main() {
             });
     // Dangerousな頂点に対して、距離 + 距離が一番近いSafeな頂点群と二番目に近いSafeな頂点群
     let mut d2ss = vec![vec![(!0, HashSet::<usize>::new()); 2]; n];
-    let mut edge_used = vec![HashSet::new(); m];
+    let mut edge_used = vec![HashSet::new(); n];
     let mut ok_dd = HashSet::new();
     let mut iibb = ss.iter().copied().map(|s| (s, s)).collect_vec();
     for depth in 1.. {
         let mut new_iibb = vec![];
         for (i, base) in iibb {
             for (j, e_idx) in g[i].iter().copied() {
-                if !edge_used[e_idx].insert(base) {
+                if !edge_used[base].insert(e_idx) {
                     continue;
                 }
                 if !ttff[j] && !ok_dd.contains(&j) {
@@ -56,8 +56,7 @@ fn main() {
                     if dss[0].0 == !0 {
                         dss[0].0 = depth;
                         dss[0].1.insert(base);
-                    } else if dss[0].0 == depth {
-                        dss[0].1.insert(base);
+                    } else if dss[0].0 == depth && dss[0].1.insert(base) {
                         ok_dd.insert(j);
                     } else if dss[1].0 == !0 {
                         dss[1].0 = depth;
@@ -77,7 +76,7 @@ fn main() {
         .into_iter()
         .map(|d| {
             let dss = &d2ss[d];
-            eprintln!("d={} dss={:?}", d, dss);
+            eprintln!("d={d} dss={dss:?}");
             if 2 <= dss[0].1.len() {
                 dss[0].0 * 2
             } else {
