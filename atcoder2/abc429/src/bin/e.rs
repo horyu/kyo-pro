@@ -21,68 +21,38 @@ fn main() {
         uuvv: [(Usize1, Usize1); m],
         s: Chars,
     };
+    // https://atcoder.jp/contests/abc429/editorial/14284
     let mut g = vec![vec![]; n];
-    for (e_idx, (u, v)) in uuvv.iter().copied().enumerate() {
-        g[u].push((v, e_idx));
-        g[v].push((u, e_idx));
+    for (u, v) in uuvv.iter().copied() {
+        g[u].push(v);
+        g[v].push(u);
     }
     let ttff = s.iter().copied().map(|c| c == 'S').collect_vec();
-    let (ss, dd) =
-        ttff.iter()
-            .copied()
-            .enumerate()
-            .fold((vec![], vec![]), |(mut ss, mut dd), (i, tf)| {
-                if tf {
-                    ss.push(i);
-                } else {
-                    dd.push(i);
-                }
-                (ss, dd)
-            });
-    // Dangerousな頂点に対して、距離 + 距離が一番近いSafeな頂点群と二番目に近いSafeな頂点群
-    let mut d2ss = vec![vec![(!0, HashSet::<usize>::new()); 2]; n];
-    let mut edge_used = vec![HashSet::new(); n];
-    let mut ok_dd = HashSet::new();
-    let mut iibb = ss.iter().copied().map(|s| (s, s)).collect_vec();
-    for depth in 1.. {
-        let mut new_iibb = vec![];
-        for (i, base) in iibb {
-            for (j, e_idx) in g[i].iter().copied() {
-                if !edge_used[base].insert(e_idx) {
-                    continue;
-                }
-                if !ttff[j] && !ok_dd.contains(&j) {
-                    let dss = &mut d2ss[j];
-                    if dss[0].0 == !0 {
-                        dss[0].0 = depth;
-                        dss[0].1.insert(base);
-                    } else if dss[0].0 == depth && dss[0].1.insert(base) {
-                        ok_dd.insert(j);
-                    } else if dss[1].0 == !0 {
-                        dss[1].0 = depth;
-                        dss[1].1.insert(base);
-                        ok_dd.insert(j);
-                    }
-                }
-                new_iibb.push((j, base));
-            }
+    let mut ff = vec![[!0; 2]; n];
+    let mut dd = ff.clone();
+    let mut qq = VecDeque::new();
+    for (i, tf) in ttff.iter().copied().enumerate() {
+        if tf {
+            ff[i][0] = i;
+            dd[i][0] = 0;
+            qq.push_back((i, i, 0));
         }
-        if ok_dd.len() == dd.len() {
-            break;
-        }
-        iibb = new_iibb;
     }
-    let rs = dd
-        .into_iter()
-        .map(|d| {
-            let dss = &d2ss[d];
-            eprintln!("d={d} dss={dss:?}");
-            if 2 <= dss[0].1.len() {
-                dss[0].0 * 2
-            } else {
-                dss[0].0 + dss[1].0
+    while let Some((base, i, dep)) = qq.pop_front() {
+        for e in g[i].iter().copied() {
+            if ff[e][0] == !0 {
+                ff[e][0] = base;
+                dd[e][0] = dep + 1;
+                qq.push_back((base, e, dep + 1));
+            } else if ff[e][1] == !0 && ff[e][0] != base {
+                ff[e][1] = base;
+                dd[e][1] = dep + 1;
+                qq.push_back((base, e, dep + 1));
             }
-        })
+        }
+    }
+    let rs = izip!(ttff, dd)
+        .filter_map(|(tf, dd)| (!tf).then(|| dd[0] + dd[1]))
         .join("\n");
     println!("{rs}");
 }
