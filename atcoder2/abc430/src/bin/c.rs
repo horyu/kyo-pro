@@ -17,7 +17,25 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        a: usize,
+        b: usize,
+        s: Chars,
     };
-    // println!("{rs}");
+    let mut cnts = vec![[0; 2]; n];
+    for (i, c) in s.iter().copied().enumerate() {
+        if 0 < i {
+            cnts[i] = cnts[i - 1];
+        }
+        cnts[i][(c == 'b') as usize] += 1;
+    }
+    let mut rs = 0usize;
+    for l in 0..(n.saturating_sub(a)) {
+        let [la, lb] = cnts[l];
+        // 'a' がa個以上になる左端インデックス
+        let j_a = l + cnts[l..].partition_point(|cc| cc[0] - la < a) + 1;
+        // 'b'がb個未満の右端インデックス
+        let j_b = l + cnts[l..].partition_point(|cc| cc[1] - lb <= b) - 1;
+        eprintln!("[{l}, {j_a}, {j_b}]");
+    }
+    println!("{rs}");
 }
