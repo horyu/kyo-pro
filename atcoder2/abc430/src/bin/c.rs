@@ -21,13 +21,31 @@ fn main() {
         b: usize,
         s: Chars,
     };
+    let xx = s.into_iter().map(|c| usize::from(c == 'b')).collect_vec();
     let mut rs = 0usize;
     let mut cc = [0; 2];
     let mut l = 0;
     // 尺取法
     for r in 0..n {
-        cc[usize::from(s[r] == 'b')] += 1;
-        // TODO
+        cc[xx[r]] += 1;
+        while 0 < l && cc[1] <= b {
+            l -= 1;
+            cc[xx[l]] += 1;
+        }
+        while l < r && b <= cc[1] {
+            cc[xx[l]] -= 1;
+            l += 1;
+        }
+        while a <= cc[0] && cc[1] < b {
+            rs += 1;
+            eprintln!("!{l}-{r} {cc:?} {rs}");
+            if r <= l {
+                break;
+            }
+            cc[xx[l]] -= 1;
+            l += 1;
+        }
+        eprintln!("{l} {r} {cc:?} {rs}");
     }
     println!("{rs}");
 }
