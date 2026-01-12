@@ -21,31 +21,53 @@ fn main() {
         b: usize,
         s: Chars,
     };
-    let xx = s.into_iter().map(|c| usize::from(c == 'b')).collect_vec();
+    let s = s.into_iter().collect_vec();
+
     let mut rs = 0usize;
-    let mut cc = [0; 2];
-    let mut l = 0;
-    // 尺取法
-    for r in 0..n {
-        cc[xx[r]] += 1;
-        while 0 < l && cc[1] <= b {
-            l -= 1;
-            cc[xx[l]] += 1;
-        }
-        while l < r && b <= cc[1] {
-            cc[xx[l]] -= 1;
-            l += 1;
-        }
-        while a <= cc[0] && cc[1] < b {
-            rs += 1;
-            eprintln!("!{l}-{r} {cc:?} {rs}");
-            if r <= l {
-                break;
+    let mut ra = 0usize; // [l, ra) で a の個数が A 以上になる最小の ra
+    let mut rb = 0usize; // [l, rb) で b の個数が B 未満を満たす最大の rb
+    let mut cnt_a = 0usize;
+    let mut cnt_b = 0usize;
+
+    for l in 0..n {
+        if 0 < l {
+            let prev = s[l - 1];
+            if l - 1 < ra && prev == 'a' {
+                cnt_a -= 1;
             }
-            cc[xx[l]] -= 1;
-            l += 1;
+            if l - 1 < rb && prev == 'b' {
+                cnt_b -= 1;
+            }
         }
-        eprintln!("{l} {r} {cc:?} {rs}");
+        if ra < l {
+            ra = l;
+            cnt_a = 0;
+        }
+        while ra < n && cnt_a < a {
+            if s[ra] == 'a' {
+                cnt_a += 1;
+            }
+            ra += 1;
+        }
+
+        if rb < l {
+            rb = l;
+            cnt_b = 0;
+        }
+        while rb < n {
+            if s[rb] == 'b' {
+                if b <= cnt_b + 1 {
+                    break;
+                }
+                cnt_b += 1;
+            }
+            rb += 1;
+        }
+
+        if a <= cnt_a && ra <= rb {
+            rs += rb - ra + 1;
+        }
     }
+
     println!("{rs}");
 }
