@@ -17,7 +17,34 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        xx: [isize; n],
     };
-    // println!("{rs}");
+    let mut bts = BTreeSet::new();
+    bts.insert(0);
+    let mut sum = 1isize << 60;
+    let mut x2d = BTreeMap::new();
+    x2d.insert(0, sum);
+    for x in xx {
+        let l = *bts.range(..x).next_back().unwrap();
+        let ld = *x2d.get(&l).unwrap();
+        let mut xd = x - l;
+        // left 側の距離を更新
+        if x - l < ld {
+            sum += (x - l) - ld;
+            x2d.insert(l, x - l);
+        }
+        if let Some(&r) = bts.range(x..).next() {
+            let rd = *x2d.get(&r).unwrap();
+            // right 側の距離を更新
+            if r - x < rd {
+                sum += (r - x) - rd;
+                x2d.insert(r, r - x);
+            }
+            xd = xd.min(r - x);
+        }
+        sum += xd;
+        x2d.insert(x, xd);
+        bts.insert(x);
+        println!("{sum}");
+    }
 }
