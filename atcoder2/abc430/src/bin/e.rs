@@ -17,7 +17,14 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        aabb: [(String, String); n],
     };
-    // println!("{rs}");
+    for (a, b) in aabb {
+        let a = a.repeat(2);
+        if let Some(pos) = a.find(&b) {
+            println!("{pos}");
+        } else {
+            println!("-1");
+        }
+    }
 }
