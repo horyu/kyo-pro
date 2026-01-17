@@ -16,8 +16,20 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
+        mut x: usize,
         n: usize,
-        aa: [usize; n],
+        ww: [usize; n],
+        q: usize,
+        pp: [Usize1; q],
     };
-    // println!("{rs}");
+    let mut ttff = [false; 100];
+    for p in pp {
+        if ttff[p] {
+            x -= ww[p];
+        } else {
+            x += ww[p];
+        }
+        ttff[p] ^= true;
+        println!("{x}");
+    }
 }
