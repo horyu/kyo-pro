@@ -17,7 +17,20 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        m: usize,
+        k: usize,
+        mut hh: [usize; n],
+        bb: [usize; m],
     };
-    // println!("{rs}");
+    hh.sort_unstable();
+    let mut bts = BTreeSet::from_iter(bb.into_iter().enumerate().map(|(i, b)| (b, i)));
+    let mut cnt = 0;
+    for h in hh.into_iter().rev() {
+        if let Some(&k) = bts.range((h, 0)..).next() {
+            cnt += 1;
+            bts.remove(&k);
+        }
+    }
+    let rs = ["No", "Yes"][(k <= cnt) as usize];
+    println!("{rs}");
 }
