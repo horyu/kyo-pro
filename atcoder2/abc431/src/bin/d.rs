@@ -17,7 +17,23 @@ macro_rules! eprintln {
 fn main() {
     input! {
         n: usize,
-        aa: [usize; n],
+        wwhhbb: [(usize, usize, usize); n],
     };
-    // println!("{rs}");
+    // これだと 2^n 通りでTLEする
+    let mut hs = HashSet::new();
+    hs.insert((0, 0, 0));
+    for (w, h, b) in wwhhbb {
+        let mut new_hs = HashSet::new();
+        for (x, wh, wb) in hs {
+            new_hs.insert((x + h, wh + w, wb));
+            new_hs.insert((x + b, wh, wb + w));
+        }
+        hs = new_hs;
+    }
+    let rs = hs
+        .into_iter()
+        .filter_map(|(x, wh, wb)| (wh <= wb).then_some(x))
+        .max()
+        .unwrap_or_default();
+    println!("{rs}");
 }
