@@ -19,26 +19,16 @@ fn main() {
         n: usize,
         wwhhbb: [(usize, usize, usize); n],
     };
+    // https://atcoder.jp/contests/abc431/editorial/14536
     let w_sum = wwhhbb.iter().map(|(w, _, _)| *w).sum::<usize>();
-    // head_weight -> score
-    let mut btm = BTreeMap::new();
-    btm.insert(0, 0);
+    let mut dp0 = vec![0];
+    let mut dp1 = vec![];
     for (w, h, b) in wwhhbb {
-        let mut new_btm = BTreeMap::new();
-        for (wh, score) in btm {
-            // h
-            let eh = new_btm.entry(wh + w).or_insert(0);
-            *eh = (*eh).max(score + h);
-            // b
-            let eb = new_btm.entry(wh).or_insert(0);
-            *eb = (*eb).max(score + b);
-        }
-        btm = new_btm;
     }
-    let rs = btm
-        .into_iter()
-        .filter_map(|(wh, score)| (wh <= w_sum - wh).then_some(score))
-        .max()
-        .unwrap_or_default();
-    println!("{rs}");
+    // let rs = btm
+    //     .into_iter()
+    //     .filter_map(|(wh, score)| (wh <= w_sum - wh).then_some(score))
+    //     .max()
+    //     .unwrap_or_default();
+    // println!("{rs}");
 }
