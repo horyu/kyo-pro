@@ -19,20 +19,25 @@ fn main() {
         n: usize,
         wwhhbb: [(usize, usize, usize); n],
     };
-    // これだと 2^n 通りでTLEする
-    let mut hs = HashSet::new();
-    hs.insert((0, 0, 0));
+    let w_sum = wwhhbb.iter().map(|(w, _, _)| *w).sum::<usize>();
+    // head_weight -> score
+    let mut btm = BTreeMap::new();
+    btm.insert(0, 0);
     for (w, h, b) in wwhhbb {
-        let mut new_hs = HashSet::new();
-        for (x, wh, wb) in hs {
-            new_hs.insert((x + h, wh + w, wb));
-            new_hs.insert((x + b, wh, wb + w));
+        let mut new_btm = BTreeMap::new();
+        for (wh, score) in btm {
+            // h
+            let eh = new_btm.entry(wh + w).or_insert(0);
+            *eh = (*eh).max(score + h);
+            // b
+            let eb = new_btm.entry(wh).or_insert(0);
+            *eb = (*eb).max(score + b);
         }
-        hs = new_hs;
+        btm = new_btm;
     }
-    let rs = hs
+    let rs = btm
         .into_iter()
-        .filter_map(|(x, wh, wb)| (wh <= wb).then_some(x))
+        .filter_map(|(wh, score)| (wh <= w_sum - wh).then_some(score))
         .max()
         .unwrap_or_default();
     println!("{rs}");
