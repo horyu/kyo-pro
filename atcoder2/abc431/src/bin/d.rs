@@ -20,15 +20,17 @@ fn main() {
         wwhhbb: [(usize, usize, usize); n],
     };
     // https://atcoder.jp/contests/abc431/editorial/14536
-    let w_sum = wwhhbb.iter().map(|(w, _, _)| *w).sum::<usize>();
-    let mut dp0 = vec![0];
-    let mut dp1 = vec![];
+    let mut dp = vec![0];
+    let mut prev = vec![];
     for (w, h, b) in wwhhbb {
+        std::mem::swap(&mut dp, &mut prev);
+        let m = prev.len();
+        dp.resize(m + w, 0);
+        for i in 0..m {
+            dp[i] = dp[i].max(prev[i] + h);
+            dp[i + w] = dp[i + w].max(prev[i] + b);
+        }
     }
-    // let rs = btm
-    //     .into_iter()
-    //     .filter_map(|(wh, score)| (wh <= w_sum - wh).then_some(score))
-    //     .max()
-    //     .unwrap_or_default();
-    // println!("{rs}");
+    let rs = dp[(dp.len() / 2)..].iter().max().unwrap();
+    println!("{rs}");
 }
