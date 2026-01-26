@@ -16,8 +16,22 @@ macro_rules! eprintln {
 
 fn main() {
     input! {
-        n: usize,
-        aa: [usize; n],
+        t: usize,
     };
+    for _ in 0..t {
+        input! {
+            h: usize,
+            w: usize,
+            ss: [Chars; h],
+        };
+        // マスの辺を以下のように番号付けする
+        // ┏0┓
+        // 1 2
+        // ┗3┛
+        // A: 　  0-3, 1-2
+        // B: ／  0-1, 2-3
+        // C: ＼  0-2, 1-3
+        // あとは Union-Find でつなげていき、ss[0][0][1] と ss[h-1][w-1][2] の間にあるグループ数を数える？
+    }
     // println!("{rs}");
 }
